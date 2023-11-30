@@ -16,7 +16,7 @@ namespace RealEstate
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/EstateOffers/Error");
             }
             app.UseStaticFiles();
 
@@ -28,7 +28,7 @@ namespace RealEstate
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=EstateOffers}/{action=Index}/{id?}");
 
             app.Run();
         }

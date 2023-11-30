@@ -100,7 +100,7 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(./images/slide-01-1920x640.jpg);
+    background-image: url(../../Images/Rest/slide-01-1920x640.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     height: 640px;
@@ -145,17 +145,6 @@ nav {
     gap: 10px;
     margin: 0px 7%;
 }
-
-/* .dark-layer-over{
-    filter: brightness(33%);
-    
-}
-
-.dark-layer-over > div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
 
 .dark-layer-over {
     position: relative;
@@ -678,5 +667,6 @@ h2 {
         margin-left: -2184px;
     }
 }
+
 body {
 }
