@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Models.DatabaseModels
 {
     [Table("tbOffers")]
+    [PrimaryKey("Id")]
     public class Offer
     {
         public int Id { get; set; }
