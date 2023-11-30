@@ -1,0 +1,169 @@
+﻿.mb-5 {
+    margin-bottom: 5px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+.mr-3 {
+    margin-right: 3px;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.mr-10 {
+    margin-right: 10px;
+}
+
+.mr-15 {
+    margin-right: 15px;
+}
+
+.mr-20 {
+    margin-right: 20px;
+}
+
+.pad-10 {
+    padding: 10px;
+}
+
+.fs-10 {
+    font-size: 10px;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-14 {
+    font-size: 14px;
+}
+
+.text-grey-light {
+    color: rgba(128, 128, 128, 0.877);
+    font-weight: 400;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.tc-orange {
+    color: rgb(255, 140, 0);
+}
+
+.tc-dorange {
+    color: darkorange;
+}
+
+.tw-bold {
+    font-weight: 700;
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.jf-center {
+    justify-content: center;
+}
+
+.jf-space-between {
+    justify-content: space-between;
+}
+
+.ai-center {
+    align-items: center;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+.btn-orange {
+    background: darkorange;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+    .btn-orange:hover {
+        background: rgb(252, 176, 34);
+        transition: 200ms ease;
+    }
+
+.partial-border {
+    position: relative;
+}
+
+    .partial-border:after {
+        content: '';
+        width: 30%;
+        height: 2px;
+        background: darkorange;
+        position: absolute;
+        bottom: -10px;
+        margin: auto;
+        left: 35%;
+    }
+
+.img-roung {
+    border-radius: 50%;
+}
+
+.flex-row {
+    display: flex;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.norefize {
+    resize: none;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.height80 {
+    height: 80px;
+}
+
+.pointer {
+    cursor: pointer;
+}
