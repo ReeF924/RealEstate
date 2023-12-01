@@ -224,6 +224,9 @@ h2 {
 
     .offers-list a {
         cursor: pointer;
+        display: flex;
+        flex-direction:column;
+        justify-content: center;
     }
 
         .offers-list a:hover img {
@@ -240,6 +243,20 @@ h2 {
     .offers-list img {
         width: 100%;
     }
+
+.offer-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+}
+
+.offer-img-container{
+    flex: 1;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+}
 
 .item-name {
     color: darkorange;

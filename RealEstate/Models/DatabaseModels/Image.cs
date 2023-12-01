@@ -8,6 +8,5 @@ namespace RealEstate.Models.DatabaseModels
     {
         public int Id { get; set; }
         public int IdOffer { get; set; }
-        public string ImagePath { get; set; }
     }
 }
