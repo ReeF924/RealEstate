@@ -9,24 +9,26 @@
             </div>
         </form>
     </section>
+   
+
     <section class="filters">
         <a class="dark-layer-over" href="./byty">
-            <img src="Images/Rest/home-img-03-442-280.jpg">
+            <img src="/images/rest/home-img-03-442-280.jpg">
             <label>Flats</label>
             <div class="subtext">32 nabídek</div>
         </a>
         <a class="dark-layer-over" href="./luxusni">
-            <img src="images/Rest/home-img-04-442-280.jpg">
+            <img src="/images/Rest/home-img-04-442-280.jpg">
             <label>Luxury</label>
             <div class="subtext">2 nabídky</div>
         </a>
         <a class="dark-layer-over" href="./domy">
-            <img src="images/Rest/home-img-01-442-280.jpg">
+            <img src="/images/Rest/home-img-01-442-280.jpg">
             <label>Houses</label>
             <div class="subtext">16 nabídek</div>
         </a>
         <a class="dark-layer-over" href="./chaty">
-            <img src="images/Rest/home-img-02-442-280.jpg">
+            <img src="/images/Rest/home-img-02-442-280.jpg">
             <label>Cottages</label>
             <div class="subtext">7 nabídek</div>
         </a>
@@ -49,10 +51,10 @@
 
                         <div class="flex-column">
                             <div class="offer-img-container">
-                                <a asp-action="Detail">
+                                <a asp-asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@offer.Id">
                                     @{
-                                        var image = offer.Images?.First();
-                                        string relPath = image != null ? "./Images/Offers/" + image.IdOffer.ToString() + '/' + image.Id.ToString() + ".png" : DefaultParams.NotFoundImg;
+                                        var image = offer.Images?.FirstOrDefault();
+                                        string relPath = image != null ? DefaultParams.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : DefaultParams.NotFoundImg;
                                     }
                                     <img src="@relPath" alt="offered-house">
                                 </a>

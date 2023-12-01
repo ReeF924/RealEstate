@@ -1,0 +1,152 @@
+﻿<main class="main-detail">
+    <section class="mb-10">
+        @{
+            Offer offer = (Offer)ViewBag.Offer;
+            Image? image = offer.Images!.FirstOrDefault();
+            string firstImagePath = image != null ? DefaultParams.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : DefaultParams.NotFoundImg;
+
+            <div class="detail-image">
+                <img src="@firstImagePath" alt="detail-image">
+            </div>
+            <div class="sub-photos">
+                @{
+                    int loops = Math.Min(offer.Images!.Count - 1, 5);
+                }
+
+                @for (int i = 1; i <= loops; i++)
+                {
+                    image = offer.Images[i];
+                    string alt = "detailSub_" + i.ToString();
+                    <a href="">
+                        <img src="@DefaultParams.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString())" alt="@alt">
+                    </a>
+                }
+                @if (offer.Images.Count > 6)
+                {
+                    image = offer.Images[6];
+                    string label = "dalších " + (offer.Images.Count - 6).ToString() + " fotek";
+                    <a class="dark-layer-over" href="./next">
+                        <img src="@DefaultParams.GetPathToImage(" Offers", image.IdOffer.ToString(), image.Id.ToString())" alt="detailSub_6">
+                        <label class="next">@label</label>
+                    </a>
+                }
+            </div>
+        }
+    </section>
+    <section class="description">
+        <div class="main-description">
+            <div>
+                <h3 class="item-name-detail">
+                    @offer.Name
+                </h3>
+                <div class="text-grey-light fs-14">@offer.Location</div>
+            </div>
+            <div>
+                <h3 class="item-price">
+                    @offer.Price Kč
+                </h3>
+                <div class="item-price-description">za nemovitost</div>
+            </div>
+        </div>
+        <div class="flex-row jf-space-between">
+            <div class="energy-class">Energetická třída<span>@offer.EnergyClass</span></div>
+            <div class="text-align-right tc-orange text-underline fs-14 pointer">
+                <span>
+                    <img class="mr-5"
+                         src="/images/icons/calc.png">spočítat hypotéku
+                </span>
+            </div>
+        </div>
+    </section>
+    <section class="mb-20">
+        <p class="text-grey-light fs-14 mb-20">
+            @offer.Description
+        </p>
+        <div class="detail-parameters">
+            @{
+                int n = this.ViewBag.offerParameters.Count / 2 + this.ViewBag.offerParameters.Count % 2;
+            }
+
+            <table>
+                @for (int i = 0; i < n; i++)
+                {
+                    <tr>
+                        <td>
+                            @this.ViewBag.offerParameters[i].Key
+                        </td>
+                        <td>
+                            @this.ViewBag.offerParameters[i].Value
+                        </td>
+                    </tr>
+                }
+            </table>
+            <table>
+                @for (int i = n; i < this.ViewBag.offerParameters.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @this.ViewBag.offerParameters[i].Key
+                        </td>
+                        <td>
+                            @this.ViewBag.offerParameters[i].Value
+                        </td>
+                    </tr>
+                }
+                @if (this.ViewBag.offerParameters.Count % 2 == 1)
+                {
+                    <tr>
+                        <td>&#8205;</td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </section>
+    <section class="contact">
+        <div class="salesman">
+
+            <h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
+
+            @if (offer.IdSeller != null)
+            {
+                <div class="salesman-info">
+                    <div class="salesman-contact mb-10">
+                        @{
+                            string ppp = DefaultParams.GetPathToImage("admins", offer.IdSeller.ToString()!);
+                        }}
+                        <img class="height80 img-roung mr-20" src="/images/admins/" alt="salesman">
+                        <div>
+                            <div class="salesman-name mb-5">Ethan Hunt</div>
+                            <div class="salesman-email text-underline">
+                                <span><img class="mr-5" src="./icons/emailName.png" alt="">TomCruise@miss.impo</span>
+                            </div>
+                            <div class="salesman-phone text-underline">
+                                <span><img class="mr-5" src="./icons/telName.png" alt="">+420 420 696 969</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="salesman-awards">
+                        <img class="mr-10" src="./icons/Major-Network.png" alt="network-medal">
+                        <img src="./icons/CCA-full-color-700px.png" alt="cca medal">
+                    </div>
+                </div>
+            }
+        </div>
+        @model Inquiry
+        <form class="center">
+            <div>
+                <h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
+            </div>
+            <div class="interested-form mb-20">
+                <input asp-for="Name" class="fulllane" type="text" placeholder="Jméno a příjmení" required>
+                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon" required>
+                <input asp-for="Email" type="email" placeholder="E-mail" required>
+                <textarea asp-for="AdditionalInformation" class="interested-form-input noresize"
+                          placeholder="Napište nám zprávu"></textarea>
+            </div>
+            <div class="flex-row center">
+                <button type="submit" class="btn-orange interested-button">Odeslat poptávku</button>
+            </div>
+        </form>
+    </section>
+</main>

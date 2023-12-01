@@ -7,24 +7,25 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     @* <link rel="stylesheet" href="~/RealEstate.styles.css" asp-append-version="true" /> *@
-    <link rel="stylesheet" href="./css/EstateOffers/index.css" asp-append-version="true" />
-    <link rel="stylesheet" href="./css/reusableClasses.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/EstateOffers/index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reusableClasses.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/EstateOffers/detail.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <div class="header-info">
             <div class="email-contact center-content">
-                <img src="./Images/Icons/envelope.png" alt="envelope">
+                <img src="/images/icons/envelope.png">
                 info@realitintense.org
             </div>
             <div class="tel-contact center-content">
-                <img src="./Images/Icons/telephone.png" alt="telephone">
+                <img src="/images/icons/telephone.png">
                 +420 420 696 969
             </div>
         </div>
         <nav>
             <div class="logo-container">
-                <img src="./Images/Rest/logo-dark.png" alt="firm-logo">
+                <img src="/images/rest/logo-dark.png" alt="firm-logo">
             </div>
             <ul class="menu">
                 <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
@@ -34,9 +35,10 @@
         </nav>
     </header>
 
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <main role="main">
+        @RenderBody()
+    </main>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

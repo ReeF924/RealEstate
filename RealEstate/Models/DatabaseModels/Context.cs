@@ -5,7 +5,7 @@ namespace RealEstate.Models.DatabaseModels
     public class Context :DbContext
     {
         public DbSet<Image>? Images { get; set; }
-        public DbSet<Label>? Labels { get; set; }
+        public DbSet<Parameter>? Labels { get; set; }
         public DbSet<Admin>? Admins { get; set; }
         public DbSet<FavouriteOffer>? FavouriteOffers { get; set; }
         public DbSet<Inquiry> Inquiries { get; set; }
