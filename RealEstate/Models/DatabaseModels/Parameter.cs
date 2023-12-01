@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbLabels")]
+    [Table("tbParameters")]
     [PrimaryKey("Id")]
-    public class Label
+    public class Parameter
     {
         public int Id { get; set; }
         public string Value { get; set; }

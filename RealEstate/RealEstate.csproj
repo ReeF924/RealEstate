@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.5" />
-    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
   <ItemGroup>
