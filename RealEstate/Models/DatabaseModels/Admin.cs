@@ -11,6 +11,6 @@ namespace RealEstate.Models.DatabaseModels
         public string Password { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string ProfilePicturePath { get; set; }
+        public string? ProfilePicturePath { get; set; }
     }
 }
