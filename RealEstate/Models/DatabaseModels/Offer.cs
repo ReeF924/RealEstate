@@ -15,7 +15,7 @@ namespace RealEstate.Models.DatabaseModels
         public string Location { get; set; }
         public string Description { get; set; }
         public string? ShortDescription { get; set; }
-        public string Category { get; set; }
+        public char Category { get; set; } // f - flats, l - luxury,  h - houses, c - cottages
         public char EnergyClass { get; set; }
         [ForeignKey("IdOffer")]
         public List<Image> Images { get; set; } = new();

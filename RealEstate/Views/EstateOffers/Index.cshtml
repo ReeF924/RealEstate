@@ -9,28 +9,33 @@
             </div>
         </form>
     </section>
-   
 
+    @{
+        var offers = (List<Offer>)this.ViewBag.Offers;
+        Dictionary<char, int> field = offers.GetCategoryCount();
+        if (this.ViewBag.Filter != null)
+            offers = offers.Where(offer => offer.Category == this.ViewBag.Filter).ToList();
+    }
     <section class="filters">
-        <a class="dark-layer-over" href="./byty">
+        <a class="dark-layer-over" asp-action="index" asp-route-filter="f">
             <img src="/images/rest/home-img-03-442-280.jpg">
             <label>Flats</label>
-            <div class="subtext">32 nabídek</div>
+            <div class="subtext">@field['f'] offers</div>
         </a>
-        <a class="dark-layer-over" href="./luxusni">
+        <a class="dark-layer-over" asp-action="index" asp-route-filter="l">
             <img src="/images/Rest/home-img-04-442-280.jpg">
             <label>Luxury</label>
-            <div class="subtext">2 nabídky</div>
+            <div class="subtext">@field['l'] offers</div>
         </a>
-        <a class="dark-layer-over" href="./domy">
+        <a class="dark-layer-over" asp-action="index" asp-route-filter="h">
             <img src="/images/Rest/home-img-01-442-280.jpg">
             <label>Houses</label>
-            <div class="subtext">16 nabídek</div>
+            <div class="subtext">@field['h'] offers</div>
         </a>
-        <a class="dark-layer-over" href="./chaty">
+        <a class="dark-layer-over" asp-action="index" asp-route-filter="c">
             <img src="/images/Rest/home-img-02-442-280.jpg">
             <label>Cottages</label>
-            <div class="subtext">7 nabídek</div>
+            <div class="subtext">@field['c'] offers</div>
         </a>
     </section>
     <section class="items-section">
@@ -41,7 +46,7 @@
         </div>
         <div>
             @{
-                var offers = this.ViewBag.Offers as List<Offer>;
+
                 if (offers == null) return;
                 int repeatCount = Math.Min(offers.Count, 6);
                 <div class="offers-list">

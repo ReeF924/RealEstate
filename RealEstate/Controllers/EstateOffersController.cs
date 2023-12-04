@@ -7,18 +7,19 @@ namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
-        public IActionResult Index()
+        public IActionResult Index(char? filter = null)
         {
             var offers = this._context.Offers?.ToList();
             offers?.ForEach(offer =>
             {
-                this._context.Images!.Where(image => image.IdOffer == offer.Id).ToList().ForEach(image =>
+                this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>
                 {
                     offer.Images!.Add(image);
                 });
             });
 
             this.ViewBag.Offers = offers;
+            this.ViewBag.Filter = filter;
             return View();
         }
         //[HttpGet]
@@ -28,19 +29,13 @@ namespace RealEstate.Controllers
             return View(new Inquiry());
         }
         [HttpPost]
-        public IActionResult Detail(int id, Inquiry inquiry)
+        public IActionResult Detail(int id, Inquiry input)
         {
-            //if(!this.ModelState.IsValid)
-            //{
-            //    this.DetailInit(id);
-            //    return View(inquiry);
-            //}
-            var inq = inquiry;
-            string s = "";
+            //modelstate
 
-
-            inquiry.IdOffer = id;
-            inquiry.DateTimeSent = DateTime.UtcNow;
+            Inquiry inquiry = new() { IdOffer = id, Name = input.Name, Email = input.Email,
+                PhoneNumber = input.PhoneNumber, AdditionalInformation = input.AdditionalInformation,
+                IdUser = input.IdUser, Surname = input.Surname, DateTimeSent = DateTime.Now };
 
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();   
@@ -67,6 +62,7 @@ namespace RealEstate.Controllers
             this.ViewBag.OfferParameters = offerParameters;
             this.ViewBag.Admin = this._context.Admins!.Find(offer.IdAdmin);
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

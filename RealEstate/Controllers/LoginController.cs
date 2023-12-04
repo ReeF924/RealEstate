@@ -1,0 +1,59 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using RealEstate.Models.DatabaseModels;
+using BCrypt.Net;
+using RealEstate.Models.LoginModels;
+
+namespace RealEstate.Controllers
+{
+    public class LoginController : BaseEstateController
+    {
+        public IActionResult Index()
+        {
+
+
+
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult Login(LoginModel login)
+        {
+            List<User> users = this._context.Users!.ToList();
+
+            List<User> found = users.Where(user => user.Username == login.Username).ToList();
+
+            if (found.Count == 0)
+            {
+                found = users.Where(user => user.Email == login.Username).ToList();
+            }
+            else if (found.Count > 1)
+            {
+                found.Where(found => found.Email == login.Username).ToList();
+                Console.WriteLine();
+            }
+
+            if (found.Count != 1)
+            {
+                this.ModelState.AddModelError("Username", "Username or password incorrect");
+                return RedirectToAction("Index", "EstateOffers", new { succesfulLogin = false });
+            }
+
+            User user = found.First();
+
+            if (login.Password != user.Password)
+            //if(!BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
+            {
+                this.ModelState.AddModelError("Username", "Username or password incorrect");
+                return RedirectToAction("Index", "EstateOffers", new { succesfulLogin = false });
+            }
+
+            this.HttpContext.Session.SetString("user", user.Username);
+
+            return RedirectToAction("Index", "EstateOffers", new { succesfulLogin = true });
+        }
+
+
+    }
+}
