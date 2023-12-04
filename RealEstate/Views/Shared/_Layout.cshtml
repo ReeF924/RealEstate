@@ -34,54 +34,57 @@
             </ul>
         </nav>
     </header>
+    <a asp-controller="Login" asp-action="SignUp">
+        Sign up
+    </a>
+    <div class="flex-column justify-content-between">
+        <main role="main">
+            @RenderBody()
+        </main>
 
-    <main role="main">
-        @RenderBody()
-    </main>
-
-    <footer class="footer-index">
-        <div class="footer-container">
-            <div class="newsletter-subscription">
-                <h3 class="footer-title">Newsletter</h3>
-                <p class="mb-10">Keep up with the company's drug addicts and nymfs, it's not as easy as it seams</p>
-                <form class="newsletter-form" method="post">
-                    <input type="email" class="newsletter-text" placeholder="Zadejte svůj email" required>
-                    <button class="btn-orange search-bar-button">Odeslat</button>
-                </form>
-            </div>
-            <div class="useful-links">
-                <h3 class="footer-title">Užitečné odkazy</h3>
-                <ul class="links-list">
-                    <li>
-                        <a href="./bytyPronajem">Byty pronájem</a>
-
-                    </li>
-                    <li class="footer-link-selected"><a href="./bytyProdej">Byty prodej</a></li>
-                    <li><a href="/.domyPronajem">Domy pronájem</a></li>
-                    <li><a href="./DomyProdej">Domy prodej</a></li>
-                </ul>
-            </div>
-            <div class="news">
-                <h3 class="footer-title">Novinky</h3>
-                <div class="news-item">
-                    <span class="footer-grey-text">4.5.2023</span>
-                    <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores libero sed animi earum aliquid?
-                        Saepe unde fugit aut laudantium enim sequi optio, iure quaerat officia nesciunt, cumque nisi
-                        magnam odio.
-                    </p>
+        <footer class="footer-index">
+            <div class="footer-container">
+                <div class="newsletter-subscription">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p class="mb-10">Keep up with the company's drug addicts and nymfs, it's not as easy as it seams</p>
+                    <form class="newsletter-form" method="post">
+                        <input type="email" class="newsletter-text" placeholder="Zadejte svůj email" required>
+                        <button class="btn-orange search-bar-button">Odeslat</button>
+                    </form>
                 </div>
-                <div class="news-item">
-                    <span class="footer-grey-text">11.9.2001</span>
-                    <p>Few offered flats got destroyed</p>
+                <div class="useful-links">
+                    <h3 class="footer-title">Užitečné odkazy</h3>
+                    <ul class="links-list">
+                        <li>
+                            <a href="./bytyPronajem">Byty pronájem</a>
+
+                        </li>
+                        <li class="footer-link-selected"><a href="./bytyProdej">Byty prodej</a></li>
+                        <li><a href="/.domyPronajem">Domy pronájem</a></li>
+                        <li><a href="./DomyProdej">Domy prodej</a></li>
+                    </ul>
+                </div>
+                <div class="news">
+                    <h3 class="footer-title">Novinky</h3>
+                    <div class="news-item">
+                        <span class="footer-grey-text">4.5.2023</span>
+                        <p>
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores libero sed animi earum aliquid?
+                            Saepe unde fugit aut laudantium enim sequi optio, iure quaerat officia nesciunt, cumque nisi
+                            magnam odio.
+                        </p>
+                    </div>
+                    <div class="news-item">
+                        <span class="footer-grey-text">11.9.2001</span>
+                        <p>Few offered flats got destroyed</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="center-content">
-            <p class="footer-grey-text">Copyright&copy; and all that jazz</p>
-        </div>
-    </footer>
-
+            <div class="center-content">
+                <p class="footer-grey-text">Copyright&copy; and all that jazz</p>
+            </div>
+        </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

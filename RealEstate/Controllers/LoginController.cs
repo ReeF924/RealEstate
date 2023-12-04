@@ -7,13 +7,21 @@ namespace RealEstate.Controllers
 {
     public class LoginController : BaseEstateController
     {
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult SignUp()
         {
+            return View(new User());
+        }
 
 
+        [HttpPost]
+        public IActionResult SignUp(User user)
+        {
+            this._context.Users!.Add(user);
+            this._context.SaveChanges();
+            this.HttpContext.Session.SetString("user", user.Username);
 
-
-            return View();
+            return RedirectToAction("Index", "EstateOffers");
         }
 
 
