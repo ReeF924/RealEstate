@@ -15,8 +15,9 @@ namespace RealEstate.Controllers
 
 
         [HttpPost]
-        public IActionResult SignUp(User user)
+        public IActionResult SignIn(User user)
         {
+            //user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             this._context.Users!.Add(user);
             this._context.SaveChanges();
             this.HttpContext.Session.SetString("user", user.Username);
@@ -26,7 +27,7 @@ namespace RealEstate.Controllers
 
 
         [HttpPost]
-        public IActionResult Login(LoginModel login)
+        public IActionResult Login(LoginModel login, string c, string a)
         {
             List<User> users = this._context.Users!.ToList();
 
@@ -51,7 +52,7 @@ namespace RealEstate.Controllers
 
             this.HttpContext.Session.SetString("user", user.Username);
 
-            return RedirectToAction("Index", "EstateOffers", new { succesfulLogin = true });
+            return RedirectToAction(a, "c", new { succesfulLogin = true });
         }
 
 

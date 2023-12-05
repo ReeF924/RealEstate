@@ -28,17 +28,10 @@ namespace RealEstate.Controllers
 
             this.ViewBag.Offers = offers;
 
-            Dictionary<string, string> dic = new();
-            foreach (var item in HttpContext.Request.Query)
-            {
-                dic[item.Key] = item.Value!;
-            }
-            foreach (var item in HttpContext.Request.RouteValues)
-            {
-                dic[item.Key] = item.Value!.ToString()!;
-            }
+            
 
-            this.ViewBag.RouteData = dic;
+            this.ViewBag.RouteData = routeData;
+
             return View();
         }
         //Muze jenom vyhledavat nebo filtrovat, ne oboji, asi vylepsit potom (?)
@@ -88,7 +81,7 @@ namespace RealEstate.Controllers
         [HttpPost]
         public IActionResult Detail(int id, Inquiry input)
         {
-            //modelstate
+            //modelstate - validace
 
             Inquiry inquiry = new()
             {

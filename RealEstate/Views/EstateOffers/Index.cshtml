@@ -56,7 +56,7 @@
 
                         <div class="flex-column">
                             <div class="offer-img-container">
-                                <a asp-asp-controller="EstateOffers" asp-asp-all-route-data="@this.ViewBag.RouteData" asp-action="Detail" asp-route-id="@offer.Id">
+                                <a asp-asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@offer.Id">
                                     @{
                                         var image = offer.Images?.FirstOrDefault();
                                         string relPath = image != null ? PathHelper.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : PathHelper.NotFoundImg;
@@ -83,7 +83,7 @@
         {
             int viewCount = this.ViewBag.ViewCount + 6;
             <div class="items-view-all-container">
-                <a asp-all-route-data="@this.ViewBag.RouteData" asp-route-viewCount="@viewCount" class="btn-orange items-view-all">
+                <a asp-action="Index" asp-all-route-data="this.ViewBag.RouteData" asp-route-viewCount="@viewCount" class="btn-orange items-view-all">
                     View more
                 </a>
             </div>

@@ -29,9 +29,9 @@
                     <img src="/images/rest/logo-dark.png" alt="firm-logo">
                 </a>
             </div>
-            @* <form asp-controller="Login" asp-action="Index">
+            <form asp-controller="Login" asp-action="Index">
                 <input />
-            </form> *@
+            </form>
             <ul class="menu">
                 <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                 <li><a>Katalog</a></li>
@@ -39,9 +39,19 @@
             </ul>
         </nav>
     </header>
-    <a asp-controller="Login" asp-action="SignUp">
-        Sign up
-    </a>
+    @if(this.ViewBag.loggedIn != true)
+    {
+        <a asp-controller="Login" asp-action="SignIn">
+            Sign up
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Login" asp-action="SignOut">
+            Sign out
+        </a>
+    }
+
     <div class="flex-column justify-content-between">
         <main role="main">
             @RenderBody()
