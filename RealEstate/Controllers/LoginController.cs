@@ -32,15 +32,7 @@ namespace RealEstate.Controllers
 
             List<User> found = users.Where(user => user.Username == login.Username).ToList();
 
-            if (found.Count == 0)
-            {
-                found = users.Where(user => user.Email == login.Username).ToList();
-            }
-            else if (found.Count > 1)
-            {
-                found.Where(found => found.Email == login.Username).ToList();
-                Console.WriteLine();
-            }
+            found = found.Count == 0 ? users.Where(user => user.Email == login.Username).ToList() : found;
 
             if (found.Count != 1)
             {

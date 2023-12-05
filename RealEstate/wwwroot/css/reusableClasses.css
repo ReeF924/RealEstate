@@ -124,6 +124,14 @@
         transition: 200ms ease;
     }
 
+.btn-orange:disabled{
+    background-color: rgb(255, 173, 72);
+}
+
+.btn-orange:disabled:hover{
+    background-color: rgb(255, 173, 72);
+}
+
 .partial-border {
     position: relative;
 }

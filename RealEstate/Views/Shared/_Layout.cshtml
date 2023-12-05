@@ -25,8 +25,13 @@
         </div>
         <nav>
             <div class="logo-container">
-                <img src="/images/rest/logo-dark.png" alt="firm-logo">
+                <a asp-controller="estateOffers" asp-action="index" class="logo-index-link">
+                    <img src="/images/rest/logo-dark.png" alt="firm-logo">
+                </a>
             </div>
+            @* <form asp-controller="Login" asp-action="Index">
+                <input />
+            </form> *@
             <ul class="menu">
                 <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                 <li><a>Katalog</a></li>
@@ -43,10 +48,10 @@
         </main>
 
         <footer class="footer-index">
-            <div class="footer-container">
+            <div class="footer-container pb-2">
                 <div class="newsletter-subscription">
                     <h3 class="footer-title">Newsletter</h3>
-                    <p class="mb-10">Keep up with the company's drug addicts and nymfs, it's not as easy as it seams</p>
+                    <p class="mb-10">Keep up with the company's drug addicts and nymfs, it's not as easy as it seems</p>
                     <form class="newsletter-form" method="post">
                         <input type="email" class="newsletter-text" placeholder="Zadejte svůj email" required>
                         <button class="btn-orange search-bar-button">Odeslat</button>

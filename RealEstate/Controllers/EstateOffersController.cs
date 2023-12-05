@@ -7,8 +7,11 @@ namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
-        public IActionResult Index(char? filter = null)
+        [HttpGet]
+        public IActionResult Index(int viewCount = 6, char? filter = null)
         {
+            this.ViewBag.ViewCount = viewCount;
+
             var offers = this._context.Offers?.ToList();
             offers?.ForEach(offer =>
             {
@@ -18,11 +21,65 @@ namespace RealEstate.Controllers
                 });
             });
 
+            this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
+
+            if (filter != null)
+                offers = offers!.Where(offer => offer.Category == filter).ToList();
+
             this.ViewBag.Offers = offers;
-            this.ViewBag.Filter = filter;
+
+            Dictionary<string, string> dic = new();
+            foreach (var item in HttpContext.Request.Query)
+            {
+                dic[item.Key] = item.Value!;
+            }
+            foreach (var item in HttpContext.Request.RouteValues)
+            {
+                dic[item.Key] = item.Value!.ToString()!;
+            }
+
+            this.ViewBag.RouteData = dic;
             return View();
         }
-        //[HttpGet]
+        //Muze jenom vyhledavat nebo filtrovat, ne oboji, asi vylepsit potom (?)
+        [HttpPost]
+        public IActionResult Index(SearchModel search)
+        {
+            var offers = this._context.Offers?.ToList();
+            offers?.ForEach(offer =>
+            {
+                this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>
+                {
+                    offer.Images!.Add(image);
+                });
+            });
+            this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
+            this.ViewBag.ViewCount = 6;
+
+            //pak upravit, tohle je jak by to psal hanak
+            offers = offers!.Where(offer => offer.Name.ToLower().StartsWith(search.Value)).ToList();
+            this._context.Offers!.Where(offer => offer.Name.Contains(search.Value) && !(offer.Name.ToLower().StartsWith(search.Value)))
+                .ForEachExt(offer => offers.Add(offer));
+
+
+            this.ViewBag.Offers = offers;
+            Dictionary<string, string> dic = new();
+
+            //prepsat nejak, jestli pujde
+            foreach (var item in HttpContext.Request.Query)
+            {
+                dic[item.Key] = item.Value!;
+            }
+            foreach (var item in HttpContext.Request.RouteValues)
+            {
+                dic[item.Key] = item.Value!.ToString()!;
+            }
+
+            this.ViewBag.RouteData = dic;
+
+            return View();
+        }
+        [HttpGet]
         public IActionResult Detail(int id)
         {
             this.DetailInit(id);
@@ -33,14 +90,23 @@ namespace RealEstate.Controllers
         {
             //modelstate
 
-            Inquiry inquiry = new() { IdOffer = id, Name = input.Name, Email = input.Email,
-                PhoneNumber = input.PhoneNumber, AdditionalInformation = input.AdditionalInformation,
-                IdUser = input.IdUser, Surname = input.Surname, DateTimeSent = DateTime.Now };
+            Inquiry inquiry = new()
+            {
+                IdOffer = id,
+                Name = input.Name,
+                Email = input.Email,
+                PhoneNumber = input.PhoneNumber,
+                AdditionalInformation = input.AdditionalInformation,
+                IdUser = input.IdUser,
+                Surname = input.Surname,
+                DateTimeSent = DateTime.Now
+            };
 
+            this.ViewBag.InquirySent = true;
             this._context.Inquiries.Add(inquiry);
-            this._context.SaveChanges();   
+            this._context.SaveChanges();
             this.DetailInit(id);
-            return View(new Inquiry());
+            return View(inquiry);
         }
         private void DetailInit(int id)
         {

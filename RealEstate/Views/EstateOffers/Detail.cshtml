@@ -137,18 +137,20 @@
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 string ta = inquiry.AdditionalInformation ?? "";
+                bool disabled = this.ViewBag.InquirySent ?? false;
             }
             <div class="interested-form mb-20">
-                <input asp-for="Name" type="text" placeholder="Jméno"value="@inquiry.Name" required>
-                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required />
-                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon"value="@inquiry.PhoneNumber" required>
+                <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
+                required disabled="@disabled" />
+                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required disabled="@disabled"/>
+                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon" value="@inquiry.PhoneNumber" required disabled="@disabled">
                 <input asp-for="Email" type="email" placeholder="E-mail"
-                value="@inquiry.Email" required>
+                value="@inquiry.Email" required disabled="@disabled">
                 <textarea asp-for="AdditionalInformation" class="interested-form-input noresize"
-                 placeholder="Napište nám zprávu">@ta</textarea>
+                 placeholder="Napište nám zprávu" disabled="@disabled">@ta</textarea>
             </div>
             <div class="flex-row center">
-                <button type="submit" class="btn-orange interested-button">Odeslat poptávku</button>
+                <button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Objednávka odeslána" : "Odeslat poptávku")</button>
             </div>
         </form>
     </section>

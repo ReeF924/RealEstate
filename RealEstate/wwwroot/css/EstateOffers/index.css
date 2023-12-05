@@ -5,12 +5,14 @@
 
 html {
     min-height:100vh;
+    display:flex;
+    justify-content:space-between;
 }
 
 body {
     margin: 0px;
     font-family: Arial, Helvetica, sans-serif;
-    min-width: 100vh;
+    height: 100%;
 }
 
 h1,
@@ -55,6 +57,11 @@ nav {
 
 .logo-container {
     margin-top: 0.5rem;
+}
+
+.logo-index-link{
+    height: 100px;
+    cursor: pointer;
 }
 
 .menu {
@@ -338,7 +345,10 @@ h2 {
 
 .footer-index {
     background: rgb(20, 20, 20);
-    padding: 30px 40px 20px 40px;
+    padding: 30px 40px 40px 40px;
+    position: relative;
+    height: 300px;
+    bottom: 0px;
 }
 
 .footer-container {
