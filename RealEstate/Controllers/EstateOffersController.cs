@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models.DatabaseModels;
 using RealEstate.Models;
 using System.Diagnostics;
