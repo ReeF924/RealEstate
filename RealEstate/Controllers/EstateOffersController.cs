@@ -7,8 +7,10 @@ namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
-        public IActionResult Index(char? filter = null)
+        public IActionResult Index(int viewCount = 6, char? filter = null)
         {
+            this.ViewBag.ViewCount = viewCount;
+
             var offers = this._context.Offers?.ToList();
             offers?.ForEach(offer =>
             {
@@ -18,8 +20,24 @@ namespace RealEstate.Controllers
                 });
             });
 
+            this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
+
+            if (filter != null)
+                offers = offers!.Where(offer => offer.Category == filter).ToList();
+
             this.ViewBag.Offers = offers;
-            this.ViewBag.Filter = filter;
+
+            Dictionary<string, string> dic = new();
+            foreach (var item in HttpContext.Request.Query)
+            {
+                dic[item.Key] = item.Value;
+            }
+            foreach (var item in HttpContext.Request.RouteValues)
+            {
+                dic[item.Key] = item.Value.ToString();
+            }
+
+            this.ViewBag.RouteData = dic;
             return View();
         }
         //[HttpGet]
@@ -37,10 +55,11 @@ namespace RealEstate.Controllers
                 PhoneNumber = input.PhoneNumber, AdditionalInformation = input.AdditionalInformation,
                 IdUser = input.IdUser, Surname = input.Surname, DateTimeSent = DateTime.Now };
 
+            this.ViewBag.InquirySent = true;
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();   
             this.DetailInit(id);
-            return View(new Inquiry());
+            return View(inquiry);
         }
         private void DetailInit(int id)
         {

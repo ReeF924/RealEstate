@@ -137,11 +137,12 @@
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 string ta = inquiry.AdditionalInformation ?? "";
+                string disabled = this.ViewBag.InquirySent == null ? "disabled" : "";
             }
             <div class="interested-form mb-20">
-                <input asp-for="Name" type="text" placeholder="Jméno"value="@inquiry.Name" required>
-                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required />
-                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon"value="@inquiry.PhoneNumber" required>
+                <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name" required @disabled>
+                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required/>
+                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon" value="@inquiry.PhoneNumber" required>
                 <input asp-for="Email" type="email" placeholder="E-mail"
                 value="@inquiry.Email" required>
                 <textarea asp-for="AdditionalInformation" class="interested-form-input noresize"
