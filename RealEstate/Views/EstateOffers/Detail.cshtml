@@ -130,7 +130,7 @@
             }
         </div>
         @model Inquiry
-        <form asp-action="Detail" class="center">
+        <form asp-action="SendInquiry" asp-route-id="@offer.Id" class="center">
             <div>
                 <h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
             </div>

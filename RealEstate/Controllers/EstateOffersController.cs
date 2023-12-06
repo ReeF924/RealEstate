@@ -28,10 +28,6 @@ namespace RealEstate.Controllers
 
             this.ViewBag.Offers = offers;
 
-            
-
-            this.ViewBag.RouteData = routeData;
-
             return View();
         }
         //Muze jenom vyhledavat nebo filtrovat, ne oboji, asi vylepsit potom (?)
@@ -72,14 +68,13 @@ namespace RealEstate.Controllers
 
             return View();
         }
-        [HttpGet]
         public IActionResult Detail(int id)
         {
             this.DetailInit(id);
             return View(new Inquiry());
         }
-        [HttpPost]
-        public IActionResult Detail(int id, Inquiry input)
+
+        public IActionResult SendInquiry(int id, Inquiry input)
         {
             //modelstate - validace
 
@@ -95,11 +90,12 @@ namespace RealEstate.Controllers
                 DateTimeSent = DateTime.Now
             };
 
-            this.ViewBag.InquirySent = true;
+            //this.ViewBag.InquirySent = true;
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();
             this.DetailInit(id);
-            return View(inquiry);
+            //return View();
+            return RedirectToAction("Detail", new {id = id});
         }
         private void DetailInit(int id)
         {
