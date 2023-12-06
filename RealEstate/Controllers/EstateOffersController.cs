@@ -30,7 +30,6 @@ namespace RealEstate.Controllers
 
             return View();
         }
-        //Muze jenom vyhledavat nebo filtrovat, ne oboji, asi vylepsit potom (?)
         [HttpPost]
         public IActionResult Index(SearchModel search)
         {
@@ -52,50 +51,30 @@ namespace RealEstate.Controllers
 
 
             this.ViewBag.Offers = offers;
-            Dictionary<string, string> dic = new();
-
-            //prepsat nejak, jestli pujde
-            foreach (var item in HttpContext.Request.Query)
-            {
-                dic[item.Key] = item.Value!;
-            }
-            foreach (var item in HttpContext.Request.RouteValues)
-            {
-                dic[item.Key] = item.Value!.ToString()!;
-            }
-
-            this.ViewBag.RouteData = dic;
 
             return View();
         }
-        public IActionResult Detail(int id)
+        public IActionResult Detail(int id, int? idInquiry)
         {
             this.DetailInit(id);
-            return View(new Inquiry());
+            this.ViewBag.Inquiry = idInquiry != null ? this._context.Inquiries.Find(idInquiry) : null;
+            return View();
         }
 
-        public IActionResult SendInquiry(int id, Inquiry input)
+        public IActionResult SendInquiry(int idOffer, Inquiry inquiry)
         {
             //modelstate - validace
 
-            Inquiry inquiry = new()
-            {
-                IdOffer = id,
-                Name = input.Name,
-                Email = input.Email,
-                PhoneNumber = input.PhoneNumber,
-                AdditionalInformation = input.AdditionalInformation,
-                IdUser = input.IdUser,
-                Surname = input.Surname,
-                DateTimeSent = DateTime.Now
-            };
+            inquiry.Id = 0;
+            inquiry.IdOffer = idOffer;
+            inquiry.DateTimeSent = DateTime.Now;
 
             //this.ViewBag.InquirySent = true;
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();
-            this.DetailInit(id);
+            this.DetailInit(idOffer);
             //return View();
-            return RedirectToAction("Detail", new {id = id});
+            return RedirectToAction("Detail", new {id = idOffer, idInquiry = inquiry.Id});
         }
         private void DetailInit(int id)
         {

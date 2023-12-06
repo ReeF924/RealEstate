@@ -15,12 +15,13 @@ namespace RealEstate.Controllers
 
 
         [HttpPost]
-        public IActionResult SignIn(User user)
+        public IActionResult SignUp(User user)
         {
             //user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             this._context.Users!.Add(user);
             this._context.SaveChanges();
             this.HttpContext.Session.SetString("user", user.Username);
+            this.ViewBag.FooterVisible = false;
 
             return RedirectToAction("Index", "EstateOffers");
         }

@@ -9,6 +9,7 @@ namespace RealEstate
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSession();
+            //builder.Services.AddEntityFrameworkProxies();
 
             var app = builder.Build();
 

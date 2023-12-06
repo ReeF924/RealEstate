@@ -15,6 +15,7 @@ namespace RealEstate.Models.DatabaseModels
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySQL("server=mysqlstudenti.litv.sssvt.cz;database=4b1_veseckylukas_db1;user=veseckylukas;password=123456;SslMode=none");
+            //optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

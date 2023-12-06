@@ -130,14 +130,14 @@
             }
         </div>
         @model Inquiry
-        <form asp-action="SendInquiry" asp-route-id="@offer.Id" class="center">
+        <form asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
             <div>
                 <h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
             </div>
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 string ta = inquiry.AdditionalInformation ?? "";
-                bool disabled = this.ViewBag.InquirySent ?? false;
+                bool disabled = this.ViewBag.Inquiry != null;
             }
             <div class="interested-form mb-20">
                 <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
