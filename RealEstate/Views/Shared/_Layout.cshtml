@@ -29,9 +29,26 @@
                     <img src="/images/rest/logo-dark.png" alt="firm-logo">
                 </a>
             </div>
-            <form asp-controller="Login" asp-action="Index">
-                <input />
-            </form>
+            @* @if (this.ViewBag.IdUser == null)
+            {
+                @model LoginModel
+                <form asp-controller="Login" asp-action="Index">
+                    <input asp-for="Username" type="text" />
+                    <input asp-for="Password" type="password" />
+                </form>
+            }
+            else
+            {
+                User user = this.ViewContext.RouteData.Values["controller"]
+                <div class="user-info">
+                    <div class="user-name">
+                        @this.ViewBag.user.Name
+                    </div>
+                    <div class="user-surname">
+                        @this.ViewBag.user.Surname
+                    </div>
+                </div>
+            } *@
             <ul class="menu">
                 <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                 <li><a>Katalog</a></li>

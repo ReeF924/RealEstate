@@ -1,3 +1,7 @@
+@section Scripts {
+    <script src="~/js/detail.js"></script>
+}
+
 <main class="main-detail">
     <section class="mb-10">
         @{
@@ -5,30 +9,51 @@
             Image? image = offer.Images!.FirstOrDefault();
             string firstImagePath = image != null ? PathHelper.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : PathHelper.NotFoundImg;
 
-            <div class="detail-image">
+            <div class="detail-photo">
                 <img src="@firstImagePath" alt="detail-image">
             </div>
             <div class="sub-photos">
                 @{
                     int loops = Math.Min(offer.Images!.Count - 1, 5);
+                    string className;
                 }
 
-                @for (int i = 1; i <= loops; i++)
+                @if (offer.Images.Count < 7)
                 {
-                    image = offer.Images[i];
-                    string alt = "detailSub_" + i.ToString();
-                    <a href="">
-                        <img src="@PathHelper.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString())" alt="@alt">
-                    </a>
+                    @for (int i = 0; i <= loops; i++)
+                    {
+                        className = i == 0 ? "selected-sub-photo" : "";
+                        image = offer.Images[i];
+                        string alt = "detailSub_" + i.ToString();
+
+                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                    }
                 }
-                @if (offer.Images.Count > 6)
+                else
                 {
-                    image = offer.Images[6];
+                    @for (int i = 0; i < loops; i++)
+                    {
+                        className = i == 0 ? "selected-sub-photo" : "";
+                        image = offer.Images[i];
+                        string alt = "detailSub_" + i.ToString();
+
+                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                    }
+
+                    image = offer.Images[5];
                     string label = "dalších " + (offer.Images.Count - 6).ToString() + " fotek";
-                    <a class="dark-layer-over" href="./next">
-                        <img src="@PathHelper.GetPathToImage(" Offers", image.IdOffer.ToString(), image.Id.ToString())" alt="detailSub_6">
+                    <a onclick="viewAllSubPhotos(this)" class="dark-layer-over view-more-sub-photo">
+                        <img src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="detailSub_6">
                         <label class="next">@label</label>
                     </a>
+
+                    @for (int i = loops+1; i < offer.Images.Count; i++)
+                    {
+                        image = offer.Images[i];
+                        string alt = "detailSub_" + i.ToString();
+
+                        <img class="d-none additional-sub-photo" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                    }
                 }
             </div>
         }
@@ -43,7 +68,7 @@
             </div>
             <div>
                 <h3 class="item-price">
-                    @offer.Price Kč
+                    @offer.Price.ToString("N0") Kč
                 </h3>
                 <div class="item-price-description">za nemovitost</div>
             </div>
@@ -136,18 +161,17 @@
             </div>
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
-                string ta = inquiry.AdditionalInformation ?? "";
                 bool disabled = this.ViewBag.Inquiry != null;
             }
             <div class="interested-form mb-20">
                 <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
-                required disabled="@disabled" />
-                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required disabled="@disabled"/>
+                       required disabled="@disabled" />
+                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required disabled="@disabled" />
                 <input asp-for="PhoneNumber" type="tel" placeholder="Telefon" value="@inquiry.PhoneNumber" required disabled="@disabled">
                 <input asp-for="Email" type="email" placeholder="E-mail"
-                value="@inquiry.Email" required disabled="@disabled">
-                <textarea asp-for="AdditionalInformation" class="interested-form-input noresize"
-                 placeholder="Napište nám zprávu" disabled="@disabled">@ta</textarea>
+                       value="@inquiry.Email" required disabled="@disabled">
+                <textarea asp-for="AdditionalInformation" class="interested-form-input ta-noresize"
+                          placeholder="Napište nám zprávu" disabled="@disabled"></textarea>
             </div>
             <div class="flex-row center">
                 <button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Objednávka odeslána" : "Odeslat poptávku")</button>

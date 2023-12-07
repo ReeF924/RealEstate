@@ -12,7 +12,7 @@ namespace RealEstate.Controllers
         {
             base.OnActionExecuting(context);
 
-            this.ViewBag.Authenticated = this.HttpContext.Session.GetString("Authenticated") != null;
+            this.ViewBag.user = this.HttpContext.Session.GetString("IdUser");
             
             //give all action data to View
             Dictionary<string, string> routeData = this.HttpContext.Request.Query.ToDictionary(item => item.Key, item => item.Value.ToString()!);

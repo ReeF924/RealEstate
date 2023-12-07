@@ -7,15 +7,16 @@ background-color: blue;
     padding: 0px 15vw 20px 15vw;
 }
 
-.detail-image {
+.detail-photo {
     width: 100%;
     margin: 30px auto 5px auto;
 }
 
-.detail-image img {
+.detail-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .sub-photos {
@@ -23,17 +24,18 @@ background-color: blue;
     grid-template-columns: repeat(6, 1fr);
     justify-content: space-around;
     gap: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
 }
+.selected-sub-photo{
+    border: 2px solid darkorange;
+}
+
 
 .sub-photos img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.sub-photos img:hover {
-    transform: scale(1.03);
-    transition: 150ms;
 }
 
 .dark-layer-over .next {
