@@ -11,8 +11,11 @@ namespace RealEstate.Attributes
 
             if (context.HttpContext.Session.GetString("IdUser") == null)
             {
-                context.Result = new RedirectToActionResult("Index", "EsateOffers", null);
+                context.Result = new RedirectToActionResult("Login", "Login", null);
+                //context.Result = new RedirectToActionResult("Index", "EsateOffers", null);
             }
+
+            
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

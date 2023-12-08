@@ -15,65 +15,61 @@
     <header>
         <div class="header-info">
             <div class="email-contact center-content">
-                <img src="/images/icons/envelope.png">
+                <img src="@Url.Content("~/images/layout/envelope.png")">
                 info@realitintense.org
             </div>
             <div class="tel-contact center-content">
-                <img src="/images/icons/telephone.png">
+                <img src="@Url.Content("~/images/layout/telephone.png")">
                 +420 420 696 969
             </div>
         </div>
         <nav>
             <div class="logo-container">
                 <a asp-controller="estateOffers" asp-action="index" class="logo-index-link">
-                    <img src="/images/rest/logo-dark.png" alt="firm-logo">
+                    <img src="@Url.Content("~/images/layout/logo-dark.png")" alt="firm-logo">
                 </a>
             </div>
             @* @if (this.ViewBag.IdUser == null)
             {
-                @model LoginModel
-                <form asp-controller="Login" asp-action="Index">
-                    <input asp-for="Username" type="text" />
-                    <input asp-for="Password" type="password" />
-                </form>
+            @model LoginModel
+            <form asp-controller="Login" asp-action="Index">
+            <input asp-for="Username" type="text" />
+            <input asp-for="Password" type="password" />
+            </form>
             }
             else
             {
-                User user = this.ViewContext.RouteData.Values["controller"]
-                <div class="user-info">
-                    <div class="user-name">
-                        @this.ViewBag.user.Name
-                    </div>
-                    <div class="user-surname">
-                        @this.ViewBag.user.Surname
-                    </div>
-                </div>
+            User user = this.ViewContext.RouteData.Values["controller"]
+            <div class="user-info">
+            <div class="user-name">
+            @this.ViewBag.user.Name
+            </div>
+            <div class="user-surname">
+            @this.ViewBag.user.Surname
+            </div>
+            </div>
             } *@
+
             <ul class="menu">
                 <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                 <li><a>Katalog</a></li>
-                <li><a>Kontakt</a></li>
+                @if (this.ViewBag.user != null)
+                {
+                    <li><a asp-controller="Login" asp-action="Logout">Logout</a></li>
+                }
+                else
+                {
+                    <li><a asp-controller="Login" asp-action="Index">Login</a></li>
+                }
             </ul>
         </nav>
     </header>
-    @if (this.ViewBag.loggedIn != true)
-    {
-        <a asp-controller="Login" asp-action="SignUp">
-            Sign up
-        </a>
-    }
-    else
-    {
-        <a asp-controller="Login" asp-action="SignOut">
-            Sign out
-        </a>
-    }
 
     <div class="flex-column justify-content-between">
         <main role="main">
             @RenderBody()
         </main>
-        @if (this.ViewBag.FooterVisible == false)
+        @if (this.ViewBag.FooterVisible == null)
         {
             <footer class="footer-index">
                 <div class="footer-container pb-2">
