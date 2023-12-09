@@ -10,6 +10,7 @@ namespace RealEstate.Controllers
         [HttpGet]
         public IActionResult Index(int viewCount = 6, char? filter = null)
         {
+            this.ViewBag.NavUnderline = "Home";
             this.ViewBag.ViewCount = viewCount;
 
             var offers = this._context.Offers?.ToList();
@@ -33,6 +34,8 @@ namespace RealEstate.Controllers
         [HttpPost]
         public IActionResult Index(SearchModel search)
         {
+            this.ViewBag.NavUnderline = "Home";
+            search.Value = search.Value.ToLower().Trim();
             var offers = this._context.Offers?.ToList();
             offers?.ForEach(offer =>
             {
@@ -56,13 +59,16 @@ namespace RealEstate.Controllers
         }
         public IActionResult Detail(int id, int? idInquiry)
         {
+            this.ViewBag.NavUnderline = "Katalog";
             this.DetailInit(id);
             this.ViewBag.Inquiry = idInquiry != null ? this._context.Inquiries.Find(idInquiry) : null;
+            
             return View();
         }
 
         public IActionResult SendInquiry(int idOffer, Inquiry inquiry)
         {
+            this.ViewBag.NavUnderline = "Katalog";
             //modelstate - validace
 
             inquiry.Id = 0;

@@ -47,7 +47,7 @@
                         <label class="next">@label</label>
                     </a>
 
-                    @for (int i = loops+1; i < offer.Images.Count; i++)
+                    @for (int i = loops + 1; i < offer.Images.Count; i++)
                     {
                         image = offer.Images[i];
                         string alt = "detailSub_" + i.ToString();
@@ -78,7 +78,7 @@
             <div class="text-align-right tc-orange text-underline fs-14 pointer">
                 <span>
                     <img class="mr-5"
-                         src="/images/icons/calc.png">spočítat hypotéku
+                         src="@Url.Content($"~/images//detail//calc.png")">spočítat hypotéku
                 </span>
             </div>
         </div>
@@ -136,32 +136,41 @@
                 Admin admin = (Admin)this.ViewBag.Admin;
                 <div class="salesman-info">
                     <div class="salesman-contact mb-10">
-                        <img class="height80 img-roung mr-20" src=@PathHelper.GetPathToImage("admins", admin.Id.ToString()) alt="salesman">
+                        <img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{admin.Id}.png")" alt="salesman">
                         <div>
                             <div class="salesman-name">@admin.Name @admin.Surname</div>
                             <div class="salesman-email text-underline">
-                                <span><img class="mr-5" src="/images/icons/emailName.png" alt="">@admin.Email</span>
+                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//emailName.png")" alt="">@admin.Email</span>
                             </div>
                             <div class="salesman-phone text-underline">
-                                <span><img class="mr-5" src="/images/icons/telName.png" alt="">@admin.PhoneNumber</span>
+                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//telName.png")" alt="">@admin.PhoneNumber</span>
                             </div>
                         </div>
                     </div>
                     <div class="salesman-awards">
-                        <img class="mr-10" src="/images/icons/Major-Network.png" alt="network-medal">
-                        <img src="/images/icons/CCA-full-color-700px.png" alt="cca medal">
+                        <img class="mr-10" src="@Url.Content($"~/images//detail//Major-Network.png")" alt="network-medal">
+                        <img src="@Url.Content($"~/images//detail//cca-medal.png")" alt="cca medal">
                     </div>
                 </div>
             }
         </div>
         @model Inquiry
-        <form asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
+
+        <form id="inquiryForm" asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
             <div>
                 <h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
             </div>
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 bool disabled = this.ViewBag.Inquiry != null;
+                if(this.ViewBag.User != null)
+                {
+                    User user = (User)this.ViewBag.User;
+                    inquiry.Name = user.Name;
+                    inquiry.Surname = user.Surname;
+                    inquiry.PhoneNumber = user.PhoneNumber;
+                    inquiry.Email = user.Email;
+                };
             }
             <div class="interested-form mb-20">
                 <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
@@ -173,9 +182,18 @@
                 <textarea asp-for="AdditionalInformation" class="interested-form-input ta-noresize"
                           placeholder="Napište nám zprávu" disabled="@disabled"></textarea>
             </div>
-            <div class="flex-row center">
-                <button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Objednávka odeslána" : "Odeslat poptávku")</button>
+            <div class="flex-row jf-space-between">
+                <div class="invisible"></div>
+                <button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Odesláno" : "Odeslat")</button>
+                <button type="button" onclick="clearInquiryForm()" class="btn btn-secondary @(disabled ? "" : "invisible")">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </button>
             </div>
         </form>
+
+
     </section>
 </main>

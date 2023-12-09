@@ -1,5 +1,7 @@
 
-const pictures = document.querySelectorAll('.sub-photos>img');
+const pictures = document.querySelectorAll('.sub-photos img');
+//const viewAllLink = document.querySelector('.view-all-link');
+//pictures.push(viewAllLink.querySelector('img'));
 
 pictures.forEach(selectedPicture => {
     selectedPicture.addEventListener('click', () => {
@@ -15,14 +17,22 @@ pictures.forEach(selectedPicture => {
 });
 
 const viewAllSubPhotos = (viewAllLink) => {
-    const photos = document.querySelectorAll('.sub-photos>img');
+    const photos = document.querySelectorAll('.sub-photos img');
 
     viewAllLink.classList.remove('dark-layer-over');
     viewAllLink.querySelector('label').classList.add('d-none');
 
     photos.forEach(photo => {
         photo.classList.remove('d-none');
-        console.log(photo.getAttribute('alt'));
     });
+}
 
+const clearInquiryForm = () => {
+    const children = document.querySelector('#inquiryForm>.interested-form').children;
+
+    Array.from(children).forEach(attr => {
+        attr.removeAttribute('disabled');
+        attr.value = '';
+    });
+    document.querySelector('.interested-button').removeAttribute('disabled');
 }

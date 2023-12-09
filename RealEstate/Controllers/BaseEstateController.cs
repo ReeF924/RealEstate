@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using RealEstate.Models.DatabaseModels;
+using System.Text.Json;
 
 namespace RealEstate.Controllers
 {
@@ -12,8 +13,11 @@ namespace RealEstate.Controllers
         {
             base.OnActionExecuting(context);
 
-            this.ViewBag.user = this.HttpContext.Session.GetString("IdUser");
-            
+            var value = this.HttpContext.Session.GetString("User");
+
+            if (value != null)
+                this.ViewBag.User = JsonSerializer.Deserialize<User>(value);
+
             //give all action data to View
             Dictionary<string, string> routeData = this.HttpContext.Request.Query.ToDictionary(item => item.Key, item => item.Value.ToString()!);
             this.HttpContext.Request.RouteValues.ForEachExt(item => routeData[item.Key] = item.Value!.ToString()!);

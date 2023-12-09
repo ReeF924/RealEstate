@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="~/css/EstateOffers/index.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/reusableClasses.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/EstateOffers/detail.css" asp-append-version="true" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -29,37 +31,33 @@
                     <img src="@Url.Content("~/images/layout/logo-dark.png")" alt="firm-logo">
                 </a>
             </div>
-            @* @if (this.ViewBag.IdUser == null)
-            {
-            @model LoginModel
-            <form asp-controller="Login" asp-action="Index">
-            <input asp-for="Username" type="text" />
-            <input asp-for="Password" type="password" />
-            </form>
-            }
-            else
-            {
-            User user = this.ViewContext.RouteData.Values["controller"]
-            <div class="user-info">
-            <div class="user-name">
-            @this.ViewBag.user.Name
-            </div>
-            <div class="user-surname">
-            @this.ViewBag.user.Surname
-            </div>
-            </div>
-            } *@
 
+            @{
+                Dictionary<string, bool> navUnderline = new Dictionary<string, bool>(){
+                    {"Home", false},
+                    {"Katalog", false},
+                    {"Login", false}};
+
+                if (this.ViewBag.NavUnderline != null)
+                    navUnderline[this.ViewBag.NavUnderline] = true;
+            }
             <ul class="menu">
-                <li class="nav-item-selected"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
-                <li><a>Katalog</a></li>
-                @if (this.ViewBag.user != null)
+                <li class="@(navUnderline["Home"] ? "nav-item-selected" : "")"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
+                <li class="@(navUnderline["Katalog"] ? "nav-item-selected" : "")"><a>Katalog</a></li>
+                @if (this.ViewBag.User == null)
                 {
-                    <li><a asp-controller="Login" asp-action="Logout">Logout</a></li>
+                    <li class="@(navUnderline["Login"] ? "nav-item-selected" : "")"><a asp-controller="Login" asp-action="Index">Login</a></li>
                 }
                 else
                 {
-                    <li><a asp-controller="Login" asp-action="Index">Login</a></li>
+                    User user = (User)this.ViewBag.User;
+                    string navValue = user.Username;
+
+                    <li><a asp-controller="Login" asp-action="Logout">@(user.Username)
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                    </a></li>
                 }
             </ul>
         </nav>

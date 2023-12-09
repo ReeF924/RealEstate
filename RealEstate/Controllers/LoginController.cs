@@ -3,6 +3,7 @@ using RealEstate.Models.DatabaseModels;
 using BCrypt.Net;
 using RealEstate.Models.LoginModels;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Text.Json;
 
 namespace RealEstate.Controllers
 {
@@ -10,8 +11,10 @@ namespace RealEstate.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            //this.ViewBag.NavUnderline = "Login";
             base.OnActionExecuting(context);
             this.ViewBag.FooterVisible = false;
+            this.ViewBag.NavUnderline = "Login";
         }
 
         [HttpGet]
@@ -37,7 +40,7 @@ namespace RealEstate.Controllers
                 return RedirectToAction("Login", "Login", login);
             }
 
-            this.HttpContext.Session.SetString("IdUser", user.Id.ToString());
+            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
 
             //return RedirectToAction(action, controller, new { succesfulLogin = true });
             return RedirectToAction("Index", "EstateOffers");
@@ -56,17 +59,17 @@ namespace RealEstate.Controllers
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             this._context.Users!.Add(user);
             this._context.SaveChanges();
-            this.HttpContext.Session.SetString("IdUser", user.Id.ToString());
+            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(User));
 
             return RedirectToAction("Index", "EstateOffers");
         }
         public IActionResult Logout()
         {
-            this.HttpContext.Session.Remove("IdUser");
+            this.HttpContext.Session.Remove("User");
 
             return RedirectToAction("Index", "EstateOffers");
         }
 
-
+        //Json web token JWT
     }
 }
