@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealEstate.Models.DatabaseModels
 {
     [PrimaryKey("Id")]
-    public abstract class LoginUser
+    public class LoginUser
     {
         public int Id { get; set; }
         [Required]
@@ -27,5 +28,24 @@ namespace RealEstate.Models.DatabaseModels
         [StringLength(15, MinimumLength = 7)]
         [RegularExpression(@"^(\+[0-9]{1,3})?([0-9]+)$")]
         public string PhoneNumber { get; set; }
+        [JsonConstructor]
+        public LoginUser(string username, string password, string name, string surname, string email, string phoneNumber)
+        {
+            Username = username;
+            Password = password;
+            Name = name;
+            Surname = surname;
+            Email = email;
+            PhoneNumber = phoneNumber;
+        }
+
+        public LoginUser(int id, string username, string password, string name, string surname, string email, string phoneNumber) : this(username, password, name, surname, email, phoneNumber)
+        {
+            Id = id;
+        }
+        public LoginUser()
+        {
+
+        }
     }
 }

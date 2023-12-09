@@ -44,13 +44,13 @@
             <ul class="menu">
                 <li class="@(navUnderline["Home"] ? "nav-item-selected" : "")"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                 <li class="@(navUnderline["Katalog"] ? "nav-item-selected" : "")"><a>Katalog</a></li>
-                @if (this.ViewBag.User == null)
+                @if (this.ViewBag.LoginUser == null)
                 {
                     <li class="@(navUnderline["Login"] ? "nav-item-selected" : "")"><a asp-controller="Login" asp-action="Index">Login</a></li>
                 }
                 else
                 {
-                    User user = (User)this.ViewBag.User;
+                    LoginUser user = (LoginUser)this.ViewBag.LoginUser;
                     string navValue = user.Username;
 
                     <li><a asp-controller="Login" asp-action="Logout">@(user.Username)

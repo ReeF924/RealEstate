@@ -26,21 +26,36 @@ namespace RealEstate.Controllers
         [HttpPost]
         public IActionResult Index(LoginModel login)
         {
-            List<User> users = this._context.Users!.ToList();
+            List<LoginUser> found = new();
+            var users = this._context.Users!;
 
-            List<User> found = users.Where(user => user.Username == login.Username).ToList();
+            List<User> foundUsers = users.Where(user => user.Username == login.Username).ToList();
+            foundUsers = foundUsers.Count == 0 ? users.Where(user => user.Email == login.Username).ToList() : foundUsers;
+            foundUsers.ForEach(user => found.Add(user));
 
-            found = found.Count == 0 ? users.Where(user => user.Email == login.Username).ToList() : found;
+            if (found.Count == 0)
+            {
+                var admins = this._context.Admins!;
+                List<Admin> foundAdmins = new();
+                foundAdmins = this._context.Admins!.Where(admin => admin.Username == login.Username).ToList();
+                foundAdmins = foundAdmins.Count == 0 ? admins.Where(admin => admin.Email == login.Username).ToList() : foundAdmins;
+                foundAdmins.ForEach(admin => found.Add(admin));
+            }
 
-
-            User user = found.First();
-            if (!BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
+            if (found.Count == 0)
             {
                 this.ModelState.AddModelError("Username", "Username or password incorrect");
                 return RedirectToAction("Login", "Login", login);
             }
 
-            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
+            LoginUser loginUser = found.First();
+            if (!BCrypt.Net.BCrypt.Verify(login.Password, loginUser.Password))
+            {
+                this.ModelState.AddModelError("Username", "Username or password incorrect");
+                return RedirectToAction("Login", "Login", login);
+            }
+
+            this.HttpContext.Session.SetString("LoginUser", JsonSerializer.Serialize(loginUser));
 
             //return RedirectToAction(action, controller, new { succesfulLogin = true });
             return RedirectToAction("Index", "EstateOffers");
@@ -54,18 +69,20 @@ namespace RealEstate.Controllers
 
 
         [HttpPost]
-        public IActionResult SignUp(User user)
+        public IActionResult SignUp(User input)
         {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            this._context.Users!.Add(user);
+            input.Password = BCrypt.Net.BCrypt.HashPassword(input.Password);
+
+            this._context.Users!.Add(input);
             this._context.SaveChanges();
-            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(User));
+            LoginUser user = input;
+            this.HttpContext.Session.SetString("LoginUser", JsonSerializer.Serialize(user));
 
             return RedirectToAction("Index", "EstateOffers");
         }
         public IActionResult Logout()
         {
-            this.HttpContext.Session.Remove("User");
+            this.HttpContext.Session.Remove("LoginUser");
 
             return RedirectToAction("Index", "EstateOffers");
         }

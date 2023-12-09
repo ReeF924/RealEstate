@@ -163,9 +163,9 @@
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 bool disabled = this.ViewBag.Inquiry != null;
-                if(this.ViewBag.User != null)
+                if(this.ViewBag.LoginUser != null)
                 {
-                    User user = (User)this.ViewBag.User;
+                    LoginUser user = (LoginUser)this.ViewBag.LoginUser;
                     inquiry.Name = user.Name;
                     inquiry.Surname = user.Surname;
                     inquiry.PhoneNumber = user.PhoneNumber;
