@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models.DatabaseModels;
 using RealEstate.Models;
 using System.Diagnostics;
+using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace RealEstate.Controllers
 {
@@ -44,19 +46,41 @@ namespace RealEstate.Controllers
                     offer.Images!.Add(image);
                 });
             });
+            
             this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
             this.ViewBag.ViewCount = 6;
 
-            //pak upravit, tohle je jak by to psal hanak
-            offers = offers!.Where(offer => offer.Name.ToLower().StartsWith(search.Value)).ToList();
-            this._context.Offers!.Where(offer => offer.Name.Contains(search.Value) && !(offer.Name.ToLower().StartsWith(search.Value)))
-                .ForEachExt(offer => offers.Add(offer));
-
+            offers = this.FindSearchOffers(offers!, search.Value);
 
             this.ViewBag.Offers = offers;
 
             return View();
         }
+
+        private List<Offer> FindSearchOffers(IEnumerable<Offer> offers, string search)
+        {
+            List<Offer> results = new();
+            List<Offer> notFound = new();
+            search = search.ToLower().Trim();
+
+            foreach (Offer offer in offers)
+            {
+                if (offer.Name.ToLower().StartsWith(search))
+                {
+                    results.Add(offer);
+                    continue;
+                }
+                notFound.Add(offer);
+            }
+            notFound.ForEach(offer =>
+            {
+                if (offer.Name.ToLower().Contains(search))
+                    results.Add(offer);
+            });
+
+            return results;
+        }
+
         public IActionResult Detail(int id, int? idInquiry)
         {
             this.ViewBag.NavUnderline = "Katalog";
@@ -75,11 +99,9 @@ namespace RealEstate.Controllers
             inquiry.IdOffer = idOffer;
             inquiry.DateTimeSent = DateTime.Now;
 
-            //this.ViewBag.InquirySent = true;
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();
             this.DetailInit(idOffer);
-            //return View();
             return RedirectToAction("Detail", new {id = idOffer, idInquiry = inquiry.Id});
         }
         private void DetailInit(int id)

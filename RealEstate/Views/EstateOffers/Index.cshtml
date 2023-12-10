@@ -7,8 +7,6 @@
         <h1 class="search-bar-h1">Vyberte si svuj novy byt</h1>
         @model RealEstate.Models.SearchModel
         <form asp-action="index" class="search-bar-form">
-            @* <input asp-for="Value" id="search-input" type="text" name="search-bar" class="search-bar-text" placeholder="Vyhledat podle mesta"
-                   required value="fra"> *@
             <input asp-for="Value" id="search-input" type="text" class="search-bar-text" placeholder="Vyhledat podle nazvu"/>
             <div class="search-bar-button-container">
                 <button id="search-button" class="btn-orange search-bar-button" type="submit">HLEDAT</button>
@@ -63,7 +61,7 @@
                                 <a asp-asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@offer.Id">
                                     @{
                                         var image = offer.Images?.FirstOrDefault();
-                                        string relPath = image != null ? PathHelper.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : PathHelper.NotFoundImg;
+                                        string relPath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
                                     }
                                     <img src="@relPath" alt="offered-house">
                                 </a>

@@ -4,9 +4,9 @@
 }
 
 html {
-    min-height:100vh;
-    display:flex;
-    justify-content:space-between;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
 }
 
 body {
@@ -24,7 +24,7 @@ div {
 }
 
 header {
-    margin: 1% 7% 0 7%;
+    margin: 1% 2% 0 2%;
 }
 
 .header-info {
@@ -52,15 +52,69 @@ header {
 
 nav {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     margin-bottom: 1rem;
+    align-items: center;
+    width: 100%;
+    padding-right: 3%;
+}
+
+    nav > div {
+        display: flex;
+        justify-content: left;
+        flex-direction: row;
+        align-items: center;
+    }
+
+.profile-container {
+    height: 46px;
+    display: flex;
+    align-items: end;
+    font-size: 20px;
+    cursor: pointer;
+    gap: 3px;
+    margin-right: 10px;
+    color: black;
+    text-decoration: none;
+}
+
+    .profile-container img {
+        height: 40px;
+    }
+
+.profile-username{
+    display:flex;
+    align-items:center;
+    gap: 6px;
+    text-align: center;
+}
+
+.dropdown-user {
+    color: black;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-user li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+}
+
+.dropdown-user li:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transition: 200ms ease;
 }
 
 .logo-container {
     margin-top: 0.5rem;
+    margin-right: 50px;
 }
 
-.logo-index-link{
+.logo-index-link {
     height: 100px;
     cursor: pointer;
 }
@@ -70,12 +124,11 @@ nav {
     display: flex;
     justify-content: right;
     align-items: center;
-    gap: 10%;
-    grid-column: 3/4;
+    gap: min(50px, 100px);
     padding-right: 0px;
     margin: 1rem 0 0 0;
     padding: 0px;
-    width: 40%;
+    width: 100%;
 }
 
     .menu li {
@@ -238,7 +291,7 @@ h2 {
     .offers-list a {
         cursor: pointer;
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
         justify-content: center;
     }
 
@@ -264,10 +317,10 @@ h2 {
     flex: 0 0 auto;
 }
 
-.offer-img-container{
+.offer-img-container {
     flex: 1;
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 

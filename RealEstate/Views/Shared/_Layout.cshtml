@@ -26,40 +26,50 @@
             </div>
         </div>
         <nav>
-            <div class="logo-container">
-                <a asp-controller="estateOffers" asp-action="index" class="logo-index-link">
-                    <img src="@Url.Content("~/images/layout/logo-dark.png")" alt="firm-logo">
-                </a>
+            <div>
+                <div class="logo-container">
+                    <a asp-controller="estateOffers" asp-action="index" class="logo-index-link">
+                        <img src="@Url.Content("~/images/layout/logo-dark.png")" alt="firm-logo">
+                    </a>
+                </div>
+
+                @{
+                    Dictionary<string, bool> navUnderline = new Dictionary<string, bool>(){
+                {"Home", false},
+                {"Katalog", false},
+                {"Kontakt", false}};
+
+                    if (this.ViewBag.NavUnderline != null)
+                        navUnderline[this.ViewBag.NavUnderline] = true;
+                }
+                <ul class="menu">
+                    <li class="@(navUnderline["Home"] ? "nav-item-selected" : "")"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
+                    <li class="@(navUnderline["Katalog"] ? "nav-item-selected" : "")"><a asp-action="">Katalog</a></li>
+                    <li class="@(navUnderline["Kontakt"] ? "nav-item-selected" : "")"><a asp-action="">Kontakt</a></li>
+                </ul>
             </div>
-
-            @{
-                Dictionary<string, bool> navUnderline = new Dictionary<string, bool>(){
-                    {"Home", false},
-                    {"Katalog", false},
-                    {"Login", false}};
-
-                if (this.ViewBag.NavUnderline != null)
-                    navUnderline[this.ViewBag.NavUnderline] = true;
+            @if (this.ViewBag.LoginUser == null)
+            {
+                <a asp-controller="Login" asp-action="Index" class="profile-container">
+                    <span>Přihlásit se</span>
+                </a>
             }
-            <ul class="menu">
-                <li class="@(navUnderline["Home"] ? "nav-item-selected" : "")"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
-                <li class="@(navUnderline["Katalog"] ? "nav-item-selected" : "")"><a>Katalog</a></li>
-                @if (this.ViewBag.LoginUser == null)
-                {
-                    <li class="@(navUnderline["Login"] ? "nav-item-selected" : "")"><a asp-controller="Login" asp-action="Index">Login</a></li>
-                }
-                else
-                {
-                    LoginUser user = (LoginUser)this.ViewBag.LoginUser;
-                    string navValue = user.Username;
-
-                    <li><a asp-controller="Login" asp-action="Logout">@(user.Username)
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                    </a></li>
-                }
-            </ul>
+            else
+            {
+                LoginUser loginUser = (LoginUser)this.ViewBag.LoginUser;
+                bool ppExists = File.Exists(Url.Content($"~/images//admins//"));
+                <div class="profile-container">
+                    <div class="profile-dropdown link-standard profile-container">
+                        <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@loginUser.Username
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a asp-controller="EstateOffers" asp-action="Index">Setttings</a></li>
+                            <li><a asp-controller="Login" asp-action="Logout">Log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
         </nav>
     </header>
 

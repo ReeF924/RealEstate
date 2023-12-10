@@ -7,7 +7,7 @@
         @{
             Offer offer = (Offer)ViewBag.Offer;
             Image? image = offer.Images!.FirstOrDefault();
-            string firstImagePath = image != null ? PathHelper.GetPathToImage("Offers", image.IdOffer.ToString(), image.Id.ToString()) : PathHelper.NotFoundImg;
+            string firstImagePath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
 
             <div class="detail-photo">
                 <img src="@firstImagePath" alt="detail-image">
@@ -17,6 +17,7 @@
                     int loops = Math.Min(offer.Images!.Count - 1, 5);
                     string className;
                 }
+
 
                 @if (offer.Images.Count < 7)
                 {

@@ -79,6 +79,16 @@
 resize: none;
 }
 
+.link-standard {
+    color: black;
+    text-decoration: none;
+}
+
+.link-standard a {
+color: black;
+    text-decoration: none;
+}
+
 .link-orange {
     color: darkorange;
 }
