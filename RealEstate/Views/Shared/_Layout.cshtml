@@ -48,7 +48,7 @@
                     <li class="@(navUnderline["Kontakt"] ? "nav-item-selected" : "")"><a asp-action="">Kontakt</a></li>
                 </ul>
             </div>
-            @if (this.ViewBag.LoginUser == null)
+            @if (this.ViewBag.User == null)
             {
                 <a asp-controller="Login" asp-action="Index" class="profile-container">
                     <span>Přihlásit se</span>
@@ -56,12 +56,12 @@
             }
             else
             {
-                LoginUser loginUser = (LoginUser)this.ViewBag.LoginUser;
+                User user = (User)this.ViewBag.User;
                 bool ppExists = File.Exists(Url.Content($"~/images//admins//"));
                 <div class="profile-container">
                     <div class="profile-dropdown link-standard profile-container">
                         <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@loginUser.Username
+                            <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@user.Username
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a asp-controller="EstateOffers" asp-action="Index">Setttings</a></li>

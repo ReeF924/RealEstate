@@ -9,8 +9,7 @@ namespace RealEstate.Models.DatabaseModels
     public class Offer
     {
         public int Id { get; set; }
-        [Column("AdminId")]
-        public int? IdAdmin { get; set; }
+        public int? IdBroker { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public string Location { get; set; }
@@ -22,6 +21,5 @@ namespace RealEstate.Models.DatabaseModels
         public List<Image> Images { get; set; } = new();
         [ForeignKey("IdOffer")]
         public List<OfferParameter> OfferParameters { get; set; } = new();
-        //public List<KeyValuePair<string, string>> Parameters { get; set; } = new();
     }
 }

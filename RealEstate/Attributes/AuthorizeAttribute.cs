@@ -9,7 +9,7 @@ namespace RealEstate.Attributes
         {
             var controller = (Controller)context.Controller;
 
-            if (context.HttpContext.Session.GetString("LoginUser") == null)
+            if (context.HttpContext.Session.GetString("User") == null)
             {
                 context.Result = new RedirectToActionResult("Login", "Login", null);
                 //context.Result = new RedirectToActionResult("Index", "EsateOffers", null);

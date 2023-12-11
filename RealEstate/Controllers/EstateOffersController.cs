@@ -122,7 +122,7 @@ namespace RealEstate.Controllers
             });
             this.ViewBag.Offer = offer;
             this.ViewBag.OfferParameters = offerParameters;
-            this.ViewBag.Admin = this._context.Admins!.Find(offer.IdAdmin);
+            this.ViewBag.Broker = this._context.Users!.Find(offer.IdBroker);
         }
 
 

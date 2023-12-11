@@ -13,10 +13,10 @@ namespace RealEstate.Controllers
         {
             base.OnActionExecuting(context);
 
-            var value = this.HttpContext.Session.GetString("LoginUser");
+            var value = this.HttpContext.Session.GetString("User");
 
             if (value != null)
-                this.ViewBag.LoginUser = JsonSerializer.Deserialize<LoginUser>(value);
+                this.ViewBag.User = JsonSerializer.Deserialize<User>(value);
 
             //give all action data to View
             Dictionary<string, string> routeData = this.HttpContext.Request.Query.ToDictionary(item => item.Key, item => item.Value.ToString()!);

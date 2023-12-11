@@ -128,23 +128,27 @@
             </table>
         </div>
     </section>
-    <section class="contact">
-        <div class="salesman">
+    @{
+        bool hasBroker = this.ViewBag.Broker != null;
+        // string contactClass = 
+    }
+    <section class="contact @(hasBroker ? " justify-content-between" : "justify-content-center")">
+        @if (hasBroker)
+        {
+            <div class="salesman">
 
-            <h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
-            @if (this.ViewBag.Admin != null)
-            {
-                Admin admin = (Admin)this.ViewBag.Admin;
+                <h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
+                @{User broker = (User)this.ViewBag.Broker;}
                 <div class="salesman-info">
                     <div class="salesman-contact mb-10">
-                        <img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{admin.Id}.png")" alt="salesman">
+                        <img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{broker.Id}.png")" alt="salesman">
                         <div>
-                            <div class="salesman-name">@admin.Name @admin.Surname</div>
+                            <div class="salesman-name">@broker.Name @broker.Surname</div>
                             <div class="salesman-email text-underline">
-                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//emailName.png")" alt="">@admin.Email</span>
+                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//emailName.png")" alt="">@broker.Email</span>
                             </div>
                             <div class="salesman-phone text-underline">
-                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//telName.png")" alt="">@admin.PhoneNumber</span>
+                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//telName.png")" alt="">@broker.PhoneNumber</span>
                             </div>
                         </div>
                     </div>
@@ -153,8 +157,8 @@
                         <img src="@Url.Content($"~/images//detail//cca-medal.png")" alt="cca medal">
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
         @model Inquiry
 
         <form id="inquiryForm" asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
@@ -164,9 +168,9 @@
             @{
                 Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
                 bool disabled = this.ViewBag.Inquiry != null;
-                if(this.ViewBag.LoginUser != null)
+                if (this.ViewBag.User != null)
                 {
-                    LoginUser user = (LoginUser)this.ViewBag.LoginUser;
+                    User user = (User)this.ViewBag.User;
                     inquiry.Name = user.Name;
                     inquiry.Surname = user.Surname;
                     inquiry.PhoneNumber = user.PhoneNumber;
