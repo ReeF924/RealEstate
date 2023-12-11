@@ -34,7 +34,7 @@ namespace RealEstate.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Index(SearchModel search)
+        public IActionResult Index(StringInputModel search)
         {
             this.ViewBag.NavUnderline = "Home";
             search.Value = search.Value.ToLower().Trim();

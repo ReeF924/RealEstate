@@ -4,6 +4,9 @@ using BCrypt.Net;
 using RealEstate.Models.LoginModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
+using RealEstate.Services;
+using RealEstate.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace RealEstate.Controllers
 {
@@ -18,7 +21,7 @@ namespace RealEstate.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(bool forgotPassword = false)
         {
             return View(new LoginModel());
         }
@@ -34,14 +37,14 @@ namespace RealEstate.Controllers
             if (found.Count == 0)
             {
                 this.ModelState.AddModelError("Username", "Username or password incorrect");
-                return RedirectToAction("Login", "Login", login);
+                return RedirectToAction("Index", "Login", login);
             }
 
             User user = found.First();
             if (!BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
                 this.ModelState.AddModelError("Username", "Username or password incorrect");
-                return RedirectToAction("Login", "Login", login);
+                return RedirectToAction("Index", "Login", login);
             }
 
             this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
@@ -51,14 +54,13 @@ namespace RealEstate.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignUp()
+        public IActionResult SignUp(User? user = null)
         {
-            return View(new User());
+            return View(user ?? new User());
         }
 
-
         [HttpPost]
-        public IActionResult SignUp(User input)
+        public IActionResult CreateUser(User input)
         {
             input.Password = BCrypt.Net.BCrypt.HashPassword(input.Password);
 
@@ -74,6 +76,28 @@ namespace RealEstate.Controllers
             this.HttpContext.Session.Remove("User");
 
             return RedirectToAction("Index", "EstateOffers");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(StringInputModel emailModel)
+        {
+            var user = this._context.Users.Where(user => user.Email == emailModel.Value).FirstOrDefault();
+
+            if (user != null)
+            {
+                string passwd = PasswordService.GeneratePassword();
+                user.Password = BCrypt.Net.BCrypt.HashPassword(passwd);
+                this._context.SaveChanges();
+                MailService.SendMail(user, passwd);
+            }
+
+            return RedirectToAction("Index", "EstateOffers", new { forgotPassword = true });
         }
 
         //Json web token JWT

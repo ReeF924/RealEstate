@@ -1,6 +1,6 @@
 ﻿namespace RealEstate.Models
 {
-    public class SearchModel
+    public class StringInputModel
     {
         public string Value { get; set; }
     }
