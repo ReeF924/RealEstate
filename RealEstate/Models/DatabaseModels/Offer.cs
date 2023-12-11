@@ -9,6 +9,7 @@ namespace RealEstate.Models.DatabaseModels
     public class Offer
     {
         public int Id { get; set; }
+        [Column("AdminId")]
         public int? IdAdmin { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }

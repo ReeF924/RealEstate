@@ -13,7 +13,7 @@ namespace RealEstate.Controllers
             this.ViewBag.NavUnderline = "Home";
             this.ViewBag.ViewCount = viewCount;
 
-            var offers = this._context.Offers?.ToList();
+            List<Offer> offers = this._context.Offers?.ToList()!;
             offers?.ForEach(offer =>
             {
                 this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>

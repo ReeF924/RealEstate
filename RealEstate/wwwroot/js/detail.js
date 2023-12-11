@@ -18,13 +18,13 @@ pictures.forEach(selectedPicture => {
 
 const viewAllSubPhotos = (viewAllLink) => {
     const photos = document.querySelectorAll('.sub-photos img');
-
     viewAllLink.classList.remove('dark-layer-over');
     viewAllLink.querySelector('label').classList.add('d-none');
 
     photos.forEach(photo => {
         photo.classList.remove('d-none');
     });
+    e.stopPropagation();
 }
 
 const clearInquiryForm = () => {
