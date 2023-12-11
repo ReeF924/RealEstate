@@ -11,11 +11,13 @@
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
                             <div class="card-header"><h3 class="text-center font-weight-light my-4 partial-border">Create Account</h3></div>
                             <div class="card-body">
-                                <form asp-controller="Login" asp-action="CreateUser">
+
+                                <form asp-controller="Login" asp-action="@(this.ViewBag.Type + "User")" asp-route-idUser ="@this.ViewBag.IdUser" >
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input asp-for="Username" class="form-control" id="inputUsername" type="text" placeholder="Enter you username" />
+                                                <input asp-for="Username" class="form-control" id="inputUsername" type="text"
+                                                       placeholder="Enter you username" />
                                                 <label for="inputEmail">Username</label>
                                             </div>
                                         </div>
@@ -58,14 +60,17 @@
                                     </div>
                                     <div class="mt-4 mb-0 d-grid">
                                         <button type="submit" class="btn-orange py-2">
-                                            Create Account
+                                            @this.ViewBag.Type Account
                                         </button>
                                     </div>
                                 </form>
                             </div>
-                            <div class="card-footer text-center py-3">
-                                <div class="small"><a class="link-orange" href="login.html">Have an account? Go to login</a></div>
-                            </div>
+                            @if (this.ViewBag.Type == "Create")
+                            {
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"><a class="link-orange" href="login.html">Have an account? Go to login</a></div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

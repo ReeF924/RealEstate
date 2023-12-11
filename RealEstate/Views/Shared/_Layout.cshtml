@@ -64,7 +64,7 @@
                             <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@user.Username
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a asp-controller="Login" asp-action="SignUp">Setttings</a></li>
+                            <li><a asp-controller="Login" asp-action="SignUp" asp-route-idUser="@user.Id">Edit Profile</a></li>
                             <li><a asp-controller="Login" asp-action="Logout">Log out</a></li>
                         </ul>
                     </div>
