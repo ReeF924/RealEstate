@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Components\" />
+    <Folder Include="Views\Shared\Components\ProfileDropdownComponent\" />
   </ItemGroup>
 
   <ItemGroup>
