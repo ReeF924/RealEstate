@@ -182,6 +182,10 @@ color: black;
     flex-direction: column;
 }
 
+.invisible{
+    visibility: 0;
+}
+
 .inline-block {
     display: inline-block;
 }
