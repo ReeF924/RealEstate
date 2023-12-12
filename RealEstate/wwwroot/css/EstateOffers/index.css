@@ -274,7 +274,16 @@ nav {
 
 
 .offers-header-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 
+.order-by-button{
+    background-color: lightgrey;
+    border-radius: 4px;
+    padding: 4px 15px;
+    font-size: 16px;
 }
 
 h2 {
