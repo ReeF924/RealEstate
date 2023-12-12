@@ -10,12 +10,13 @@ namespace RealEstate.Controllers
     public class EstateOffersController : BaseEstateController
     {
         [HttpGet]
-        public IActionResult Index(int viewCount = 6, char? filter = null)
+        public IActionResult Index(int viewCount = 6, char? filter = null, string orderby = "Name")
         {
             this.ViewBag.NavUnderline = "Home";
             this.ViewBag.ViewCount = viewCount;
 
             List<Offer> offers = this._context.Offers?.ToList()!;
+
             offers?.ForEach(offer =>
             {
                 this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>
@@ -85,6 +86,8 @@ namespace RealEstate.Controllers
         {
             this.ViewBag.NavUnderline = "Katalog";
             this.DetailInit(id);
+
+            //Predelat na TempData (misto ViewBag) potom
             this.ViewBag.Inquiry = idInquiry != null ? this._context.Inquiries.Find(idInquiry) : null;
             
             return View();
