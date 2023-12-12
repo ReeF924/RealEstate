@@ -118,7 +118,7 @@ namespace RealEstate.Controllers
             var offerParams = this._context.OfferParameters!.Where(param => param.IdOffer == offer.Id)!.ToList();
             offerParams.ForEach(param =>
             {
-                this._context.Labels!.Where(label => label.Id == param.IdParameter).ForEachExt(label =>
+                this._context.Parameters!.Where(label => label.Id == param.IdParameter).ForEachExt(label =>
                 {
                     offerParameters.Add(new KeyValuePair<string, string>(label.Value, param.Value));
                 });

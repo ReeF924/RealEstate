@@ -31,6 +31,7 @@ namespace RealEstate.Models.DatabaseModels
         [StringLength(15, MinimumLength = 7)]
         [RegularExpression(@"^(\+[0-9]{1,3})?([0-9]+)$")]
         public string PhoneNumber { get; set; }
+
         [JsonConstructor]
         public User(string username, string password, string name, string surname, string email, string phoneNumber)
         {

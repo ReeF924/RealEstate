@@ -59,6 +59,10 @@
                 User user = (User)this.ViewBag.User;
                 bool ppExists = File.Exists(Url.Content($"~/images//admins//"));
                 <div class="profile-container">
+
+                   
+                    
+
                     <div class="profile-dropdown link-standard profile-container">
                         <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@user.Username
