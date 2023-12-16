@@ -1,6 +1,6 @@
-.testClassFoo{
-color: red;
-background-color: blue;
+.testClassFoo {
+    color: red;
+    background-color: blue;
 }
 
 .main-detail {
@@ -12,12 +12,12 @@ background-color: blue;
     margin: 30px auto 5px auto;
 }
 
-.detail-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    cursor: pointer;
-}
+    .detail-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+    }
 
 .sub-photos {
     display: grid;
@@ -27,7 +27,8 @@ background-color: blue;
     box-sizing: border-box;
     cursor: pointer;
 }
-.selected-sub-photo{
+
+.selected-sub-photo {
     border: 2px solid darkorange;
 }
 
@@ -53,25 +54,25 @@ section.description {
     margin-bottom: 10px;
 }
 
-section.description > .main-description{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
+    section.description > .main-description {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
 
-section.description img{
-    height: 20px;
-}
+    section.description img {
+        height: 20px;
+    }
 
-.item-price-description{
-    color:grey;
+.item-price-description {
+    color: grey;
     font-size: 12px;
     text-align: right;
 }
 
-.description h3{
+.description h3 {
     font-size: 28px;
     margin: 0px;
 }
@@ -89,15 +90,29 @@ section.description img{
     align-items: center;
 }
 
-.energy-class span{
+.not-favourite-star {
+    color: grey;
+}
+
+.favourite-star {
+    color: orange;
+    background-color: white !important;
+}
+
+    .favourite-star:active {
+        color: orange;
+        background-color: white !important;
+    }
+
+.energy-class span {
     font-size: 26px;
     font-weight: 500;
     margin-left: 20px;
 }
 
-.loan-calc{
+.loan-calc {
     color: orange;
-    text-decoration:underline;
+    text-decoration: underline;
     font-size: 14px;
     cursor: pointer;
     display: flex;
@@ -115,33 +130,33 @@ section.description img{
     gap: 15px;
 }
 
-.detail-parameters>table {
-    width: 100%;
-    border-spacing: 0px;
-    border: none;
-}
+    .detail-parameters > table {
+        width: 100%;
+        border-spacing: 0px;
+        border: none;
+    }
 
 
 
-.detail-parameters>table tr td {
-    padding: 4px 8px;
-    font-weight: 600;
-    font-size: 15px;
-}
+        .detail-parameters > table tr td {
+            padding: 4px 8px;
+            font-weight: 600;
+            font-size: 15px;
+        }
 
-.detail-parameters>table tr :nth-child(even){
-    font-weight: 500;
-    font-size: 14px;
-    text-align: right;
-}
+        .detail-parameters > table tr :nth-child(even) {
+            font-weight: 500;
+            font-size: 14px;
+            text-align: right;
+        }
 
-.detail-parameters>table tr {
-    background: rgb(255, 225, 191);
-}
+        .detail-parameters > table tr {
+            background: rgb(255, 225, 191);
+        }
 
-.detail-parameters>table tr:nth-child(even) {
-    background: rgb(255, 243, 229);
-}
+            .detail-parameters > table tr:nth-child(even) {
+                background: rgb(255, 243, 229);
+            }
 
 .contact {
     padding: 10px 5%;
@@ -162,23 +177,23 @@ section.description img{
     align-items: center;
 }
 
-.salesman-contact h3{
-    color: darkorange;
-    font-size: 24px;
-}
+    .salesman-contact h3 {
+        color: darkorange;
+        font-size: 24px;
+    }
 
-.salesman-contact a {
-    color: black;
-}
+    .salesman-contact a {
+        color: black;
+    }
 
-.salesman-contact>div {
-    display: inline-block;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+    .salesman-contact > div {
+        display: inline-block;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 
-.salesman-name{
+.salesman-name {
     font-size: 18px;
     font-weight: 700;
 }
@@ -187,13 +202,13 @@ section.description img{
     padding-left: 5px;
 }
 
-.salesman-awards>div{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .salesman-awards > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.award-title{
+.award-title {
     width: 100px;
     text-align: center;
     font-size: 14px;
@@ -205,21 +220,21 @@ section.description img{
     gap: 10px;
 }
 
-.interested-form>* {
-    border-radius: 0;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 2px 5px;
-    height: 24px;
-}
+    .interested-form > * {
+        border-radius: 0;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        padding: 2px 5px;
+        height: 24px;
+    }
 
-.interested-form>textarea {
-    height: 75px;
-    grid-column: 1/3;
-}
+    .interested-form > textarea {
+        height: 75px;
+        grid-column: 1/3;
+    }
 
-.interested-form> .fullLane {
-    grid-column: 1/3;
-}
+    .interested-form > .fullLane {
+        grid-column: 1/3;
+    }
 
 .interested-button {
     padding: 8px 6px;
@@ -227,92 +242,93 @@ section.description img{
 }
 
 @media (max-width:540px) {
-    
-    .main-detail{
+
+    .main-detail {
         padding: 0px 2vw 20px 1.5vw;
     }
 
-    .item-name-detail{
+    .item-name-detail {
         font-size: 26px;
     }
 
-    .sub-photos{
+    .sub-photos {
         grid-template-columns: repeat(3, 1fr);
         gap: 5px;
     }
 
-    section.description{
+    section.description {
         flex-direction: column;
         /* padding-left: 5px; */
     }
 
-    section.description > .main-description{
-        flex-direction: column;
-        text-align: left;
-        /* justify-content: left; */
-        align-items: flex-start;
-        margin-bottom: 0px;
-    }
-    
-    section.description > .main-description > div{
-        margin-bottom: 5px;
-    }    
+        section.description > .main-description {
+            flex-direction: column;
+            text-align: left;
+            /* justify-content: left; */
+            align-items: flex-start;
+            margin-bottom: 0px;
+        }
 
-    .item-price-description{
+            section.description > .main-description > div {
+                margin-bottom: 5px;
+            }
+
+    .item-price-description {
         text-align: left;
     }
 
-    .description :last-child{
+    .description :last-child {
         flex-direction: row;
     }
 
-    .description h3{
+    .description h3 {
         font-size: 20px;
         text-align-last: left;
-        
     }
-    
-    .energy-class{
+
+    .energy-class {
         padding: 1px 2px;
         font-size: 11px;
     }
-    
-    .energy-class span{
-        font-size: 20px;
-    }
 
-    .detail-parameters{
+        .energy-class span {
+            font-size: 20px;
+        }
+
+    .detail-parameters {
         flex-direction: column;
         gap: 8px;
     }
 
-    .detail-parameters>table tr td{
-        font-size: 12px;
-        padding: 2px 3px;
-    }
-    .detail-parameters>table tr td .second-item{
-        font-size: 14px;
-    }
-    .contact{
+        .detail-parameters > table tr td {
+            font-size: 12px;
+            padding: 2px 3px;
+        }
+
+            .detail-parameters > table tr td .second-item {
+                font-size: 14px;
+            }
+
+    .contact {
         flex-direction: column;
         padding: 0px;
     }
 
-    .h3-contact{
+    .h3-contact {
         font-size: 28px;
     }
 
-    .salesman{
+    .salesman {
         padding-left: 0;
     }
 
-    .salesman-info{
-        display: flex;  
+    .salesman-info {
+        display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .salesman-awards{
+    .salesman-awards {
         display: none;
     }
 }

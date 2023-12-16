@@ -1,0 +1,45 @@
+﻿@using RealEstate.Models.ViewModels;
+@{
+    string[] headers = new string[] { "Name", "Price", "Address", "Category", "Broker", "Offers made" };
+    List<OfferList> offers = (List<OfferList>)this.ViewBag.Offers;
+}
+
+<div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    @for (int i = 0; i < headers.Length; i++)
+                    {
+                        <th>@headers[i]</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < offers.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@offers[i].Id">@offers[i].Name</a>
+                        </td>
+                        <td>
+                            @offers[i].Price
+                        </td>
+                        <td>
+                            @offers[i].Location
+                        </td>
+                        <td>
+                            @offers[i].Category
+                        </td>
+                        <td>
+                            @offers[i].Broker
+                        </td>
+                        <td>
+                            @offers[i].OffersMade
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

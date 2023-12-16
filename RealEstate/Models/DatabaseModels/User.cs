@@ -10,7 +10,7 @@ namespace RealEstate.Models.DatabaseModels
     public class User
     {
         public int Id { get; set; }
-        public char Type { get; set; } = 'c';
+        public char Type { get; set; } = 'u';
         [Required]
         [StringLength(15, MinimumLength = 3)]
         [RegularExpression(@"^([^;""\\\/\!]+)$")]

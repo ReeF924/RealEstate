@@ -166,6 +166,15 @@ nav {
     text-underline-offset: 6px;
 }
 
+.admin-navbar {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 1rem 0 0 0;
+    padding: 0px;
+    width: 100%;
+}
+
 .search-bar-container {
     display: flex;
     flex-direction: column;

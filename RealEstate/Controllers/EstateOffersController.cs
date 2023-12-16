@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models.DatabaseModels;
 using RealEstate.Models;
 using System.Diagnostics;
-using System;
-using System.Reflection.Metadata.Ecma335;
+using RealEstate.Attributes;
 
 namespace RealEstate.Controllers
 {
@@ -47,7 +46,7 @@ namespace RealEstate.Controllers
                     offer.Images!.Add(image);
                 });
             });
-            
+
             this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
             this.ViewBag.ViewCount = 6;
 
@@ -89,7 +88,7 @@ namespace RealEstate.Controllers
 
             //Predelat na TempData (misto ViewBag) potom
             this.ViewBag.Inquiry = idInquiry != null ? this._context.Inquiries.Find(idInquiry) : null;
-            
+
             return View();
         }
 
@@ -105,7 +104,7 @@ namespace RealEstate.Controllers
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();
             this.DetailInit(idOffer);
-            return RedirectToAction("Detail", new {id = idOffer, idInquiry = inquiry.Id});
+            return RedirectToAction("Detail", new { id = idOffer, idInquiry = inquiry.Id });
         }
         private void DetailInit(int id)
         {
@@ -126,8 +125,36 @@ namespace RealEstate.Controllers
             this.ViewBag.Offer = offer;
             this.ViewBag.OfferParameters = offerParameters;
             this.ViewBag.Broker = this._context.Users!.Find(offer.IdBroker);
-        }
 
+            if (this.ViewBag.User == null) return;
+
+            User user = (User)this.ViewBag.User;
+            FavouriteOffer? favOff = this._context.FavouriteOffers!.FirstOrDefault(offer => offer.IdOffer == id && offer.IdUser == user.Id);
+            this.ViewBag.Favourite = favOff != null;
+        }
+        [Authorize]
+        public IActionResult AddFavourite(int id, int? idInquiry)
+        {
+            User user = (User)this.ViewBag.User;
+            this._context.FavouriteOffers!.Add(new FavouriteOffer()
+            {
+                IdOffer = id,
+                IdUser = user.Id
+            });
+
+            this._context.SaveChanges();
+            return RedirectToAction("Detail", new { id, idInquiry });
+        }
+        [Authorize]
+        public IActionResult RemoveFavourite(int id, int? idInquiry)
+        {
+            User user = (User)this.ViewBag.User;
+            var favOff = this._context.FavouriteOffers!.First(offer => offer.IdOffer == id && offer.IdUser == user.Id);
+            this._context.FavouriteOffers!.Remove(favOff!);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Detail", new { id, idInquiry });
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

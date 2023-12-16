@@ -25,6 +25,18 @@
                 +420 420 696 969
             </div>
         </div>
+        @{
+            Dictionary<string, bool> navUnderline = new Dictionary<string, bool>(){
+        {"Home", false},
+        {"Katalog", false},
+        {"Kontakt", false}};
+
+            if (this.ViewBag.NavUnderline != null)
+                navUnderline[this.ViewBag.NavUnderline] = true;
+
+            // bool userExists = this.ViewBag.User != null;
+            User? user = this.ViewBag.User as User;
+        }
         <nav>
             <div>
                 <div class="logo-container">
@@ -33,22 +45,13 @@
                     </a>
                 </div>
 
-                @{
-                    Dictionary<string, bool> navUnderline = new Dictionary<string, bool>(){
-                {"Home", false},
-                {"Katalog", false},
-                {"Kontakt", false}};
-
-                    if (this.ViewBag.NavUnderline != null)
-                        navUnderline[this.ViewBag.NavUnderline] = true;
-                }
                 <ul class="menu">
                     <li class="@(navUnderline["Home"] ? "nav-item-selected" : "")"><a asp-controller="EstateOffers" asp-action="Index">Home</a></li>
                     <li class="@(navUnderline["Katalog"] ? "nav-item-selected" : "")"><a asp-action="">Katalog</a></li>
                     <li class="@(navUnderline["Kontakt"] ? "nav-item-selected" : "")"><a asp-action="">Kontakt</a></li>
                 </ul>
             </div>
-            @if (this.ViewBag.User == null)
+            @if (user == null)
             {
                 <a asp-controller="Login" asp-action="Index" class="profile-container">
                     <span>Přihlásit se</span>
@@ -56,12 +59,8 @@
             }
             else
             {
-                User user = (User)this.ViewBag.User;
                 bool ppExists = File.Exists(Url.Content($"~/images//admins//"));
                 <div class="profile-container">
-
-                   
-                    
 
                     <div class="profile-dropdown link-standard profile-container">
                         <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,12 +68,37 @@
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a asp-controller="Login" asp-action="SignUp" asp-route-idUser="@user.Id">Edit Profile</a></li>
+                            @if (user.Type == 'a')
+                            {
+                                <li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
+                            }
                             <li><a asp-controller="Login" asp-action="Logout">Log out</a></li>
                         </ul>
                     </div>
                 </div>
             }
         </nav>
+        @if (user != null)
+        {
+            <nav class="admin-navbar">
+                <ul>
+                    @if (user.Type == 'a' || user.Type == 'b')
+                    {
+                        <li><a asp-controller="Admin" asp-action="Offers">Offers</a></li>
+                        <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
+                        <li><a asp-controller="Admin" asp-action="Parameters">Parametres</a></li>
+                    }
+                    @if (user.Type == 'u')
+                    {
+                        <li><a asp-controller="Admin" asp-action="Favourite">Favourite</a></li>
+                    }
+                    <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
+                    <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
+                </ul>
+
+
+            </nav>
+        }
     </header>
 
     <div class="flex-column justify-content-between">

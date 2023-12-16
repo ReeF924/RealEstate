@@ -62,9 +62,24 @@
     <section class="description">
         <div class="main-description">
             <div>
-                <h3 class="item-name-detail">
-                    @offer.Name
-                </h3>
+                <div>
+                    <h3 class="item-name-detail">
+                        @offer.Name
+                    </h3>
+
+                    @if (this.ViewBag.User != null)
+                    {
+                        @if (!this.ViewBag.Favourite)
+                        {
+                            <a asp-action="AddFavourite" asp-all-route-data="this.ViewBag.RouteData" class="favourite-star"><i class="bi bi-star-fill not-favourite-star"></i></a>
+                        }
+                        else
+                        {
+                            <a asp-action="RemoveFavourite" asp-all-route-data="this.ViewBag.RouteData"><i class="bg-info bi-star-fill favourite-star"></i></a>
+                        }
+                    }
+
+                </div>
                 <div class="text-grey-light fs-14">@offer.Location</div>
             </div>
             <div>
@@ -130,7 +145,7 @@
     </section>
     @{
         bool hasBroker = this.ViewBag.Broker != null;
-        // string contactClass = 
+        // string contactClass =
     }
     <section class="contact @(hasBroker ? " justify-content-between" : "justify-content-center")">
         @if (hasBroker)
@@ -138,7 +153,9 @@
             <div class="salesman">
 
                 <h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
-                @{User broker = (User)this.ViewBag.Broker;}
+                @{
+                    User broker = (User)this.ViewBag.Broker;
+                }
                 <div class="salesman-info">
                     <div class="salesman-contact mb-10">
                         <img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{broker.Id}.png")" alt="salesman">
