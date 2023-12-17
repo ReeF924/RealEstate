@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace RealEstate.Models.DatabaseModels
 {
     [PrimaryKey("Id")]
-    [Table("tbUsers")]
+    [Table("Users")]
     public class User
     {
         public int Id { get; set; }

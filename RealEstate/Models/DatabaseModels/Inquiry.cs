@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbInquiries")]
+    [Table("Inquiries")]
     [PrimaryKey("Id")]
     public class Inquiry
     {

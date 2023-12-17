@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbOfferParameters")]
+    [Table("OfferParameters")]
     [PrimaryKey("Id")]
     public class OfferParameter
     {

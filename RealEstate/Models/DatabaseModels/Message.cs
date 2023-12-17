@@ -4,15 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbMessages")]
+    [Table("Messages")]
     [PrimaryKey("Id")]
     public class Message
     {
         public int Id { get; set; }
-        public int IdSender { get; set; }
-        public int IdRecipient { get; set; }
-        public int? IdInquiry { get; set; }
-        public string? Subject { get; set; }
+        public int IdChat { get; set; }
+        public int IdUser { get; set; }
         public string Text { get; set; }
         public bool IsRead { get; set; }
         public DateTime DateTimeSentUtc { get; set; }

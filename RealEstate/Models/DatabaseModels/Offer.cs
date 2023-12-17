@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbOffers")]
+    [Table("Offers")]
     [PrimaryKey("Id")]
     public class Offer
     {

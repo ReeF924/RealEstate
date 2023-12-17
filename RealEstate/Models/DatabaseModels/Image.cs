@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 namespace RealEstate.Models.DatabaseModels
 {
-    [Table("tbImages")]
+    [Table("Images")]
     [PrimaryKey("Id")]
     public class Image
     {
