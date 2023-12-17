@@ -101,6 +101,11 @@ namespace RealEstate.Controllers
             inquiry.IdOffer = idOffer;
             inquiry.DateTimeSent = DateTime.Now;
 
+            if(this.ViewBag.User != null)
+            {
+                inquiry.IdUser = this.ViewBag.User.Id;
+            }
+
             this._context.Inquiries.Add(inquiry);
             this._context.SaveChanges();
             this.DetailInit(idOffer);

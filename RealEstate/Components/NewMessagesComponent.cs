@@ -9,8 +9,8 @@ namespace RealEstate.Components
         public IViewComponentResult Invoke(User user)
         {
             this.ViewBag.User = user;
-            MessageController messageController = new MessageController();
-            this.ViewBag.Messages = messageController.GetMessages(user.Id, 4);
+            //MessageController messageController = new MessageController();
+            //this.ViewBag.Messages = messageController.GetMessages(user.Id, 4);
 
             return View();
         }

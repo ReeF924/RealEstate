@@ -12,9 +12,9 @@ namespace RealEstate.Models.DatabaseModels
         public int IdSender { get; set; }
         public int IdRecipient { get; set; }
         public int? IdInquiry { get; set; }
+        public string? Subject { get; set; }
         public string Text { get; set; }
+        public bool IsRead { get; set; }
         public DateTime DateTimeSentUtc { get; set; }
-        [JsonIgnore]
-        public User? OtherUser { get; set; }
     }
 }

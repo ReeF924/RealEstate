@@ -11,15 +11,13 @@ namespace RealEstate.Models.ViewModels
         public string Location { get; set; }
         public string? Broker { get; set; }
         public string Category { get; set; } // f - flats, l - luxury,  h - houses, c - cottages
-        public int OffersMade { get; set; }
-        public OfferList(Offer offer, string broker, int offersMade)
+        public int? OffersMade { get; set; }
+        public OfferList(Offer offer)
         {
             this.Id = offer.Id;
             this.Name = offer.Name;
             this.Price = offer.Price;
             this.Location = offer.Location;
-            this.Broker = broker;
-
             switch (offer.Category)
             {
                 case 'f':
@@ -35,6 +33,11 @@ namespace RealEstate.Models.ViewModels
                     this.Category = "Cottage";
                     break;
             }
+        }
+
+        public OfferList(Offer offer, string broker, int offersMade) : this(offer)
+        {
+            this.Broker = broker;    
             this.OffersMade = offersMade;
         }
     }

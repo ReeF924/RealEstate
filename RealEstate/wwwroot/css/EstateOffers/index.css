@@ -24,7 +24,7 @@ div {
 }
 
 header {
-    margin: 1% 2% 0 2%;
+    margin: 1% 0 0 0;
 }
 
 .header-info {
@@ -33,9 +33,11 @@ header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-right: 6px;
-    height: 2rem;
+    height: 2.5rem;
     margin-bottom: 0;
+    padding-right: calc(3% + 6px);
+    padding-left: 3%;
+    padding-bottom: 10px;
 }
 
 .email-contact {
@@ -57,7 +59,10 @@ nav {
     margin-bottom: 1rem;
     align-items: center;
     width: 100%;
+    padding-left: 3%;
     padding-right: 3%;
+    padding-bottom: 1rem;   
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
 }
 
     nav > div {

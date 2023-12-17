@@ -1,0 +1,45 @@
+﻿@using RealEstate.Models.ViewModels;
+@{
+    List<InquiryList> inquiries = this.ViewBag.Inquiries;
+}
+<div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Email</th>
+                    <th>Date Sent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (InquiryList inquiry in inquiries)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@inquiry.IdOffer">@inquiry.OfferName</a>
+                        </td>
+                        <td>
+                            @inquiry.Name
+                        </td>
+                        <td>
+                            @inquiry.Surname
+                        </td>
+                        <td>
+                            @inquiry.Email
+                        </td>
+                        <td>
+                            @{string? additionalInfo = inquiry.AdditionalInformation ?? "";}
+                            @additionalInfo.Substring(0, Math.Min(30, additionalInfo.Length))
+                        </td>
+                        <td>
+                            @inquiry.DateTimeSent
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

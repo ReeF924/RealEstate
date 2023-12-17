@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/css/EstateOffers/detail.css" asp-append-version="true" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -82,18 +83,18 @@
         {
             <nav class="admin-navbar">
                 <ul>
+                    <li><a asp-controller="Admin" asp-action="Offers">@(user.Type == 'u' ? "Favourite" : "Offers")</a></li>
+                    <li><a asp-controller="Admin" asp-action="Messages">Messages</a></li>
                     @if (user.Type == 'a' || user.Type == 'b')
                     {
-                        <li><a asp-controller="Admin" asp-action="Offers">Offers</a></li>
                         <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
                         <li><a asp-controller="Admin" asp-action="Parameters">Parametres</a></li>
                     }
                     @if (user.Type == 'u')
                     {
-                        <li><a asp-controller="Admin" asp-action="Favourite">Favourite</a></li>
+                        <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
                     }
-                    <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
-                    <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
+                    <li><a asp-controller="Admin" asp-action="Inquiries">Void</a></li>
                 </ul>
 
 

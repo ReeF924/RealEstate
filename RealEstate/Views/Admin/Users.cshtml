@@ -16,31 +16,29 @@
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < users.Count; i++)
+                @foreach(User user in users)
                 {
                     <tr>
                         <td>
-                            <a asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@users[i].Id">@users[i].Username</a>
+                            <a asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@user.Id">@user.Username</a>
                         </td>
                         <td>
-                            @users[i].Type
+                            @user.Type
                         </td>
                         <td>
-                            @users[i].Name
+                            @user.Name
                         </td>
                         <td>
-                            @users[i].Surname
+                            @user.Surname
                         </td>
                         <td>
-                            @users[i].Email
+                            @user.Email
                         </td>
                         <td>
-                            @users[i].PhoneNumber
+                            @user.PhoneNumber
                         </td>
                         <td>
                             @{
-                                User user = users[i];
-
                                 if (user.Type == 'u')
                                 {
                                     <button class="btn btn-primary">
