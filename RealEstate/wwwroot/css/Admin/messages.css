@@ -1,9 +1,9 @@
 ﻿.main {
-    /*display:grid;*/
-    /*grid-template-columns: 1fr 3fr;*/
+    display:grid;
+    grid-template-columns: 300px, 1fr;
 }
 
-.chat-header-container {
+.aside-container {
     width: 300px;
     height: 80px;
     display: flex;
@@ -16,28 +16,28 @@
     margin: 0 3%;
 }
 
-.chat-header-container:hover{
+.aside-container:hover{
     background-color: rgb(235,235,235);
 }
 
-    .chat-header-container > .left-side {
+    .aside-container > .left-side {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
-        .chat-header-container > .left-side > .name {
+        .aside-container > .left-side > .name {
             font-size: 18px;
         }
 
-        .chat-header-container > .left-side > .subject {
+        .aside-container > .left-side > .subject {
             font-size: 16px;
         }
 
-        .chat-header-container > .left-side > .last-message {
+        .aside-container > .left-side > .last-message {
             font-size: 14px;
         }
 
-    .chat-header-container > .right-side {
+    .aside-container > .right-side {
 
     }

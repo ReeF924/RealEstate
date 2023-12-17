@@ -4,6 +4,7 @@
 @using RealEstate.Models.ViewModels;
 @{
     List<MessageView> messages = (List<MessageView>)this.ViewBag.Messages;
+    List<MessageView> chatMessages = this.ViewBag.ChatMessages;
     int n = messages.Count;
     DateTime currentDate = DateTime.Now;
 }
@@ -11,7 +12,7 @@
     <aside>
         @foreach (MessageView message in messages)
         {
-            <div class="chat-header-container">
+            <div class="aside-container">
                 <div class="left-side">
                     <span class="name">
                         @($"{message.OtherUser.Name} {message.OtherUser.Surname}")
@@ -28,12 +29,13 @@
                     <span>@message.DateTimeSentUtc.GetMessageDateString()</span>
                 </div>
             </div>
-
         }
-
-
-
     </aside>
-    <div>
-    </div>
+    <section>
+        <div class="chat-header-container">
+           <h2>
+
+           </h2>
+        </div>
+    </section>
 </main>

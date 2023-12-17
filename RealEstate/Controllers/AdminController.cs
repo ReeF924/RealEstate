@@ -112,7 +112,7 @@ namespace RealEstate.Controllers
                     messages.Add(new MessageView(mess, otherUser!));
                     continue;
                 }
-                if(mess.DateTimeSentUtc > foundMess.DateTimeSentUtc)
+                if (mess.DateTimeSentUtc > foundMess.DateTimeSentUtc)
                 {
                     int index = messages.IndexOf(foundMess);
                     messages[index] = foundMess;
@@ -121,6 +121,9 @@ namespace RealEstate.Controllers
 
             messages = messages.OrderByDescending(mess => mess.DateTimeSentUtc).ToList();
             this.ViewBag.Messages = messages;
+
+            if (messages.Count != 0)
+                this.GetChatMessages(messages, messages[0].OtherUser.Id);
 
             return View();
         }
@@ -137,7 +140,7 @@ namespace RealEstate.Controllers
                 chatMessages.Add(new MessageView(mess, user!));
             });
 
-            this.ViewBag.Messages = chatMessages;
+            this.ViewBag.ChatMessages = chatMessages;
 
             return RedirectToAction("Messages", new { messages });
         }
