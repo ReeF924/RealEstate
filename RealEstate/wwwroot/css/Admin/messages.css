@@ -1,6 +1,6 @@
-﻿.main {
+﻿main {
     display:grid;
-    grid-template-columns: 300px, 1fr;
+    grid-template-columns: 300px 1fr;
 }
 
 .aside-container {
@@ -38,6 +38,11 @@
             font-size: 14px;
         }
 
-    .aside-container > .right-side {
+.chat-header-container{
+    border-bottom: solid 2px #fff;
+}
 
-    }
+.message-container{
+    background-color: grey;
+    border: solid 1px #fff;
+}

@@ -12,5 +12,7 @@ namespace RealEstate.Models.DatabaseModels
         public int IdUser2 { get; set; }
         public int? IdInquiry { get; set; }
         public string? Subject { get; set; }
+        public int? IdLastMessage { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

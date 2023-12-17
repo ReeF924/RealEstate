@@ -2,6 +2,9 @@
 using RealEstate.Attributes;
 using RealEstate.Models.ViewModels;
 using RealEstate.Models.DatabaseModels;
+using System;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics.Metrics;
 
 namespace RealEstate.Controllers
 {
@@ -27,7 +30,7 @@ namespace RealEstate.Controllers
             List<OfferList> listOffers = new();
 
 
-            int n = offers.Count();
+            int n = offers.Count;
             for (int i = 0; i < Math.Min(20, n); i++)
             {
                 Offer offer = offers[i];
@@ -64,7 +67,7 @@ namespace RealEstate.Controllers
                 users = users.Where(user => user.Type == 'u').ToList();
             }
 
-            users.Take(Math.Min(users.Count, 20));
+            users = users.Take(Math.Min(users.Count, 20)).ToList();
             this.ViewBag.Users = users;
 
             return View();
@@ -90,59 +93,38 @@ namespace RealEstate.Controllers
         }
 
         [Authorize]
-        public IActionResult Messages(List<MessageView>? messages = null)
+        public IActionResult Messages(int selected = 0, int take = 10)
         {
-            if (messages.Count != 0)
-            {
-                this.ViewBag.Messages = messages;
-                return View();
-            }
-
             User user = this.ViewBag.User;
-            var data = this._context.Messages!.Where(message => message.IdSender == user.Id || message.IdRecipient == user.Id).ToList();
-            messages = new(50);
 
-            foreach (Message mess in data)
+            var data = this._context.Chats
+                .Where(chat => chat.IdUser1 == user.Id || chat.IdUser2 == user.Id).ToList();
+
+            List<ChatView> chats = new();
+
+            int counter = 0;
+            foreach (Chat item in data)
             {
-                MessageView? foundMess = messages.FirstOrDefault(found => found.OtherUser.Id == mess.IdRecipient || found.OtherUser.Id == mess.IdSender);
-                if (foundMess == null)
-                {
-                    int otherUserId = mess.IdSender == user.Id ? mess.IdRecipient : mess.IdSender;
-                    User otherUser = this._context.Users.Find(otherUserId)!;
-                    messages.Add(new MessageView(mess, otherUser!));
-                    continue;
-                }
-                if (mess.DateTimeSentUtc > foundMess.DateTimeSentUtc)
-                {
-                    int index = messages.IndexOf(foundMess);
-                    messages[index] = foundMess;
-                }
+                int idOther = item.IdUser1 == user.Id ? item.IdUser2 : item.IdUser1;
+                User otherUser = this._context.Users.Find(idOther)!;
+                Message? message = this._context.Messages!.Find(item.IdLastMessage);
+                chats.Add(new ChatView(item, otherUser, message));
+
+                if (counter++ >= take) break;
+
             }
 
-            messages = messages.OrderByDescending(mess => mess.DateTimeSentUtc).ToList();
-            this.ViewBag.Messages = messages;
+            chats.Sort(ChatView.OrderByDate);
+            this.ViewBag.Chats = chats;
 
-            if (messages.Count != 0)
-                this.GetChatMessages(messages, messages[0].OtherUser.Id);
-
+            if (chats.Count > 0)
+            {
+                Chat chat = chats[selected];
+                this.ViewBag.Messages = this._context.Messages!
+                .Where(mess => mess.IdChat == chat.Id).ToList();
+                this.ViewBag.Selected = selected;
+            }
             return View();
-        }
-
-        [Authorize]
-        public IActionResult GetChatMessages(List<MessageView> messages, int idUser)
-        {
-            List<MessageView> chatMessages = new(30);
-            User user = this.ViewBag.User;
-
-            this._context.Messages!.Where(mess => (mess.IdSender == idUser || mess.IdRecipient == idUser) && (mess.IdSender == user.Id || mess.IdRecipient == user.Id)).ForEachExt(mess =>
-            {
-                User? user = this._context.Users.Find(mess.IdSender);
-                chatMessages.Add(new MessageView(mess, user!));
-            });
-
-            this.ViewBag.ChatMessages = chatMessages;
-
-            return RedirectToAction("Messages", new { messages });
         }
     }
 }

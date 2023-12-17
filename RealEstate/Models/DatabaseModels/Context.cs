@@ -4,6 +4,7 @@ namespace RealEstate.Models.DatabaseModels
 {
     public class Context :DbContext
     {
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<FavouriteOffer>? FavouriteOffers { get; set; }
         public DbSet<Image>? Images { get; set; }
         public DbSet<Inquiry> Inquiries { get; set; }

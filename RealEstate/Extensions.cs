@@ -55,11 +55,11 @@ namespace RealEstate
             }
             else if (sentDate.Year == now.Year)
             {
-                return sentDate.ToString("dd MM HH:mm");
+                return sentDate.ToString("dd. MM. HH:mm");
             }
             else
             {
-                return sentDate.ToString("dd MM yyyy HH:mm");
+                return sentDate.ToString("dd. MM. yyyy");
             }
         }
 

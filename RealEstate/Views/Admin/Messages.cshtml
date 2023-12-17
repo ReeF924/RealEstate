@@ -3,39 +3,63 @@
 }
 @using RealEstate.Models.ViewModels;
 @{
-    List<MessageView> messages = (List<MessageView>)this.ViewBag.Messages;
-    List<MessageView> chatMessages = this.ViewBag.ChatMessages;
-    int n = messages.Count;
+    List<ChatView> chats = this.ViewBag.Chats;
+    int n = chats.Count;
     DateTime currentDate = DateTime.Now;
 }
 <main>
     <aside>
-        @foreach (MessageView message in messages)
+        @foreach (ChatView chat in chats)
         {
             <div class="aside-container">
                 <div class="left-side">
                     <span class="name">
-                        @($"{message.OtherUser.Name} {message.OtherUser.Surname}")
+                        @($"{chat.OtherUser.Name} {chat.OtherUser.Surname}")
                     </span>
                     <span class="subject">
-                        @(message.Subject ?? "No subject")
+                        @(chat.Subject ?? "No subject")
                     </span>
                     <span class="last-message">
-                        @(message.Text.Substring(0, Math.Min(20, message.Text.Length)))
+                        @(
+                      chat.LastMessage != null
+                      ? chat.LastMessage.Text.Substring(0, Math.Min(20, chat.LastMessage.Text.Length))
+                        : " " )
+                        
                     </span>
                 </div>
 
                 <div class="right-side">
-                    <span>@message.DateTimeSentUtc.GetMessageDateString()</span>
+                    <span>
+                        @(chat.LastMessage != null 
+                        ? chat.LastMessage.DateTimeSentUtc.GetMessageDateString()
+                        : chat.CreatedAt.GetMessageDateString())
+                    </span>
                 </div>
             </div>
         }
     </aside>
     <section>
-        <div class="chat-header-container">
-           <h2>
+        @{
+            User user = this.ViewBag.User;
+            User otherUser = chats[this.ViewBag.Selected].OtherUser;
+            List<Message> messages = this.ViewBag.Messages;
+        }
 
-           </h2>
+        <div class="chat-header-container">
+            <div>@(otherUser.Name + " " + otherUser.Surname)</div>
+            <div>@otherUser.Email</div>
+        </div>
+        <div class="messages-container">
+            @foreach(Message message in messages)
+            {
+                string align = user.Id == message.IdUser ? "d-flex justify-content-start" : "d-flex justify-content-end";
+                <div class="@align">
+                    <div class="message-container">
+
+                    </div>
+                    
+                </div>
+            }
         </div>
     </section>
 </main>
