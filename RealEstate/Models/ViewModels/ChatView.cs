@@ -5,9 +5,10 @@ namespace RealEstate.Models.ViewModels
 {
     public class ChatView : Chat
     {
+        public User? Sender { get; set; }
         public User OtherUser { get; set; }
         public Message? LastMessage { get; set; }
-        public ChatView(Chat chat, User otherUser, Message? lastMessage)
+        public ChatView(Chat chat, User otherUser, Message? lastMessage, User? recipent = null)
         {
             this.Id = chat.Id;
             this.IdUser1 = chat.IdUser1;

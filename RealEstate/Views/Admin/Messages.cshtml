@@ -1,65 +1,135 @@
 ﻿@section Styles {
     <link href="~/css/admin/messages.css" rel="stylesheet" />
 }
+@section Scripts {
+    <script src="~/js/messages.js"></script>
+}
+
 @using RealEstate.Models.ViewModels;
 @{
-    List<ChatView> chats = this.ViewBag.Chats;
-    int n = chats.Count;
-    DateTime currentDate = DateTime.Now;
+    User user = this.ViewBag.User;
+    List<ChatView> chats = this.ViewBag.Chats ?? new List<ChatView>();
+    int counter = 0;
 }
-<main>
-    <aside>
-        @foreach (ChatView chat in chats)
-        {
-            <div class="aside-container">
-                <div class="left-side">
-                    <span class="name">
-                        @($"{chat.OtherUser.Name} {chat.OtherUser.Surname}")
-                    </span>
-                    <span class="subject">
-                        @(chat.Subject ?? "No subject")
-                    </span>
-                    <span class="last-message">
-                        @(
-                      chat.LastMessage != null
-                      ? chat.LastMessage.Text.Substring(0, Math.Min(20, chat.LastMessage.Text.Length))
-                        : " " )
-                        
-                    </span>
-                </div>
-
-                <div class="right-side">
-                    <span>
-                        @(chat.LastMessage != null 
-                        ? chat.LastMessage.DateTimeSentUtc.GetMessageDateString()
-                        : chat.CreatedAt.GetMessageDateString())
-                    </span>
-                </div>
-            </div>
-        }
-    </aside>
-    <section>
-        @{
-            User user = this.ViewBag.User;
-            User otherUser = chats[this.ViewBag.Selected].OtherUser;
-            List<Message> messages = this.ViewBag.Messages;
-        }
-
-        <div class="chat-header-container">
-            <div>@(otherUser.Name + " " + otherUser.Surname)</div>
-            <div>@otherUser.Email</div>
-        </div>
-        <div class="messages-container">
-            @foreach(Message message in messages)
+<main class="messages">
+    <aside class="messages">
+        <div class="chats-selection">
+            @foreach (ChatView chat in chats)
             {
-                string align = user.Id == message.IdUser ? "d-flex justify-content-start" : "d-flex justify-content-end";
-                <div class="@align">
-                    <div class="message-container">
+                <a asp-action="Messages" asp-all-route-data="this.ViewBag.RouteData" asp-route-idChat="@chat.Id"
+                   class="aside-container link-standard" id="@(counter++ == this.ViewBag.Selected ? "selected-chat" : "")">
+                    <div class="left-side">
+                        @{
+                            string message = user.Type != 'a' ? $"{chat.OtherUser.Name} {chat.OtherUser.Surname}" : $"{chat.OtherUser.Name} {chat.OtherUser.Surname} - {chat.Sender!.Name} {chat.Sender!.Surname}";
+                            message = message.Length > 18 ? message.Substring(0, 15) + "..." : message;
+                        }
+                        <span class="name">
+                            @message
+                        </span>
+                        <span class="subject">
+                            @(chat.Subject ?? "No subject")
+                        </span>
+                        <span class="last-message">
+                            @(
+                                chat.LastMessage != null
+                                ? chat.LastMessage.Text.Substring(0, Math.Min(20, chat.LastMessage.Text.Length))
+                                : " ")
 
+                        </span>
                     </div>
-                    
-                </div>
+                    <div class="d-flex flex-column">
+                        <span>
+                            @(chat.LastMessage != null
+                                ? chat.LastMessage.DateTimeSentUtc.GetMessageDateString()
+                                : chat.CreatedAt.GetMessageDateString())
+                        </span>
+                    </div>
+                </a>
             }
         </div>
+        @model StringInputModel
+        <form class="d-flex" asp-action="NewChat">
+            <input class="width-100" asp-for="Value" type="email" placeholder="Enter email" required autocomplete="off" />
+            <button class="btn btn-orange"><i class="bi bi-plus-square"></i></button>
+        </form>
+    </aside>
+    <section>
+        @if (chats.Count > 0)
+        {
+            User otherUser = chats[this.ViewBag.Selected].OtherUser;
+            User? sender = chats[this.ViewBag.Selected].Sender;
+            List<MessageView> messages = this.ViewBag.Messages;
+
+            @if (sender != null)
+            {
+                <div class="chat-header-container d-flex justify-content-between">
+                    <div>
+                        <div>@(otherUser.Name + " " + otherUser.Surname)</div>
+                        <div>@otherUser.Email</div>
+                    </div>
+                    <div>
+                        <div>@sender.Name @sender.Surname</div>
+                        <div>@sender.Email</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="chat-header-container">
+                    <div>@(otherUser.Name + " " + otherUser.Surname)</div>
+                    <div>@otherUser.Email</div>
+                </div>
+            }
+
+            <div class="chat-container">
+                @{
+                    DateTime lastDate = DateTime.MinValue;
+                    int lastIdUser = -1;
+                }
+                @foreach (MessageView message in messages)
+                {
+                    string align;
+                    string messageClass = "text-container";
+                    if (user.Id != message.IdUser)
+                    {
+                        align = "d-flex justify-content-start";
+                        messageClass += " own";
+                    }
+                    else
+                    {
+                        align = "d-flex justify-content-end";
+                        messageClass += " foreign";
+                    }
+
+
+                    <div class="@align">
+                        <div class="message-container">
+                            @if ((message.DateTimeSentUtc - lastDate).TotalSeconds / 3600 > 1 || lastIdUser != message.IdUser)
+                            {
+                                lastIdUser = message.IdUser;
+                                lastDate = message.DateTimeSentUtc;
+                                string headerClass = message.Text.Length < 8 ? "message-header small" : "message-header standard";
+                                <div class="@headerClass">
+                                    <span>@message.DateTimeSentUtc.GetMessageDateString()</span>
+                                    <span>@message.Sender.Name @message.Sender.Surname</span>
+                                </div>
+                            }
+                            <div class="@messageClass">
+                                @message.Text
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+
+            var selectedChat = (ChatView)chats[this.ViewBag.Selected];
+            <form class="message-send-form" asp-action="SendMessage"
+                  asp-route-idChat="@selectedChat.Id">
+                <input asp-for="Value" class="message-send-input" type="text" maxlength="200" autocomplete="off" />
+                <button class="d-none"></button>
+            </form>
+        }
     </section>
 </main>

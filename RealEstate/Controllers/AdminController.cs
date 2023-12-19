@@ -5,11 +5,22 @@ using RealEstate.Models.DatabaseModels;
 using System;
 using Microsoft.AspNetCore.Identity;
 using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Mvc.Filters;
+using RealEstate.Models;
+using System.Diagnostics;
+using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace RealEstate.Controllers
 {
     public class AdminController : BaseEstateController
     {
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            this.ViewBag.FooterVisible = false;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -56,7 +67,7 @@ namespace RealEstate.Controllers
             this.ViewBag.IsAdminView = false;
         }
 
-        [Authorize(false)]
+        [Authorize(usersAllowed: false)]
         public IActionResult Users()
         {
             var users = this._context.Users!.Where(users => users.Type != 'a').ToList();
@@ -71,6 +82,16 @@ namespace RealEstate.Controllers
             this.ViewBag.Users = users;
 
             return View();
+        }
+
+        public IActionResult ChangeUserType(int idUser)
+        {
+            User user = this._context.Users!.Find(idUser)!;
+
+            user.Type = user.Type == 'u' ? 'b' : 'u';
+            this._context.SaveChanges();
+
+            return RedirectToAction("Users");
         }
 
         [Authorize]
@@ -93,37 +114,153 @@ namespace RealEstate.Controllers
         }
 
         [Authorize]
-        public IActionResult Messages(int selected = 0, int take = 10)
+        //[HttpGet]
+        public IActionResult Messages(int idChat = 0)
         {
             User user = this.ViewBag.User;
 
-            var data = this._context.Chats
-                .Where(chat => chat.IdUser1 == user.Id || chat.IdUser2 == user.Id).ToList();
+            var data = this._context.Chats.ToList();
+
+            if (user.Type != 'a')
+            {
+                data = data.Where(chat => chat.IdUser1 == user.Id || chat.IdUser2 == user.Id).ToList();
+            }
+
+
 
             List<ChatView> chats = new();
 
-            int counter = 0;
+            if (data.Count == 0) return View();
+
             foreach (Chat item in data)
             {
                 int idOther = item.IdUser1 == user.Id ? item.IdUser2 : item.IdUser1;
                 User otherUser = this._context.Users.Find(idOther)!;
                 Message? message = this._context.Messages!.Find(item.IdLastMessage);
                 chats.Add(new ChatView(item, otherUser, message));
+            }
 
-                if (counter++ >= take) break;
-
+            if (user.Type == 'a')
+            {
+                chats.ForEach(chatView =>
+                {
+                    if (chatView.IdUser1 == user.Id)
+                        chatView.Sender = this._context.Users!.Find(chatView.IdUser1)!;
+                    else
+                        chatView.Sender = this._context.Users!.Find(chatView.IdUser2)!;
+                });
             }
 
             chats.Sort(ChatView.OrderByDate);
             this.ViewBag.Chats = chats;
 
-            if (chats.Count > 0)
+            if (chats.Count == 0)
             {
-                Chat chat = chats[selected];
-                this.ViewBag.Messages = this._context.Messages!
-                .Where(mess => mess.IdChat == chat.Id).ToList();
-                this.ViewBag.Selected = selected;
+                this.ViewBag.Messages = new List<MessageView>();
             }
+
+            int selected = idChat != 0 ? chats.FindIndex(chat => chat.Id == idChat) : 0;
+            Chat chat = chats[selected];
+
+            var dataMessages = this._context.Messages!.Where(mess => mess.IdChat == chat.Id).ToList();
+            List<MessageView> messages = new List<MessageView>();
+            List<User> chatters = new List<User>();
+
+            dataMessages.ForEach(mess =>
+            {
+                User? sender = chatters.Find(user => user.Id == mess.IdUser);
+
+                if (sender == null)
+                {
+                    sender = this._context.Users!.Find(mess.IdUser)!;
+                    chatters.Add(sender);
+                }
+                messages.Add(new MessageView(mess, sender));
+            });
+
+
+            this.ViewBag.Messages = messages;
+            this.ViewBag.Selected = selected;
+
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult SendMessage(int idChat, StringInputModel input)
+        {
+            var message = new Message()
+            {
+                IdChat = idChat,
+                IdUser = this.ViewBag.User.Id,
+                Text = input.Value,
+                IsRead = false,
+                DateTimeSentUtc = DateTime.Now
+            };
+            Chat chat = this._context.Chats!.Find(idChat)!;
+
+            this._context.Messages!.Add(message);
+            this._context.SaveChanges();
+
+            chat.IdLastMessage = message.Id;
+
+            this._context.SaveChanges();
+
+            return RedirectToAction("Messages", new { idChat });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult NewChat(StringInputModel input)
+        {
+            User user = this.ViewBag.User;
+            User? recipent = this._context.Users!.FirstOrDefault(user => user.Email == input.Value)!;
+            recipent = recipent != null ? recipent : this._context.Users!.FirstOrDefault(user => user.Username == input.Value)!;
+
+            if (recipent.Email == user.Email || recipent.Username == user.Username)
+            {
+                this.ViewBag.Error = "You cannot send a message to yourself";
+                return RedirectToAction("Messages");
+            }
+
+            if (recipent == null)
+            {
+                this.ViewBag.Error = "User not found";
+                return RedirectToAction("Messages");
+            }
+
+            Chat? existing = this._context.Chats!
+                .FirstOrDefault(chat => (chat.IdUser1 == user.Id && chat.IdUser2 == recipent.Id) ||
+                               (chat.IdUser2 == user.Id && chat.IdUser1 == recipent.Id));
+
+            if (existing != null)
+            {
+                return RedirectToAction("Messages", new { idChat = existing.Id });
+            }
+
+            var chat = new Chat()
+            {
+                IdInquiry = null,
+                IdUser1 = this.ViewBag.User.Id,
+                IdUser2 = recipent.Id,
+                IdLastMessage = null,
+                Subject = null,
+                CreatedAt = DateTime.Now
+            };
+
+            this._context.Chats!.Add(chat);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Messages", new { idChat = chat.Id });
+        }
+
+        [Authorize(false, false)]
+        public IActionResult Parameters()
+        {
+            var parameters = this._context.Parameters!.ToList();
+
+            this.ViewBag.Parameters = parameters;
+
             return View();
         }
     }

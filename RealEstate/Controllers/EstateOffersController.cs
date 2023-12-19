@@ -9,7 +9,7 @@ namespace RealEstate.Controllers
     public class EstateOffersController : BaseEstateController
     {
         [HttpGet]
-        public IActionResult Index(int viewCount = 6, char? filter = null, string orderby = "Name")
+        public IActionResult Index(int viewCount = 6, char? filter = null)
         {
             this.ViewBag.NavUnderline = "Home";
             this.ViewBag.ViewCount = viewCount;

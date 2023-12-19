@@ -56,7 +56,6 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 1rem;
     align-items: center;
     width: 100%;
     padding-left: 3%;
@@ -122,6 +121,11 @@ nav {
 .logo-container {
     margin-top: 0.5rem;
     margin-right: 50px;
+    user-select: none;
+}
+
+.logo-container>*{
+    user-select:none;
 }
 
 .logo-index-link {
@@ -451,7 +455,7 @@ h2 {
 
 .footer-title {
     margin: 0px;
-    padding: 0pxs;
+    padding: 0px;
 }
 
 .newsletter-subscription {

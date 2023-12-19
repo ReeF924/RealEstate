@@ -7,16 +7,13 @@ namespace RealEstate.Attributes
 {
     public class AuthorizeAttribute : Attribute, IActionFilter
     {
-        private bool UserAllowed = true;
+        private bool UsersAllowed = true;
+        private bool BrokersAllowed = true;
 
-        public AuthorizeAttribute(bool userAllowed)
+        public AuthorizeAttribute(bool usersAllowed = true, bool brokersAllowed = true)
         {
-                this.UserAllowed = userAllowed;
-        }
-
-        public AuthorizeAttribute()
-        {
-            
+            this.UsersAllowed = usersAllowed;
+            this.BrokersAllowed = brokersAllowed;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -29,21 +26,22 @@ namespace RealEstate.Attributes
                 return;
             }
 
-            if(UserAllowed)
-                return;
 
-            string data= context.HttpContext.Session.GetString("User")!;
+            string data = context.HttpContext.Session.GetString("User")!;
             User user = JsonSerializer.Deserialize<User>(data)!;
 
-            if (user.Type == 'u')
+            if (user.Type == 'b' && !this.BrokersAllowed)
                 context.Result = new RedirectToActionResult("Index", "Home", null);
-            
+
+            if (user.Type == 'u' && !this.UsersAllowed)
+                context.Result = new RedirectToActionResult("Index", "Home", null);
+
 
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
+
         }
-    }   
+    }
 }

@@ -114,7 +114,7 @@
         </div>
         @if (offers.Count >= this.ViewBag.ViewCount)
         {
-            int viewCount = this.ViewBag.ViewCount + 6;
+            int viewCount = this.ViewBag.ViewCount+ 6; 
             <div class="items-view-all-container">
                 <a asp-action="Index" asp-all-route-data="this.ViewBag.RouteData" asp-route-viewCount="@viewCount" class="btn-orange items-view-all">
                     View more

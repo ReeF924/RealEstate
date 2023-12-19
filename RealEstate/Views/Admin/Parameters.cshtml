@@ -1,0 +1,28 @@
+﻿@{
+    List<Parameter> parameters = (List<Parameter>)this.ViewBag.Parameters;
+}
+<div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Value</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Parameter param in parameters)
+                {
+                    <tr>
+                        <td>
+                            @param.Value
+                        </td>
+                        <td>
+                            <a></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

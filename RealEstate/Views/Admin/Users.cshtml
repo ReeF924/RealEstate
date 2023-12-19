@@ -16,11 +16,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(User user in users)
+                @foreach (User user in users)
                 {
                     <tr>
                         <td>
-                            <a asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@user.Id">@user.Username</a>
+                            @user.Username
                         </td>
                         <td>
                             @user.Type
@@ -41,15 +41,11 @@
                             @{
                                 if (user.Type == 'u')
                                 {
-                                    <button class="btn btn-primary">
-                                        <a asp-controller="Admin" asp-action="MakeBroker" asp-route-id="@user.Id">Make broker</a>
-                                    </button>
+                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@user.Id" class="link-standard">Make broker</a>
                                 }
                                 else if (user.Type == 'b')
                                 {
-                                    <button class="btn btn-danger">
-                                        <a asp-controller="Admin" asp-action="MakeUser" asp-route-id="@user.Id">Remove broker</a>
-                                    </button>
+                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@user.Id" class="link-standard">Remove broker</a>
                                 }
                             }
                         </td>
