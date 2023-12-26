@@ -258,10 +258,35 @@ namespace RealEstate.Controllers
         public IActionResult Parameters()
         {
             var parameters = this._context.Parameters!.ToList();
-
             this.ViewBag.Parameters = parameters;
 
             return View();
+        }
+
+        [Authorize(false, false)]
+        public IActionResult AddParameter(StringInputModel input)
+        {
+            if(input.Value.Length > 30)
+                return RedirectToAction("Parameters");
+
+            var parameter = new Parameter()
+            {
+                Value = input.Value
+            };
+
+            this._context.Parameters!.Add(parameter);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Parameters");
+        }
+        [Authorize(false, false)]
+        public IActionResult DeleteParameter(int idParameter)
+        {
+            var parameter = this._context.Parameters!.Find(idParameter);
+            this._context.Parameters!.Remove(parameter!);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Parameters");
         }
     }
 }

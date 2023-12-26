@@ -1,4 +1,8 @@
-﻿@{
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/admin/parameters.css" />
+}
+
+@{
     List<Parameter> parameters = (List<Parameter>)this.ViewBag.Parameters;
 }
 <div>
@@ -18,10 +22,19 @@
                             @param.Value
                         </td>
                         <td>
-                            <a></a>
+                            <a asp-action="DeleteParameter" asp-route-idParameter="@param.Id" class="alert-danger delete-param"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>
                 }
+                <tr>
+                    <td>
+                        @model StringInputModel
+                        <form asp-action="AddParameter">
+                            <input asp-for="Value" type="text" class="form-control" required maxlength="30" />
+                            <button class="btn btn-success"><i class="bi bi-plus-square"></i></button>
+                        </form>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
