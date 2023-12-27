@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -14,6 +15,7 @@ namespace RealEstate.Models.DatabaseModels
         public int Price { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
+        [MaxLength(100)]
         public string? ShortDescription { get; set; }
         public char Category { get; set; } // f - flats, l - luxury,  h - houses, c - cottages
         public char EnergyClass { get; set; }

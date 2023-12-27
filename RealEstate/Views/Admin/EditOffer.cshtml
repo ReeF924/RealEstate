@@ -1,0 +1,59 @@
+﻿@section Styles {
+	<link rel="stylesheet" href="~/css/admin/editOffer.css" />
+}
+@{
+	User user = this.ViewBag.User;
+	Offer offer = this.ViewBag.Offer;
+	List<User> brokers = this.ViewBag.Brokers;
+
+}
+@model Offer
+<section>	
+	<form asp-action="EditOffer" ap-route-idOffer="@offer.Id">
+		<label asp-for="Name" class="form-label"></label>
+		<input asp-for="Name" class="form-control" type="text" required"/>
+
+		<label asp-for="Price" class="form-label"></label>
+		<input asp-for="Price" class="form-control" type="number" required />
+
+		<label asp-for="Location" class="form-label"></label>
+		<input asp-for="Location" class="form-control" type="text" required />
+
+		<label asp-for="Description" class="form-label"></label>
+		<input asp-for="Description" class="form-control" type="textarea" required />
+
+		<label asp-for="ShortDescription" class="form-label"></label>
+		<textarea asp-for="ShortDescription" class="form-control"></textarea>
+
+		<select asp-for="Category" name="CategorySelect" class="form-select" required>
+				<option selected>Choose poverty category</option>
+				<option value="f">Flats</option>
+				<option value="l">Luxury</option>
+				<option value="h">Houses</option>
+				<option value="c">Cottages</option>
+			</select>
+
+		<select asp-for="EnergyClass" name="EnergyClassSelect" class="form-select" required> <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
+				<option selected>Choose the energy class</option>
+				<option value="A">A</option>
+				<option value="B">B</option>
+				<option value="C">C</option>
+				<option value="D">D</option>
+				<option value="E">E</option>
+				<option value="F">F</option>
+			</select>
+
+			<select asp-for="IdBroker" name="IdBrokerSelect" class="form-select"> <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
+				<option selected>Choose broker</option>
+			@foreach (User broker in brokers)
+			{
+				<option value="@broker.Id">@broker.Username</option>
+			}
+			</select>
+
+			<div class="d-flex">
+			<button type="submit" class="btn btn-sucess">Save</button>
+			<button type="reset">Cancel</button>
+			</div>
+	</form>
+</section>
