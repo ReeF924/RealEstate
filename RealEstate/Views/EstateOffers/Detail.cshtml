@@ -1,221 +1,233 @@
 @section Scripts {
-    <script src="~/js/detail.js"></script>
+		<script src="~/js/detail.js"></script>
 }
 
 <main class="main-detail">
-    <section class="mb-10">
-        @{
-            Offer offer = (Offer)ViewBag.Offer;
-            Image? image = offer.Images!.FirstOrDefault();
-            string firstImagePath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
+	<section class="mb-10">
+		@{
+			Offer offer = (Offer)ViewBag.Offer;
+			Image? image = offer.Images!.FirstOrDefault();
+			string firstImagePath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
 
-            <div class="detail-photo">
-                <img src="@firstImagePath" alt="detail-image">
-            </div>
-            <div class="sub-photos">
-                @{
-                    int loops = Math.Min(offer.Images!.Count - 1, 5);
-                    string className;
-                }
+				<div class="detail-photo">
+					<img src="@firstImagePath" alt="detail-image">
+				</div>
+				<div class="sub-photos">
+				@{
+					int loops = Math.Min(offer.Images!.Count - 1, 5);
+					string className;
+				}
 
 
-                @if (offer.Images.Count < 7)
-                {
-                    @for (int i = 0; i <= loops; i++)
-                    {
-                        className = i == 0 ? "selected-sub-photo" : "";
-                        image = offer.Images[i];
-                        string alt = "detailSub_" + i.ToString();
+				@if (offer.Images.Count < 7)
+				{
+					@for (int i = 0; i <= loops; i++)
+					{
+						className = i == 0 ? "selected-sub-photo" : "";
+						image = offer.Images[i];
+						string alt = "detailSub_" + i.ToString();
 
-                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
-                    }
-                }
-                else
-                {
-                    @for (int i = 0; i < loops; i++)
-                    {
-                        className = i == 0 ? "selected-sub-photo" : "";
-                        image = offer.Images[i];
-                        string alt = "detailSub_" + i.ToString();
+									<img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+					}
+				}
+				else
+				{
+					@for (int i = 0; i < loops; i++)
+					{
+						className = i == 0 ? "selected-sub-photo" : "";
+						image = offer.Images[i];
+						string alt = "detailSub_" + i.ToString();
 
-                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
-                    }
+									<img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+					}
 
-                    image = offer.Images[5];
-                    string label = "dalších " + (offer.Images.Count - 6).ToString() + " fotek";
-                    <a onclick="viewAllSubPhotos(this)" class="dark-layer-over view-more-sub-photo">
-                        <img src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="detailSub_6">
-                        <label class="next">@label</label>
-                    </a>
+					image = offer.Images[5];
+					string label = "dalších " + (offer.Images.Count - 6).ToString() + " fotek";
+							<a onclick="viewAllSubPhotos(this)" class="dark-layer-over view-more-sub-photo">
+								<img src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="detailSub_6">
+								<label class="next">@label</label>
+							</a>
 
-                    @for (int i = loops + 1; i < offer.Images.Count; i++)
-                    {
-                        image = offer.Images[i];
-                        string alt = "detailSub_" + i.ToString();
+					@for (int i = loops + 1; i < offer.Images.Count; i++)
+					{
+						image = offer.Images[i];
+						string alt = "detailSub_" + i.ToString();
 
-                        <img class="d-none additional-sub-photo" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
-                    }
-                }
-            </div>
-        }
-    </section>
-    <section class="description">
-        <div class="main-description">
-            <div>
-                <div>
-                    <h3 class="item-name-detail">
-                        @offer.Name
-                    </h3>
+									<img class="d-none additional-sub-photo" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+					}
+				}
+				</div>
+		}
+	</section>
+	<section class="description">
+		<div class="main-description">
+			<div>
+				<div>
+					<h3 class="item-name-detail">
+						@offer.Name
+					</h3>
 
-                    @if (this.ViewBag.User != null)
-                    {
-                        @if (!this.ViewBag.Favourite)
-                        {
-                            <a asp-action="AddFavourite" asp-all-route-data="this.ViewBag.RouteData" class="favourite-star"><i class="bi bi-star-fill not-favourite-star"></i></a>
-                        }
-                        else
-                        {
-                            <a asp-action="RemoveFavourite" asp-all-route-data="this.ViewBag.RouteData"><i class="bg-info bi-star-fill favourite-star"></i></a>
-                        }
-                    }
+					@if (this.ViewBag.User != null)
+					{
+						@if (!this.ViewBag.Favourite)
+						{
+									<a asp-action="AddFavourite" asp-all-route-data="this.ViewBag.RouteData" class="favourite-star"><i class="bi bi-star-fill not-favourite-star"></i></a>
+						}
+						else
+						{
+									<a asp-action="RemoveFavourite" asp-all-route-data="this.ViewBag.RouteData"><i class="bg-info bi-star-fill favourite-star"></i></a>
+						}
+					}
 
-                </div>
-                <div class="text-grey-light fs-14">@offer.Location</div>
-            </div>
-            <div>
-                <h3 class="item-price">
-                    @offer.Price.ToString("N0") Kč
-                </h3>
-                <div class="item-price-description">za nemovitost</div>
-            </div>
-        </div>
-        <div class="flex-row jf-space-between">
-            <div class="energy-class">Energetická třída<span>@offer.EnergyClass</span></div>
-            <div class="text-align-right tc-orange text-underline fs-14 pointer">
-                <span>
-                    <img class="mr-5"
-                         src="@Url.Content($"~/images//detail//calc.png")">spočítat hypotéku
-                </span>
-            </div>
-        </div>
-    </section>
-    <section class="mb-20">
-        <p class="text-grey-light fs-14 mb-20">
-            @offer.Description
-        </p>
-        <div class="detail-parameters">
-            @{
-                int n = this.ViewBag.offerParameters.Count / 2 + this.ViewBag.offerParameters.Count % 2;
-            }
+				</div>
+				<div class="text-grey-light fs-14">@offer.Location</div>
+			</div>
+			<div>
+				<h3 class="item-price">
+					@offer.Price.ToString("N0") Kč
+				</h3>
+				<div class="item-price-description">za nemovitost</div>
+			</div>
+		</div>
+		<div class="flex-row jf-space-between">
+			<div class="energy-class">Energetická třída<span>@offer.EnergyClass</span></div>
+			<div class="text-align-right tc-orange text-underline fs-14 pointer">
+				<span>
+					<img class="mr-5"
+						 src="@Url.Content($"~/images//detail//calc.png")">spočítat hypotéku
+				</span>
+			</div>
+		</div>
+	</section>
+	<section class="mb-20">
+		<p class="text-grey-light fs-14 mb-20">
+			@offer.Description
+		</p>
+		<div class="detail-parameters">
+			@{
+				int n = this.ViewBag.offerParameters.Count / 2 + this.ViewBag.offerParameters.Count % 2;
+			}
 
-            <table>
-                @for (int i = 0; i < n; i++)
-                {
-                    <tr>
-                        <td>
-                            @this.ViewBag.offerParameters[i].Key
-                        </td>
-                        <td>
-                            @this.ViewBag.offerParameters[i].Value
-                        </td>
-                    </tr>
-                }
-            </table>
-            <table>
-                @for (int i = n; i < this.ViewBag.offerParameters.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @this.ViewBag.offerParameters[i].Key
-                        </td>
-                        <td>
-                            @this.ViewBag.offerParameters[i].Value
-                        </td>
-                    </tr>
-                }
-                @if (this.ViewBag.offerParameters.Count % 2 == 1)
-                {
-                    <tr>
-                        <td>&#8205;</td>
-                        <td></td>
-                    </tr>
-                }
-            </table>
-        </div>
-    </section>
-    @{
-        bool hasBroker = this.ViewBag.Broker != null;
-        // string contactClass =
-    }
-    <section class="contact @(hasBroker ? " justify-content-between" : "justify-content-center")">
-        @if (hasBroker)
-        {
-            <div class="salesman">
+			<table>
+				@for (int i = 0; i < n; i++)
+				{
+						<tr>
+							<td>
+							@this.ViewBag.offerParameters[i].Key
+							</td>
+							<td>
+							@this.ViewBag.offerParameters[i].Value
+							</td>
+						</tr>
+				}
+			</table>
+			<table>
+				@for (int i = n; i < this.ViewBag.offerParameters.Count; i++)
+				{
+						<tr>
+							<td>
+							@this.ViewBag.offerParameters[i].Key
+							</td>
+							<td>
+							@this.ViewBag.offerParameters[i].Value
+							</td>
+						</tr>
+				}
+				@if (this.ViewBag.offerParameters.Count % 2 == 1)
+				{
+						<tr>
+							<td>&#8205;</td>
+							<td></td>
+						</tr>
+				}
+			</table>
+		</div>
+	</section>
+	@{
+		bool hasBroker = this.ViewBag.Broker != null;
+		// string contactClass =
+	}
+	<section class="contact @(hasBroker ? " justify-content-between" : "justify-content-center")">
+		@if (hasBroker)
+		{
+				<div class="salesman">
 
-                <h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
-                @{
-                    User broker = (User)this.ViewBag.Broker;
-                }
-                <div class="salesman-info">
-                    <div class="salesman-contact mb-10">
-                        <img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{broker.Id}.png")" alt="salesman">
-                        <div>
-                            <div class="salesman-name">@broker.Name @broker.Surname</div>
-                            <div class="salesman-email text-underline">
-                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//emailName.png")" alt="">@broker.Email</span>
-                            </div>
-                            <div class="salesman-phone text-underline">
-                                <span><img class="mr-5" src="@Url.Content($"~/images//detail//telName.png")" alt="">@broker.PhoneNumber</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="salesman-awards">
-                        <img class="mr-10" src="@Url.Content($"~/images//detail//Major-Network.png")" alt="network-medal">
-                        <img src="@Url.Content($"~/images//detail//cca-medal.png")" alt="cca medal">
-                    </div>
-                </div>
-            </div>
-        }
+					<h3 class="tc-dorange mb-20">Kontaktujte prodejce</h3>
+				@{
+					User broker = (User)this.ViewBag.Broker;
+				}
+					<div class="salesman-info">
+						<div class="salesman-contact mb-10">
+							<img class="height80 img-roung mr-20" src="@Url.Content($"~/images//admins//{broker.Id}.png")" alt="salesman">
+							<div>
+								<div class="salesman-name">@broker.Name @broker.Surname</div>
+								<div class="salesman-email text-underline">
+									<span><img class="mr-5" src="@Url.Content($"~/images//detail//emailName.png")" alt="">@broker.Email</span>
+								</div>
+								<div class="salesman-phone text-underline">
+									<span><img class="mr-5" src="@Url.Content($"~/images//detail//telName.png")" alt="">@broker.PhoneNumber</span>
+								</div>
+							</div>
+						</div>
+						<div class="salesman-awards">
+							<img class="mr-10" src="@Url.Content($"~/images//detail//Major-Network.png")" alt="network-medal">
+							<img src="@Url.Content($"~/images//detail//cca-medal.png")" alt="cca medal">
+						</div>
+					</div>
+				</div>
+		}
+		@{
+			User user = this.ViewBag.User;
+		}
+		@if (user == null || user.Type == 'u')
+		{
         @model Inquiry
 
-        <form id="inquiryForm" asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
-            <div>
-                <h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
-            </div>
-            @{
-                Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
-                bool disabled = this.ViewBag.Inquiry != null;
-                if (this.ViewBag.User != null)
-                {
-                    User user = (User)this.ViewBag.User;
-                    inquiry.Name = user.Name;
-                    inquiry.Surname = user.Surname;
-                    inquiry.PhoneNumber = user.PhoneNumber;
-                    inquiry.Email = user.Email;
-                };
-            }
-            <div class="interested-form mb-20">
-                <input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
-                       required disabled="@disabled" />
-                <input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required disabled="@disabled" />
-                <input asp-for="PhoneNumber" type="tel" placeholder="Telefon" value="@inquiry.PhoneNumber" required disabled="@disabled">
-                <input asp-for="Email" type="email" placeholder="E-mail"
-                       value="@inquiry.Email" required disabled="@disabled">
-                <textarea asp-for="AdditionalInformation" class="interested-form-input ta-noresize"
-                          placeholder="Napište nám zprávu" disabled="@disabled"></textarea>
-            </div>
-            <div class="flex-row jf-space-between">
-                <div class="invisible"></div>
-                <button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Odesláno" : "Odeslat")</button>
-                <button type="button" onclick="clearInquiryForm()" class="btn btn-secondary @(disabled ? "" : "invisible")">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-                    </svg>
-                </button>
-            </div>
-        </form>
+			<form id="inquiryForm" asp-action="SendInquiry" asp-route-idOffer="@offer.Id" class="center">
+				<div>
+					<h3 class="tc-dorange mb-20">Napište nám, ozveme se</h3>
+				</div>
+				@{
+					Inquiry inquiry = (Inquiry)this.ViewBag.Inquiry ?? new Inquiry();
+					bool disabled = this.ViewBag.Inquiry != null;
+					if (user != null)
+					{
+						inquiry.Name = user.Name;
+						inquiry.Surname = user.Surname;
+						inquiry.PhoneNumber = user.PhoneNumber;
+						inquiry.Email = user.Email;
+					};
+				}
+				<div class="interested-form mb-20">
+					<input asp-for="Name" type="text" placeholder="Jméno" value="@inquiry.Name"
+						   required disabled="@disabled" />
+					<input asp-for="Surname" type="text" placeholder="Přijmení" value="@inquiry.Surname" required disabled="@disabled" />
+					<input asp-for="PhoneNumber" type="tel" placeholder="Telefon" value="@inquiry.PhoneNumber" required disabled="@disabled">
+					<input asp-for="Email" type="email" placeholder="E-mail"
+						   value="@inquiry.Email" required disabled="@disabled">
+					<textarea asp-for="AdditionalInformation" class="interested-form-input ta-noresize"
+							  placeholder="Napište nám zprávu" disabled="@disabled"></textarea>
+				</div>
+				<div class="flex-row jf-space-between">
+					<div class="invisible"></div>
+					<button type="submit" class="btn-orange interested-button" disabled="@disabled">@(disabled ? "Odesláno" : "Odeslat")</button>
+					<button type="button" onclick="clearInquiryForm()" class="btn btn-secondary @(disabled ? "" : "invisible")">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+							<path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+							<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+						</svg>
+					</button>
+				</div>
+			</form>
+		}
+		else if(user.Type == 'a' || offer.IdBroker == user.Id)
+		{
+			<div class="edit-button-container">
+					<a asp-controller="Admin" asp-action="EditOffer" asp-route-idOffer="@offer.Id"
+				class="btn btn-primary">Edit offer</a>
+			</div>
+		}
 
 
-    </section>
+	</section>
 </main>

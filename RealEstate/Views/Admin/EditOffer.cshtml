@@ -1,0 +1,103 @@
+﻿@section Styles {
+							<link rel="stylesheet" href="~/css/admin/editOffer.css" />
+}
+@using RealEstate.Models.ViewModels;
+@{
+	User user = this.ViewBag.User;
+	OfferEdit offer = this.ViewBag.Offer;
+	List<User> brokers = this.ViewBag.Brokers;
+	List<ParameterView> parameters = this.ViewBag.Parameters;
+}
+<section>	
+@model OfferEdit
+	<form asp-action="EditOffer" asp-route-idOffer="@offer.Id">
+		<div>
+		<label asp-for="Name" class="form-label"></label>
+		<input asp-for="Name" class="form-control" type="text" required" value="@offer.Name"/>
+		</div>
+
+		<div>
+		<label asp-for="Price" class="form-label"></label>
+		<input asp-for="Price" class="form-control" type="number" required value="@offer.Price" />
+		</div>
+
+		<div>
+		<label asp-for="Location" class="form-label"></label>
+		<input asp-for="Location" class="form-control" type="text" required value="@offer.Location" />
+		</div>
+
+		<div>
+		<label asp-for="Description" class="form-label"></label>
+		<input asp-for="Description" class="form-control" type="textarea" required  value="@offer.Description"/>
+		</div>
+
+		<div>
+		<label asp-for="ShortDescription" class="form-label"></label>
+		<textarea asp-for="ShortDescription" class="form-control">@offer.ShortDescription</textarea>
+		</div>
+
+		<div>
+			@{
+				List<KeyValuePair<char, string>> categoryArr = new(4);
+				categoryArr.Add(new KeyValuePair<char, string>('f', "Flat"));
+				categoryArr.Add(new KeyValuePair<char, string>('l', "Luxury"));
+				categoryArr.Add(new KeyValuePair<char, string>('h', "House"));
+				categoryArr.Add(new KeyValuePair<char, string>('c', "Cottage"));
+			}
+		<select asp-for="Category" name="CategorySelect" class="form-select" required>
+				@foreach (KeyValuePair<char, string> item in categoryArr)
+				{
+					<option value="@item.Key" selected="@(item.Key == offer.Category)" >@item.Value</option>	
+				}
+			</select>
+		</div>
+
+		<div>
+
+			@{
+				char[] energyArr = { 'A', 'B', 'C', 'D', 'E', 'F' };
+			}
+		<select asp-for="EnergyClass" name="EnergyClassSelect" class="form-select" required> <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
+				<option>Choose the energy class</option>
+				@foreach (char c in energyArr)
+				{
+					<option value="@c" selected="@(c == offer.EnergyClass)" >@c</option>
+				}
+			</select>
+		</div>
+
+		<div>
+			<select asp-for="IdBroker" name="IdBrokerSelect" class="form-select"> <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
+				<option selected>Choose broker</option>
+				@foreach (User broker in brokers)
+				{
+					<option value="@broker.Id" selected="@(broker.Id == offer.IdBroker)">@broker.Username</option>
+				}
+			</select>
+		</div>
+
+		<div class="offer-parameters">
+			<table class="table table-striped">
+				<thead>
+					<th>Parameter</th>
+					<th>Value</th>
+				</thead>
+				<tbody>
+					@for (int i = 0; i < offer.Parameters.Count; i++)
+					{
+						<tr>
+							<td>@offer.Parameters[i].Key.Value</td>
+							<td><input type="text" asp-for="Parameters[i].Value.Value" value="@(offer.Parameters[i].Value != null ? offer.Parameters[i].Value!.Value : "")" /></td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="d-flex">
+				<button type="submit" class="btn btn-success">Save</button>
+				<button type="reset" class="btn btn-danger">Reset</button>
+		</div>
+		</form>
+
+</section>

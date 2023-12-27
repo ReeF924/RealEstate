@@ -1,0 +1,8 @@
+﻿form{
+    padding: 3% 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+input,textarea,select{
+    margin-bottom: 5px;
+}
