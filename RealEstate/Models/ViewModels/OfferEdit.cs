@@ -4,7 +4,8 @@ namespace RealEstate.Models.ViewModels
 {
 	public class OfferEdit : Offer
 	{
-        public List<KeyValuePair<KeyValuePair<int, string>, KeyValuePair<int, string>?>> Parameters { get; set; }
+        //public List<KeyValuePair<KeyValuePair<int, string>, KeyValuePair<int, string>?>> Parameters { get; set; }
+        public List<ParameterView> Parameters { get; set; }
 
         public OfferEdit(Offer offer, List<ParameterView> parameters)
         {
@@ -18,16 +19,18 @@ namespace RealEstate.Models.ViewModels
             this.Price = offer.Price;
             this.Location = offer.Location;
 
-            this.Parameters = new();
+            this.Parameters = parameters;
 
-            parameters.ForEach(param =>
-            {
-                OfferParameter? offerParameter = param.Parameter;
+            //this.Parameters = new();
 
-                KeyValuePair<int, string>? offerKVP = offerParameter == null ? null : new KeyValuePair<int, string>(offerParameter.Id, offerParameter.Value);
+            //parameters.ForEach(param =>
+            //{
+            //    OfferParameter? offerParameter = param.Parameter;
 
-                this.Parameters.Add(new(new(param.Id, param.Value), offerKVP));
-            });
+            //    KeyValuePair<int, string>? offerKVP = offerParameter == null ? null : new KeyValuePair<int, string>(offerParameter.Id, offerParameter.Value);
+
+            //    this.Parameters.Add(new(new(param.Id, param.Value), offerKVP));
+            //});
         }
 
         public OfferEdit()

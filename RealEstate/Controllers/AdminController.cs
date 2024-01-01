@@ -333,12 +333,6 @@ namespace RealEstate.Controllers
 			offer.Location = input.Location;
 
 			this._context.SaveChanges();
-			//input.Parameters.ForEach(param =>
-			//{
-			
-
-
-			//})
 
 			return RedirectToAction("Detail", "EstateOffers", new {id = idOffer});
 
