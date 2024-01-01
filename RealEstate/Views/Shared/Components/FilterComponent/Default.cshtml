@@ -1,0 +1,29 @@
+﻿<form>
+    @{
+        char[] energyArr = { 'A', 'B', 'C', 'D', 'E', 'F' };
+
+    }
+    <div class="price">
+        Price
+    </div>
+
+    <div class="area">
+        Area
+    </div>
+
+    <div class="region">
+        Region
+    </div>
+
+    <div class="energy-class">
+        <select class="form-select">
+            <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
+            <option value="" selected>Choose the energy class</option>
+            @foreach (char c in energyArr)
+            {
+                <option value="@c">@c</option>
+            }
+        </select>
+    </div>
+
+</form>

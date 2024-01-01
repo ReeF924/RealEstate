@@ -27,8 +27,18 @@
         </div>
 
         <div>
+            <label asp-for="Region" class="form-label"></label>
+            <input asp-for="Region" class="form-control" type="text" required value="@offer.Region" />
+        </div>
+
+        <div>
+            <label asp-for="Area" class="form-label"></label>
+            <input asp-for="Area" class="form-control" type="number" required value="@offer.Area" />
+        </div>
+
+        <div>
             <label asp-for="Description" class="form-label"></label>
-            <input asp-for="Description" class="form-control" type="textarea" required value="@offer.Description" />
+            <textarea asp-for="Description" class="form-control">@offer.Description</textarea>
         </div>
 
         <div>

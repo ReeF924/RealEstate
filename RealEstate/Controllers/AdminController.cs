@@ -331,6 +331,8 @@ namespace RealEstate.Controllers
 			offer.Price = input.Price;
 			offer.EnergyClass = input.EnergyClass;
 			offer.Location = input.Location;
+			offer.Area = input.Area;
+			offer.Region = input.Region;
 
 			this._context.SaveChanges();
 

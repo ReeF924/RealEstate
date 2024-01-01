@@ -60,7 +60,7 @@ nav {
     width: 100%;
     padding-left: 3%;
     padding-right: 3%;
-    padding-bottom: 1rem;   
+    padding-bottom: 1rem;
     border-bottom: solid 1px rgba(0, 0, 0, 0.1);
 }
 
@@ -87,9 +87,9 @@ nav {
         height: 40px;
     }
 
-.profile-username{
-    display:flex;
-    align-items:center;
+.profile-username {
+    display: flex;
+    align-items: center;
     gap: 6px;
     text-align: center;
 }
@@ -101,22 +101,22 @@ nav {
     padding: 0;
 }
 
-.dropdown-user li {
-    height: 30px;
-}
-
-    .dropdown-user li a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
+    .dropdown-user li {
+        height: 30px;
     }
 
-.dropdown-user li:hover {
-    background: rgba(0, 0, 0, 0.2);
-    transition: 200ms ease;
-}
+        .dropdown-user li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dropdown-user li:hover {
+            background: rgba(0, 0, 0, 0.2);
+            transition: 200ms ease;
+        }
 
 .logo-container {
     margin-top: 0.5rem;
@@ -124,9 +124,9 @@ nav {
     user-select: none;
 }
 
-.logo-container>*{
-    user-select:none;
-}
+    .logo-container > * {
+        user-select: none;
+    }
 
 .logo-index-link {
     height: 100px;
@@ -291,17 +291,32 @@ nav {
 }
 
 
-.offers-header-container{
+.offers-header-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-.order-by-button{
-    background-color: lightgrey;
+.filter-button {
+    background-color: rgb(240, 240,240);
     border-radius: 4px;
     padding: 4px 15px;
     font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: 150ms ease;
+}
+
+    .filter-button:hover {
+        background-color: rgb(215, 215, 215);
+    }
+
+.filter-menu-container {
+    border: 2px solid rgba(40, 40, 40, 0.7);
+    border-radius: 6px;
+    background-color: rgb(225,225,225);
+    padding: 5px 10px;
+    margin-bottom: 30px;
 }
 
 h2 {
@@ -309,8 +324,6 @@ h2 {
     margin: 0px;
     font-size: 30px;
 }
-
-
 
 .items-section {
     margin: 0px 7%;

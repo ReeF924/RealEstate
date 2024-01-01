@@ -3,16 +3,16 @@ using RealEstate.Models.DatabaseModels;
 using RealEstate.Models;
 using System.Diagnostics;
 using RealEstate.Attributes;
+using Org.BouncyCastle.Tls.Crypto;
 
 namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
         [HttpGet]
-        public IActionResult Index(int viewCount = 6, char? filter = null)
+        public IActionResult Index(char? filter = null)
         {
             this.ViewBag.NavUnderline = "Home";
-            this.ViewBag.ViewCount = viewCount;
 
             List<Offer> offers = this._context.Offers?.ToList()!;
 
@@ -29,6 +29,13 @@ namespace RealEstate.Controllers
             if (filter != null)
                 offers = offers!.Where(offer => offer.Category == filter).ToList();
 
+            List<string> regions = new();
+            offers!.ForEach(offer =>
+            {
+                if (!regions.Contains(offer.Region))
+                    regions.Add(offer.Region);
+            });
+            this.ViewBag.Regions = regions;
             this.ViewBag.Offers = offers;
 
             return View();

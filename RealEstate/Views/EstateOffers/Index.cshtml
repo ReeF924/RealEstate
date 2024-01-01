@@ -1,4 +1,4 @@
-@section Scripts{
+@section Scripts {
     <script src="~/js/index.js"></script>
 }
 
@@ -7,7 +7,7 @@
         <h1 class="search-bar-h1">Vyberte si svuj novy byt</h1>
         @model RealEstate.Models.StringInputModel
         <form asp-action="index" class="search-bar-form">
-            <input asp-for="Value" id="search-input" type="text" class="search-bar-text" placeholder="Vyhledat podle nazvu"/>
+            <input asp-for="Value" id="search-input" type="text" class="search-bar-text" placeholder="Vyhledat podle nazvu" />
             <div class="search-bar-button-container">
                 <button id="search-button" class="btn-orange search-bar-button" type="submit">HLEDAT</button>
             </div>
@@ -42,48 +42,29 @@
     </section>
     <section class="items-section">
         <div class="center-content choice-header-container">
-            <h2 class="partial-border">Nase nabidka</h2>
-            @* <div class="offers-header-container"> *@
-                @* <div class="invisible"></div> *@
 
-                @* <h2 class="partial-border">Nase nabidka</h2> *@
+            <div class="offers-header-container">
+                <div class="invisible"></div>
 
-                @* <div>
-                    @{
-                        string s = @" <span>Rnd</span>";
-                        if (this.ViewBag.OrderBy != null)
-                        {
-                            
+                <h2 class="partial-border">Nase nabidka</h2>
 
-                        Dictionary<string, string> filters = new(4)
-                        {
-                            {"Name", ""},
-                            {"Price", ""}
-                        };
-                        filters[this.ViewBag.OrderBy] = @" <i class=""bi bi-arrow - down""></i>";
-                        }
+                <a class="filter-button link-standard" id="filter-button">
+                    Filter<span class="fs-12"><i class="bi bi-caret-down-fill"></i></span>
+                </a>
+            </div>
+        </div>
 
-                    }
+        <div class="filter-menu-container d-none">
+            
 
-                    <div class="profile-dropdown link-standard order-by-button">
-                        <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
-                            order by<span class="fs-12"><i class="bi bi-caret-down-fill"></i></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a>Name @Html.Raw(s)</a></li>
-                            <li><a>Price</a></li>
-                        </ul>
-                    </div>
-                </div> *@
-            @* </div> *@
+
         </div>
         <div>
             @{
 
                 if (offers == null) return;
-                int repeatCount = Math.Min(offers.Count, this.ViewBag.ViewCount);
                 <div class="offers-list">
-                    @for (int i = 0; i < repeatCount; i++)
+                    @for (int i = 0; i < offers.Count; i++)
                     {
                         Offer offer = offers[i];
 
@@ -112,15 +93,12 @@
                 </div>
             }
         </div>
-        @if (offers.Count >= this.ViewBag.ViewCount)
-        {
-            int viewCount = this.ViewBag.ViewCount+ 6; 
-            <div class="items-view-all-container">
-                <a asp-action="Index" asp-all-route-data="this.ViewBag.RouteData" asp-route-viewCount="@viewCount" class="btn-orange items-view-all">
-                    View more
-                </a>
+
+        <div class="items-view-all-container">
+            <div class="btn-orange items-view-all">
+                View more
             </div>
-        }
+        </div>
     </section>
 </main>
 <section class="experiences">
