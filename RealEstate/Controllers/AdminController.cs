@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Attributes;
 using RealEstate.Models.ViewModels;
 using RealEstate.Models.DatabaseModels;
