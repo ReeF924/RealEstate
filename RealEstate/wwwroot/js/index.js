@@ -1,14 +1,18 @@
 
 const chat = document.querySelector("#search-button");
 chat.addEventListener("click", (event) => {
+    console.log("clickSearch");
     const input = document.querySelector("#search-input");
     inputText = input.value.trim();
     if (inputText === '') {
         event.preventDefault();
+        return;
     }
+
+    document.querySelector("#search-form").submit();
 });
 
-const filterButton = document.querySelector(".filter-button");
+const filterButton = document.querySelector(".filter-visible-button");
 
 filterButton.addEventListener("click", (event) => {
     const filterMenu = document.querySelector(".filter-menu-container");
@@ -43,3 +47,4 @@ const changeVisibilityOffers = (offers) => {
         document.querySelector(".items-view-all").classList.add("d-none");
     }
 }
+

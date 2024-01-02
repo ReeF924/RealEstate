@@ -54,22 +54,21 @@
             @if (user == null)
             {
                 <a asp-controller="Login" asp-action="Index" class="profile-container">
-                    <span>Přihlásit se</span>
+                        <span>Přihlásit se</span>
                 </a>
             }
             else
             {
                 bool ppExists = File.Exists(Url.Content($"~/images//admins//"));
                 <div class="profile-container">
-
                     <div class="profile-dropdown link-standard profile-container">
                         <a class="dropdown profile-username" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="@Url.Content("~/images/layout/userIcon.png")" alt="userLogo" />@user.Username
                         </a>
                         <ul class="dropdown-menu dropdown-user">
                             <li><a asp-controller="Login" asp-action="SignUp" asp-route-idUser="@user.Id">Edit Profile</a></li>
-                                <li><a asp-controller="Admin" asp-action="Offers">@(user.Type == 'u' ? "Favourite" : "Offers")</a></li>
-                        <li><a asp-controller="Admin" asp-action="Messages">Messages</a></li>
+                            <li><a asp-controller="Admin" asp-action="Offers">@(user.Type == 'u' ? "Favourite" : "Offers")</a></li>
+                            <li><a asp-controller="Admin" asp-action="Messages">Messages</a></li>
                             @if (user.Type == 'a' || user.Type == 'b')
                             {
                                 <li><a asp-controller="Admin" asp-action="Users">Users</a></li>

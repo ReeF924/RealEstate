@@ -6,10 +6,10 @@
     <section class="search-bar-container">
         <h1 class="search-bar-h1">Vyberte si svuj novy byt</h1>
         @model RealEstate.Models.StringInputModel
-        <form asp-action="index" class="search-bar-form">
+        <form asp-action="index" class="search-bar-form" id="search-form">
             <input asp-for="Value" id="search-input" type="text" class="search-bar-text" placeholder="Vyhledat podle nazvu" />
             <div class="search-bar-button-container">
-                <button id="search-button" class="btn-orange search-bar-button" type="submit">HLEDAT</button>
+                <button id="search-button" class="btn-orange search-bar-button" type="button">HLEDAT</button>
             </div>
         </form>
     </section>
@@ -18,23 +18,23 @@
         var offers = (List<Offer>)this.ViewBag.Offers;
         Dictionary<char, int> categoryCounts = (Dictionary<char, int>)this.ViewBag.CategoryCounts;
     }
-    <section class="filters">
-        <a class="dark-layer-over" asp-route-filter="f">
+    <section class="categories">
+        <a class="dark-layer-over" asp-route-category="f" asp-all-route-data="this.ViewBag.RouteData">
             <img src="/images/rest/home-img-03-442-280.jpg">
             <label>Flats</label>
             <div class="subtext">@categoryCounts['f'] offers</div>
         </a>
-        <a class="dark-layer-over" asp-route-filter="l">
+        <a class="dark-layer-over" asp-route-category="l">
             <img src="/images/Rest/home-img-04-442-280.jpg">
             <label>Luxury</label>
             <div class="subtext">@categoryCounts['l'] offers</div>
         </a>
-        <a class="dark-layer-over" asp-route-filter="h">
+        <a class="dark-layer-over" asp-route-category="h">
             <img src="/images/Rest/home-img-01-442-280.jpg">
             <label>Houses</label>
             <div class="subtext">@categoryCounts['h'] offers</div>
         </a>
-        <a class="dark-layer-over" asp-route-filter="c">
+        <a class="dark-layer-over" asp-route-category="c">
             <img src="/images/Rest/home-img-02-442-280.jpg">
             <label>Cottages</label>
             <div class="subtext">@categoryCounts['c'] offers</div>
@@ -48,16 +48,14 @@
 
                 <h2 class="partial-border">Nase nabidka</h2>
 
-                <a class="filter-button link-standard" id="filter-button">
+                <a class="filter-visible-button link-standard" id="filter-visible-button">
                     Filter<span class="fs-12"><i class="bi bi-caret-down-fill"></i></span>
                 </a>
             </div>
         </div>
 
         <div class="filter-menu-container d-none">
-            
-
-
+            <vc:filter-component param="@(new KeyValuePair<ulong,List<string>>(this.ViewBag.MaxPrice, this.ViewBag.Regions))"></vc:filter-component>
         </div>
         <div>
             @{

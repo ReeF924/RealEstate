@@ -3,49 +3,64 @@ using RealEstate.Models.DatabaseModels;
 using RealEstate.Models;
 using System.Diagnostics;
 using RealEstate.Attributes;
-using Org.BouncyCastle.Tls.Crypto;
+using System.Text.Json;
+using System.Text;
 
 namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
         [HttpGet]
-        public IActionResult Index(char? filter = null)
+        public IActionResult Index(string? filter = null, char? category = null)
         {
-            this.ViewBag.NavUnderline = "Home";
+            List<Offer> offers = this._context.Offers!.ToList();
 
-            List<Offer> offers = this._context.Offers?.ToList()!;
+            if (category != null)
+                offers = offers.Where(offer => offer.Category == category).ToList();
 
-            offers?.ForEach(offer =>
-            {
-                this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>
-                {
-                    offer.Images!.Add(image);
-                });
-            });
-
-            this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
+            ulong? maxPrice = null;
+            FilterModel filterModel = new();
 
             if (filter != null)
-                offers = offers!.Where(offer => offer.Category == filter).ToList();
-
-            List<string> regions = new();
-            offers!.ForEach(offer =>
             {
-                if (!regions.Contains(offer.Region))
-                    regions.Add(offer.Region);
-            });
-            this.ViewBag.Regions = regions;
-            this.ViewBag.Offers = offers;
+                var filterBytes = Convert.FromBase64String(filter);
+                var filterJson = Encoding.UTF8.GetString(filterBytes);
+
+                filterModel = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
+                offers = this.FilterOffers(offers, filterModel, new StringInputModel());
+                maxPrice = filterModel.PriceMax;
+            }
+
+            this.ViewBag.Filter = filterModel;
+            this.IndexInit(offers, maxPrice);
 
             return View();
         }
         [HttpPost]
-        public IActionResult Index(StringInputModel search)
+        public IActionResult Index(FilterModel filter, StringInputModel search)
+        {
+            var offers = this._context.Offers!.ToList();
+
+            ulong? maxPrice = filter!.PriceMax;
+
+            //if (filterSubmit)
+                offers = this.FilterOffers(offers, filter, search);
+
+            this.IndexInit(offers, maxPrice);
+
+            string json = JsonSerializer.Serialize(filter);
+            string filterBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+
+            this.ViewBag.Filter = filter;
+            this.ViewBag.FilterToken = filterBase64;
+
+            return View();
+        }
+
+        private void IndexInit(List<Offer> offers, ulong? maxPrice = null)
         {
             this.ViewBag.NavUnderline = "Home";
-            search.Value = search.Value.ToLower().Trim();
-            var offers = this._context.Offers?.ToList();
+
             offers?.ForEach(offer =>
             {
                 this._context.Images!.Where(image => image.IdOffer == offer.Id).ForEachExt(image =>
@@ -54,14 +69,53 @@ namespace RealEstate.Controllers
                 });
             });
 
-            this.ViewBag.CategoryCounts = offers!.GetCategoryCount();
-            this.ViewBag.ViewCount = 6;
+            List<string> regions = new();
 
-            offers = this.FindSearchOffers(offers!, search.Value);
+            this._context.Offers!.ForEachExt(offer =>
+            {
+                if (!regions.Contains(offer.Region))
+                    regions.Add(offer.Region);
+            });
 
+
+            this.ViewBag.CategoryCounts = this._context.Offers!.GetCategoryCount();
+            this.ViewBag.MaxPrice = maxPrice ?? this._context.Offers!.Max(offer => offer.Price);
+            this.ViewBag.Regions = regions;
             this.ViewBag.Offers = offers;
 
-            return View();
+        }
+
+        private List<Offer> FilterOffers(List<Offer> offers, FilterModel filter, StringInputModel search)
+        {
+            if (search != null && search!.Value != null)
+            {
+                search!.Value = search.Value.ToLower().Trim();
+                offers = this.FindSearchOffers(offers!, search.Value);
+            }
+
+            if (filter != null)
+            {
+                IEnumerable<Offer> filtered = offers!;
+
+                if (filter.Region != null)
+                {
+                    filtered = filtered.Where(offer => offer.Region == filter.Region).ToList();
+                }
+
+                if (filter.EnergyClass != null)
+                {
+                    filtered = filtered.Where(offer => offer.EnergyClass == filter.EnergyClass).ToList();
+                }
+                if (filter.PriceMin != null && filter.PriceMax != null)
+                {
+                    filtered = filtered!.Where(offer => offer.Price >= filter.PriceMin && offer.Price <= filter.PriceMax
+                                                 /*&& offer.Area >= filter.AreaMin && offer.Area <= filter.AreaMax*/).ToList();
+                }
+
+                offers = filtered.ToList();
+            }
+
+            return offers;
         }
 
         private List<Offer> FindSearchOffers(IEnumerable<Offer> offers, string search)
@@ -108,7 +162,7 @@ namespace RealEstate.Controllers
             inquiry.IdOffer = idOffer;
             inquiry.DateTimeSent = DateTime.Now;
 
-            if(this.ViewBag.User != null)
+            if (this.ViewBag.User != null)
             {
                 inquiry.IdUser = this.ViewBag.User.Id;
             }

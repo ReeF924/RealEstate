@@ -12,14 +12,14 @@ namespace RealEstate
                 action(item);
             }
         }
-        public static Dictionary<char, int> GetCategoryCount(this List<Offer> offers)
+        public static Dictionary<char, int> GetCategoryCount(this IEnumerable<Offer> offers)
         {
             Dictionary<char, int> counts = new();
             counts['f'] = 0;
             counts['l'] = 0;
             counts['h'] = 0;
             counts['c'] = 0;
-            offers.ForEach(offer =>
+            offers.ForEachExt(offer =>
             {
                 switch (offer.Category)
                 {

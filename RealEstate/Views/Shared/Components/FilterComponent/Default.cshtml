@@ -1,10 +1,103 @@
-﻿<form>
+﻿@* @section Styles{
+    <link rel="stylesheet" href="~/css/EstateOffers/filter.css" />
+} *@
+
+<link rel="stylesheet" href="~/css/EstateOffers/filter.css" />
+
+
+@* @section Scripts{
+    <script src="@Url.Content("~/js/Components/filter.js")"></script>
+} *@
+
+
+
+@model FilterModel
+<form asp-controller="EstateOffers" asp-action="Index" id="filter-form">
     @{
         char[] energyArr = { 'A', 'B', 'C', 'D', 'E', 'F' };
-
+        List<string> regions = this.ViewBag.Regions;
+        FilterModel filter = this.ViewBag.Filter;
     }
-    <div class="price">
-        Price
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector("#filter-button").addEventListener("click", () => {
+
+                // const highestPrice = document.querySelector("#highestPrice");
+                // const lowestPrice = document.querySelector("#lowestPrice");
+
+                // highestPrice.value = highestPrice.value.replace(/[,. ]/g, '');
+                // lowestPrice.value = lowestPrice.value.replace(/[,. ]/g, '');
+
+                document.querySelector("#filter-form").submit();
+            });
+        });
+
+        // let rangeMin = 100;
+        // const range = document.querySelector(".range-selected");
+        // const rangeInput = document.querySelectorAll(".range-input input");
+        // const rangePrice = document.querySelectorAll(".range-price input");
+
+        // rangeInput.forEach((input) => {
+        //     input.addEventListener("input", (e) => {
+        //         let minRange = parseInt(rangeInput[0].value);
+        //         let maxRange = parseInt(rangeInput[1].value);
+        //         if (maxRange - minRange < rangeMin) {
+        //             if (e.target.className === "min") {
+        //                 rangeInput[0].value = maxRange - rangeMin;
+        //             } else {
+        //                 rangeInput[1].value = minRange + rangeMin;
+        //             }
+        //         } else {
+        //             rangePrice[0].value = minRange;
+        //             rangePrice[1].value = maxRange;
+        //             range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
+        //             range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
+        //         }
+        //     });
+        // });
+
+        // rangePrice.forEach((input) => {
+        //     input.addEventListener("input", (e) => {
+        //         let minPrice = rangePrice[0].value;
+        //         let maxPrice = rangePrice[1].value;
+        //         if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
+        //             if (e.target.className === "min") {
+        //                 rangeInput[0].value = minPrice;
+        //                 range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+        //             } else {
+        //                 rangeInput[1].value = maxPrice;
+        //                 range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+        //             }
+        //         }
+        //     });
+        // });
+    </script>
+
+    <div class="test" id="test">
+        Test
+    </div>
+
+    <label for="price-range" class="form-label">Price Range</label>
+    <div class="price-range">
+        <div class="range-slider">
+            <span class="range-selected"></span>
+        </div>
+        <div class="range-input">
+            <input type="range" class="min" min="0" max="@filter.PriceMax" value="@filter.PriceMin" step="1">
+            <input type="range" class="max" min="0" max="@filter.PriceMax" value="@filter.PriceMax" step="1">
+        </div>
+
+        <div class="range-price">
+            <div>
+                <label for="min">Min</label>
+                <input asp-for="PriceMin" type="number" name="PriceMin" value="@filter.PriceMin" id="lowestPrice">
+            </div>
+            <div>
+                <label for="max">Max</label>
+                <input asp-for="PriceMax" type="number" name="PriceMax" value="@filter.PriceMax" id="highestPrice">
+            </div>
+        </div>
     </div>
 
     <div class="area">
@@ -12,11 +105,17 @@
     </div>
 
     <div class="region">
-        Region
+        <select asp-for="Region" class="form-select">
+            <option value="" selected>Choose a region</option>
+            @foreach (var region in regions)
+            {
+                <option value="@region">@region</option>
+            }
+        </select>
     </div>
 
     <div class="energy-class">
-        <select class="form-select">
+        <select asp-for="EnergyClass" class="form-select">
             <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
             <option value="" selected>Choose the energy class</option>
             @foreach (char c in energyArr)
@@ -26,4 +125,7 @@
         </select>
     </div>
 
+    <div class="center-content">
+        <button type="button" class="btn btn-primary" id="filter-button">Sort</button>
+    </div>
 </form>
