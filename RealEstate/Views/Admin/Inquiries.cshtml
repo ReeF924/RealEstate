@@ -11,7 +11,9 @@
                     <th>First name</th>
                     <th>Last name</th>
                     <th>Email</th>
+                    <th>Additional information</th>
                     <th>Date Sent</th>
+                    <th>Send Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +38,9 @@
                         </td>
                         <td>
                             @inquiry.DateTimeSent
+                        </td>
+                        <td>
+                            <a asp-action="NewChatFromInquiry" asp-route-mail="@inquiry.Email" class="link-underline-hover">Send Message</a>
                         </td>
                     </tr>
                 }

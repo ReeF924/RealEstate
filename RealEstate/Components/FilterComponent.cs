@@ -10,6 +10,7 @@ namespace RealEstate.Components
             FilterModel filter = new();
             filter.PriceMin = 0;
             filter.PriceMax = param.Key;
+            //filter.PriceMax = 69;
 
             this.ViewBag.Filter = filter;
             this.ViewBag.Regions = param.Value;
