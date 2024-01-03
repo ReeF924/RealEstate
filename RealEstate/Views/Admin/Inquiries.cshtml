@@ -11,7 +11,9 @@
                     <th>First name</th>
                     <th>Last name</th>
                     <th>Email</th>
+                    <th>Additional information</th>
                     <th>Date Sent</th>
+                    <th>Send Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,11 +33,19 @@
                             @inquiry.Email
                         </td>
                         <td>
-                            @{string? additionalInfo = inquiry.AdditionalInformation ?? "";}
+                            @{
+                                string? additionalInfo = inquiry.AdditionalInformation ?? "";
+                            }
                             @additionalInfo.Substring(0, Math.Min(30, additionalInfo.Length))
                         </td>
                         <td>
                             @inquiry.DateTimeSent
+                        </td>
+                        <td>
+                            @if (inquiry.IdUser != null)
+                            {
+                                <a asp-action="NewChatFromInquiry" asp-route-idOffer="@inquiry.IdOffer" class="link-underline-hover">Send Message</a>
+                            }
                         </td>
                     </tr>
                 }

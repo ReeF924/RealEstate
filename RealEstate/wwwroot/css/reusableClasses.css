@@ -89,15 +89,26 @@ resize: none;
     text-decoration: none !important;
 }
 
-link-standard :hover {
+.link-standard :hover {
     color: black !important;
     text-decoration: none !important;
 }
 
-link-standard a :hover {
+.link-standard a :hover {
     color: black !important;
     text-decoration: none !important;
 }
+
+.link-underline-hover{
+    color:black !important;
+    text-decoration:none !important;
+}
+
+.link-underline-hover:hover{
+    color:black !important;
+    text-decoration:underline !important;
+}
+
 
 .link-orange {
     color: darkorange !important;

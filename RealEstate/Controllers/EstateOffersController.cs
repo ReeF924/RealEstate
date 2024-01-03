@@ -5,6 +5,7 @@ using System.Diagnostics;
 using RealEstate.Attributes;
 using System.Text.Json;
 using System.Text;
+using RealEstate.Models.ComponentModels;
 
 namespace RealEstate.Controllers
 {
@@ -18,21 +19,17 @@ namespace RealEstate.Controllers
             if (category != null)
                 offers = offers.Where(offer => offer.Category == category).ToList();
 
-            ulong? maxPrice = null;
-            FilterModel filterModel = new();
+            FilterModel filterEncoded = new();
 
             if (filter != null)
             {
                 var filterBytes = Convert.FromBase64String(filter);
                 var filterJson = Encoding.UTF8.GetString(filterBytes);
 
-                filterModel = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
-                offers = this.FilterOffers(offers, filterModel, new StringInputModel());
-                maxPrice = filterModel.PriceMax;
+                filterEncoded = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
             }
 
-            this.ViewBag.Filter = filterModel;
-            this.IndexInit(offers, maxPrice);
+            this.IndexInit(offers, filterEncoded, new());
 
             return View();
         }
@@ -41,25 +38,27 @@ namespace RealEstate.Controllers
         {
             var offers = this._context.Offers!.ToList();
 
-            ulong? maxPrice = filter!.PriceMax;
+            if (filter.PriceMax == null)
+            {
+                var filterToken = this.HttpContext.Session.GetString("filterToken");
+                if (filterToken != null)
+                {
+                    var filterBytes = Convert.FromBase64String(filterToken!);
+                    var filterJson = Encoding.UTF8.GetString(filterBytes);
 
-            //if (filterSubmit)
-                offers = this.FilterOffers(offers, filter, search);
+                    filter = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
+                }
+            }
 
-            this.IndexInit(offers, maxPrice);
-
-            string json = JsonSerializer.Serialize(filter);
-            string filterBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-
-            this.ViewBag.Filter = filter;
-            this.ViewBag.FilterToken = filterBase64;
+            this.IndexInit(offers, filter, search);
 
             return View();
         }
 
-        private void IndexInit(List<Offer> offers, ulong? maxPrice = null)
+        private void IndexInit(List<Offer> offers, FilterModel filter, StringInputModel search)
         {
             this.ViewBag.NavUnderline = "Home";
+
 
             offers?.ForEach(offer =>
             {
@@ -77,12 +76,16 @@ namespace RealEstate.Controllers
                     regions.Add(offer.Region);
             });
 
+            ulong maxPrice = this._context.Offers!.Max(offer => offer.Price);
+
+            string json = JsonSerializer.Serialize(filter);
+            string filterBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+            this.HttpContext.Session.SetString("filterToken", filterBase64);
+
 
             this.ViewBag.CategoryCounts = this._context.Offers!.GetCategoryCount();
-            this.ViewBag.MaxPrice = maxPrice ?? this._context.Offers!.Max(offer => offer.Price);
-            this.ViewBag.Regions = regions;
-            this.ViewBag.Offers = offers;
-
+            this.ViewBag.Offers = this.FilterOffers(offers!, filter, search);
+            this.ViewBag.FilterComponentParameter = new FilterComponentParameter(filter, regions, maxPrice);
         }
 
         private List<Offer> FilterOffers(List<Offer> offers, FilterModel filter, StringInputModel search)

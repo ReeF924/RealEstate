@@ -31,10 +31,10 @@ namespace RealEstate.Attributes
             User user = JsonSerializer.Deserialize<User>(data)!;
 
             if (user.Type == 'b' && !this.BrokersAllowed)
-                context.Result = new RedirectToActionResult("Index", "Home", null);
+                context.Result = new RedirectToActionResult("Index", "EstateOffers", null);
 
             if (user.Type == 'u' && !this.UsersAllowed)
-                context.Result = new RedirectToActionResult("Index", "Home", null);
+                context.Result = new RedirectToActionResult("Index", "EstateOffers", null);
 
 
         }

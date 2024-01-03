@@ -53,14 +53,17 @@
                 </a>
             </div>
         </div>
+        @{
+            
+
+            
+        }
 
         <div class="filter-menu-container d-none">
-            <vc:filter-component param="@(new KeyValuePair<ulong,List<string>>(this.ViewBag.MaxPrice, this.ViewBag.Regions))"></vc:filter-component>
+            <vc:filter-component param="@this.ViewBag.FilterComponentParameter"></vc:filter-component>
         </div>
         <div>
-            @{
-
-                if (offers == null) return;
+                @if (offers == null) return;
                 <div class="offers-list">
                     @for (int i = 0; i < offers.Count; i++)
                     {
@@ -89,7 +92,6 @@
                         </div>
                     }
                 </div>
-            }
         </div>
 
         <div class="items-view-all-container">

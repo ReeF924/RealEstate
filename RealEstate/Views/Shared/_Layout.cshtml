@@ -54,7 +54,7 @@
             @if (user == null)
             {
                 <a asp-controller="Login" asp-action="Index" class="profile-container">
-                        <span>Přihlásit se</span>
+                    <span>Přihlásit se</span>
                 </a>
             }
             else
@@ -72,12 +72,15 @@
                             @if (user.Type == 'a' || user.Type == 'b')
                             {
                                 <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
+                            }
+                            @if (user.Type == 'a')
+                            {
                                 <li><a asp-controller="Admin" asp-action="Parameters">Parametres</a></li>
                             }
-                            @if (user.Type == 'u')
-                            {
-                                <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
-                            }
+                            @*@if (user.Type == 'u')
+                            //{
+                            //}*@
+                            <li><a asp-controller="Admin" asp-action="Inquiries">Inquiries</a></li>
                             <li><a asp-controller="Login" asp-action="Logout">Log out</a></li>
                         </ul>
                     </div>
