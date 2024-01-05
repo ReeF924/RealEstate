@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Models;
 using RealEstate.Models.ComponentModels;
 using System.Text;
