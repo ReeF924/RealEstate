@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using RealEstate.Models;
 using Org.BouncyCastle.Tls.Crypto;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RealEstate.Controllers
 {
@@ -35,7 +36,7 @@ namespace RealEstate.Controllers
 
             var offers = this._context.Offers!.ToList();
 
-            if(user.Type == 'b')
+            if (user.Type == 'b')
             {
                 offers = offers.Where(offer => offer.IdBroker == user.Id).ToList();
             }
@@ -127,7 +128,6 @@ namespace RealEstate.Controllers
         }
 
         [Authorize]
-        //[HttpGet]
         public IActionResult Messages(int idChat = 0)
         {
             User user = this.ViewBag.User;
@@ -256,7 +256,7 @@ namespace RealEstate.Controllers
                 return RedirectToAction("Messages");
             }
 
-            Chat? existing = this._context.Chats.Where(chat => (chat.IdUser1 == recipent.Id && chat.IdUser2 == user.Id)  
+            Chat? existing = this._context.Chats.Where(chat => (chat.IdUser1 == recipent.Id && chat.IdUser2 == user.Id)
                                                             || (chat.IdUser1 == user.Id && chat.IdUser2 == recipent.Id)).FirstOrDefault();
 
             if (existing != null) return RedirectToAction("Messages", new { idchat = existing.Id });
@@ -339,9 +339,12 @@ namespace RealEstate.Controllers
             this._context.Parameters!.ToList().ForEach(param =>
             {
                 OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == param.Id).FirstOrDefault();
+                string? value = offerParam != null ? offerParam.Value : null;
 
-                parameterViews.Add(new(param, offerParam));
+                parameterViews.Add(new(param.Id, param.Value, value));
             });
+
+            parameterViews.OrderBy(param => param.ParameterValue);
 
             OfferEdit offerEdit = new(offer, parameterViews);
 
@@ -367,8 +370,39 @@ namespace RealEstate.Controllers
             offer.Area = input.Area;
             offer.Region = input.Region;
 
-            this._context.SaveChanges();
 
+            foreach (ParameterView paramInput in input.Parameters)
+            {
+                if (paramInput.Value == null)
+                {
+                    OfferParameter? offerParameter = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter).FirstOrDefault();
+
+                    if (offerParameter != null)
+                    {
+                        this._context.OfferParameters!.Remove(offerParameter);
+                    }
+                    continue;
+                }
+
+                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter).FirstOrDefault();
+
+                if (offerParam != null)
+                {
+                    offerParam!.Value = paramInput.Value;
+                    continue;
+                }
+
+                offerParam ??= new OfferParameter()
+                {
+                    IdOffer = offer.Id,
+                    IdParameter = paramInput.IdParameter,
+                    Value = paramInput.Value
+                };
+                this._context.OfferParameters!.Add(offerParam);
+            }
+
+
+            this._context.SaveChanges();
             return RedirectToAction("Detail", "EstateOffers", new { id = idOffer });
 
         }
