@@ -44,7 +44,7 @@ namespace RealEstate.Controllers
 
 
             int n = offers.Count;
-            for (int i = 0; i < Math.Min(20, n); i++)
+            for (int i = 0; i < n; i++)
             {
                 Offer offer = offers[i];
 
@@ -327,28 +327,32 @@ namespace RealEstate.Controllers
         public IActionResult EditOffer(int idOffer)
         {
             User user = this.ViewBag.User;
-            Offer offer = this._context.Offers!.Find(idOffer)!;
-
 
             var users = this._context.Users.Where(user => user.Type != 'u').OrderBy(user => user.Surname).ToList();
-            users.Remove(user);
+            this.ViewBag.Brokers = users;
 
+            Offer? offer = this._context.Offers!.Find(idOffer)!;
+            offer ??= new Offer();
+
+            if(offer.IdBroker != user.Id || user.Type != 'a')
+            {
+                return RedirectToAction("Offers");
+            }
 
             List<ParameterView> parameterViews = new();
 
             this._context.Parameters!.ToList().ForEach(param =>
             {
-                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == param.Id).FirstOrDefault();
+                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == param.Id && o.IdOffer == offer.Id).FirstOrDefault();
                 string? value = offerParam != null ? offerParam.Value : null;
 
                 parameterViews.Add(new(param.Id, param.Value, value));
             });
 
-            parameterViews.OrderBy(param => param.ParameterValue);
+            parameterViews = parameterViews.OrderBy(param => param.ParameterValue).ToList();
 
             OfferEdit offerEdit = new(offer, parameterViews);
 
-            this.ViewBag.Brokers = users;
             this.ViewBag.Offer = offerEdit;
             return View();
         }
@@ -356,8 +360,19 @@ namespace RealEstate.Controllers
         [HttpPost]
         public IActionResult EditOffer(OfferEdit input, int idOffer)
         {
-            Offer offer = this._context.Offers!.Find(idOffer)!;
-            offer.OfferParameters = this._context.OfferParameters!.Where(o => o.IdOffer == offer.Id).ToList();
+            Offer offer;
+
+            if (idOffer == 0)
+            {
+                offer = new();
+                offer.OfferParameters = new();
+            }
+            else
+            {
+                offer = this._context.Offers!.Find(idOffer)!;
+                offer.OfferParameters = this._context.OfferParameters!.Where(o => o.IdOffer == offer.Id).ToList();
+            }
+
 
             offer.IdBroker = input.IdBroker;
             offer.Name = input.Name;
@@ -371,11 +386,18 @@ namespace RealEstate.Controllers
             offer.Region = input.Region;
 
 
+            if (idOffer == 0)
+            {
+                this._context.Offers!.Add(offer);
+                this._context.SaveChanges();
+            }
+
             foreach (ParameterView paramInput in input.Parameters)
             {
                 if (paramInput.Value == null)
                 {
-                    OfferParameter? offerParameter = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter).FirstOrDefault();
+                    OfferParameter? offerParameter = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter
+                                                                                            && o.IdOffer == offer.Id).FirstOrDefault();
 
                     if (offerParameter != null)
                     {
@@ -384,7 +406,8 @@ namespace RealEstate.Controllers
                     continue;
                 }
 
-                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter).FirstOrDefault();
+                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter
+                                                                                    && o.IdOffer == offer.Id).FirstOrDefault();
 
                 if (offerParam != null)
                 {
@@ -403,9 +426,24 @@ namespace RealEstate.Controllers
 
 
             this._context.SaveChanges();
-            return RedirectToAction("Detail", "EstateOffers", new { id = idOffer });
+            return RedirectToAction("Detail", "EstateOffers", new { id = offer.Id });
 
         }
+        [Authorize(false)]
+        public IActionResult DeleteOffer(int idOffer)
+        {
+            User user = this.ViewBag.User;
+            Offer offer = this._context.Offers!.Find(idOffer)!;
 
+            if (offer.IdBroker != user.Id && user.Type != 'a')
+            {
+                return RedirectToAction("Offers");
+            }
+
+            this._context.Offers!.Remove(offer);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Offers");
+        }
     }
 }

@@ -226,8 +226,8 @@
         else if (user.Type == 'a' || offer.IdBroker == user.Id)
         {
             <div class="edit-button-container">
-                <a asp-controller="Admin" asp-action="EditOffer" asp-route-idOffer="@offer.Id"
-                   class="btn btn-primary">Edit offer</a>
+                <a asp-controller="Admin" asp-action="EditOffer" asp-route-idOffer="@offer.Id" class="btn btn-primary">Edit offer</a>
+                 <a asp-controller="Admin" asp-action="DeleteOffer" asp-route-idOffer="@offer.Id" class="btn btn-danger">Delete offer</a>
             </div>
         }
 
