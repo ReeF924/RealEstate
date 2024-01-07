@@ -58,6 +58,7 @@ namespace RealEstate.Controllers
 
             return View();
         }
+
         public void FavouriteOffers()
         {
             User user = (User)this.ViewBag.User;
@@ -352,6 +353,8 @@ namespace RealEstate.Controllers
             parameterViews = parameterViews.OrderBy(param => param.ParameterValue).ToList();
 
             OfferEdit offerEdit = new(offer, parameterViews);
+
+            List<Image> images = this._context.Images!.Where(image => image.IdOffer == offer.Id).ToList();
 
             this.ViewBag.Offer = offerEdit;
             return View();
