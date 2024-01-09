@@ -4,10 +4,7 @@ using RealEstate.Models.ViewModels;
 using RealEstate.Models.DatabaseModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 using RealEstate.Models;
-using Org.BouncyCastle.Tls.Crypto;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
+using System.IO;
 namespace RealEstate.Controllers
 {
     public class AdminController : BaseEstateController
@@ -139,7 +136,6 @@ namespace RealEstate.Controllers
             {
                 data = data.Where(chat => chat.IdUser1 == user.Id || chat.IdUser2 == user.Id).ToList();
             }
-
 
 
             List<ChatView> chats = new();
@@ -335,7 +331,7 @@ namespace RealEstate.Controllers
             Offer? offer = this._context.Offers!.Find(idOffer)!;
             offer ??= new Offer();
 
-            if(offer.IdBroker != user.Id && user.Type != 'a')
+            if (offer.IdBroker != user.Id && user.Type != 'a')
             {
                 return RedirectToAction("Offers");
             }
@@ -352,18 +348,22 @@ namespace RealEstate.Controllers
 
             parameterViews = parameterViews.OrderBy(param => param.ParameterValue).ToList();
 
-            OfferEdit offerEdit = new(offer, parameterViews);
-
             List<Image> images = this._context.Images!.Where(image => image.IdOffer == offer.Id).ToList();
+            offer.Images = images;
+
+            OfferEdit offerEdit = new(offer, parameterViews);
 
             this.ViewBag.Offer = offerEdit;
             return View();
         }
         [Authorize(false)]
         [HttpPost]
-        public IActionResult EditOffer(OfferEdit input, int idOffer)
+        public IActionResult EditOffer(OfferEdit input, int idOffer, List<IFormFile> images)
         {
             Offer offer;
+
+            input.Parameters ??= new();
+            input.ImageEdits ??= new();
 
             if (idOffer == 0)
             {
@@ -425,6 +425,74 @@ namespace RealEstate.Controllers
                     Value = paramInput.Value
                 };
                 this._context.OfferParameters!.Add(offerParam);
+            }
+
+            
+
+            IWebHostEnvironment env = this.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
+
+            foreach (ImageEdit image in input.ImageEdits)
+            {
+                if (image.ToRemove)
+                {
+                    Image? imageToRemove = this._context.Images!.Where(i => i.PathName == image.Name).FirstOrDefault();
+
+                    if (imageToRemove != null) 
+                    {
+                        this._context.Images!.Remove(imageToRemove);
+                        string path = Path.Combine(env.WebRootPath, $"Images//offers//{offer.Id}//{image.Name}.png");
+
+                        System.IO.File.Delete(path);
+                    }
+                    continue;
+                }
+
+                Image imageToEdit = this._context.Images!.Where(i => i.PathName == image.Name).FirstOrDefault()!;
+                imageToEdit!.IsMainImage = image.IsMainImage;
+            }
+
+            foreach (IFormFile image in images)
+            {
+                Guid guid = Guid.NewGuid();
+
+                string path = Path.Combine(env.WebRootPath, $"Images//offers//{offer.Id}//{guid}.png");
+
+                string directoryPath = Path.GetDirectoryName(path)!;
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+
+                Image newImage = new()
+                {
+                    IdOffer = offer.Id,
+                    PathName = guid.ToString(),
+                    IsMainImage = false
+                };
+
+                this._context.Images!.Add(newImage);
+            }
+
+            this._context.SaveChanges();
+
+
+            var mainImgs = this._context.Images!.Where(image => image.IdOffer == offer.Id).ToList();
+            int n = mainImgs.Where(img => img.IsMainImage).Count();
+
+            if (n == 0 && mainImgs.Count > 0)
+            {
+                Image image = this._context.Images!.First(image => image.IdOffer == offer.Id);
+                image.IsMainImage = true;
+
+            }
+            else if (n > 1)
+            {
+                return RedirectToAction("EditOffer", new { idOffer });
             }
 
 

@@ -4,8 +4,8 @@ namespace RealEstate.Models.ViewModels
 {
 	public class OfferEdit : Offer
 	{
-        //public List<KeyValuePair<KeyValuePair<int, string>, KeyValuePair<int, string>?>> Parameters { get; set; }
         public List<ParameterView> Parameters { get; set; }
+        public List<ImageEdit> ImageEdits { get; set; }
 
         public OfferEdit(Offer offer, List<ParameterView> parameters)
         {
@@ -23,12 +23,19 @@ namespace RealEstate.Models.ViewModels
             this.Location = offer.Location;
             this.Region = offer.Region;
             this.Parameters = parameters;
-            this.Images = offer.Images;
+
+            List<ImageEdit> images = new();
+
+            offer.Images.ForEach(image =>
+            {
+                images.Add(new() { Name = image.PathName, ToRemove = false, IsMainImage = image.IsMainImage});
+            });
+            this.ImageEdits = images;
         }
 
         public OfferEdit()
         {
-            
+
         }
     }
 }

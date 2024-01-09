@@ -15,4 +15,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.14" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.5" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Offers\1\" />
+    <Folder Include="wwwroot\Images\Offers\2\" />
+    <Folder Include="wwwroot\Images\Offers\5\" />
+  </ItemGroup>
 </Project>

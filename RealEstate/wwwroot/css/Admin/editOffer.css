@@ -22,20 +22,46 @@ input, textarea, select {
         .offer-parameters tr td, .offer-parameters tr th {
             width: 100%;
             text-align: center;
-            display:flex;
-            align-items:center;
+            display: flex;
+            align-items: center;
         }
 
-.offer-parameters .images{
-    height: 100px;
-}
+    .offer-parameters .images {
+        height: 100px;
+    }
 
 .buttons {
     display: flex;
     justify-content: space-evenly;
 }
 
-.buttons > * {
-    width: 10%;
-    font-size: 1.2em;
+    .buttons > * {
+        width: 10%;
+        font-size: 1.2em;
+    }
+
+.edit-img {
+    height: 150px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 0 !important;
+    margin-left: 4px;
+}
+
+.center-td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.images {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    place-items: center;
+    gap: 10px;
+    width: 100% !important;
 }
