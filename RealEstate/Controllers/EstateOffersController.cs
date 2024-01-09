@@ -179,7 +179,7 @@ namespace RealEstate.Controllers
         {
             Offer offer = this._context.Offers?.First(offer => offer.Id == id)!;
 
-            offer.Images = this._context.Images!.Where(image => image.IdOffer == offer.Id)!.ToList();
+            offer.Images = this._context.Images!.Where(image => image.IdOffer == offer.Id)!.OrderBy(image => image.IsMainImage).ToList();
             List<KeyValuePair<string, string>> offerParameters = new();
 
 
