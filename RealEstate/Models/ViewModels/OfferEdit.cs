@@ -16,21 +16,14 @@ namespace RealEstate.Models.ViewModels
             this.ShortDescription = offer.ShortDescription;
             this.Price = offer.Price;
             this.Category = offer.Category;
+            this.Location = offer.Location;
+            this.EnergyClass = offer.EnergyClass;
+            this.Area = offer.Area;
             this.Price = offer.Price;
             this.Location = offer.Location;
-
+            this.Region = offer.Region;
             this.Parameters = parameters;
 
-            //this.Parameters = new();
-
-            //parameters.ForEach(param =>
-            //{
-            //    OfferParameter? offerParameter = param.Parameter;
-
-            //    KeyValuePair<int, string>? offerKVP = offerParameter == null ? null : new KeyValuePair<int, string>(offerParameter.Id, offerParameter.Value);
-
-            //    this.Parameters.Add(new(new(param.Id, param.Value), offerKVP));
-            //});
         }
 
         public OfferEdit()

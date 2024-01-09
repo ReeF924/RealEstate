@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using RealEstate.Models;
 using Org.BouncyCastle.Tls.Crypto;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RealEstate.Controllers
 {
@@ -35,7 +36,7 @@ namespace RealEstate.Controllers
 
             var offers = this._context.Offers!.ToList();
 
-            if(user.Type == 'b')
+            if (user.Type == 'b')
             {
                 offers = offers.Where(offer => offer.IdBroker == user.Id).ToList();
             }
@@ -43,7 +44,7 @@ namespace RealEstate.Controllers
 
 
             int n = offers.Count;
-            for (int i = 0; i < Math.Min(20, n); i++)
+            for (int i = 0; i < n; i++)
             {
                 Offer offer = offers[i];
 
@@ -127,7 +128,6 @@ namespace RealEstate.Controllers
         }
 
         [Authorize]
-        //[HttpGet]
         public IActionResult Messages(int idChat = 0)
         {
             User user = this.ViewBag.User;
@@ -222,9 +222,13 @@ namespace RealEstate.Controllers
             return RedirectToAction("Messages", new { idChat });
         }
         [Authorize]
-        public IActionResult NewChatFromInquiry(string mail)
+        public IActionResult NewChatFromInquiry(int idOffer)
         {
-            return RedirectToAction("CreateChat", new { mail });
+            Offer offer = this._context.Offers!.Find(idOffer)!;
+            User broker = this._context.Users.Find(offer.IdBroker)!;
+
+
+            return RedirectToAction("CreateChat", new { mail = broker.Email });
         }
 
         [Authorize]
@@ -252,7 +256,8 @@ namespace RealEstate.Controllers
                 return RedirectToAction("Messages");
             }
 
-            Chat? existing = this._context.Chats.Where(chat => chat.IdUser1 == recipent.Id || chat.IdUser2 == recipent.Id).FirstOrDefault();
+            Chat? existing = this._context.Chats.Where(chat => (chat.IdUser1 == recipent.Id && chat.IdUser2 == user.Id)
+                                                            || (chat.IdUser1 == user.Id && chat.IdUser2 == recipent.Id)).FirstOrDefault();
 
             if (existing != null) return RedirectToAction("Messages", new { idchat = existing.Id });
 
@@ -322,25 +327,32 @@ namespace RealEstate.Controllers
         public IActionResult EditOffer(int idOffer)
         {
             User user = this.ViewBag.User;
-            Offer offer = this._context.Offers!.Find(idOffer)!;
-
 
             var users = this._context.Users.Where(user => user.Type != 'u').OrderBy(user => user.Surname).ToList();
-            users.Remove(user);
+            this.ViewBag.Brokers = users;
 
+            Offer? offer = this._context.Offers!.Find(idOffer)!;
+            offer ??= new Offer();
+
+            if(offer.IdBroker != user.Id || user.Type != 'a')
+            {
+                return RedirectToAction("Offers");
+            }
 
             List<ParameterView> parameterViews = new();
 
             this._context.Parameters!.ToList().ForEach(param =>
             {
-                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == param.Id).FirstOrDefault();
+                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == param.Id && o.IdOffer == offer.Id).FirstOrDefault();
+                string? value = offerParam != null ? offerParam.Value : null;
 
-                parameterViews.Add(new(param, offerParam));
+                parameterViews.Add(new(param.Id, param.Value, value));
             });
+
+            parameterViews = parameterViews.OrderBy(param => param.ParameterValue).ToList();
 
             OfferEdit offerEdit = new(offer, parameterViews);
 
-            this.ViewBag.Brokers = users;
             this.ViewBag.Offer = offerEdit;
             return View();
         }
@@ -348,8 +360,19 @@ namespace RealEstate.Controllers
         [HttpPost]
         public IActionResult EditOffer(OfferEdit input, int idOffer)
         {
-            Offer offer = this._context.Offers!.Find(idOffer)!;
-            offer.OfferParameters = this._context.OfferParameters!.Where(o => o.IdOffer == offer.Id).ToList();
+            Offer offer;
+
+            if (idOffer == 0)
+            {
+                offer = new();
+                offer.OfferParameters = new();
+            }
+            else
+            {
+                offer = this._context.Offers!.Find(idOffer)!;
+                offer.OfferParameters = this._context.OfferParameters!.Where(o => o.IdOffer == offer.Id).ToList();
+            }
+
 
             offer.IdBroker = input.IdBroker;
             offer.Name = input.Name;
@@ -362,11 +385,65 @@ namespace RealEstate.Controllers
             offer.Area = input.Area;
             offer.Region = input.Region;
 
-            this._context.SaveChanges();
 
-            return RedirectToAction("Detail", "EstateOffers", new { id = idOffer });
+            if (idOffer == 0)
+            {
+                this._context.Offers!.Add(offer);
+                this._context.SaveChanges();
+            }
+
+            foreach (ParameterView paramInput in input.Parameters)
+            {
+                if (paramInput.Value == null)
+                {
+                    OfferParameter? offerParameter = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter
+                                                                                            && o.IdOffer == offer.Id).FirstOrDefault();
+
+                    if (offerParameter != null)
+                    {
+                        this._context.OfferParameters!.Remove(offerParameter);
+                    }
+                    continue;
+                }
+
+                OfferParameter? offerParam = this._context.OfferParameters!.Where(o => o.IdParameter == paramInput.IdParameter
+                                                                                    && o.IdOffer == offer.Id).FirstOrDefault();
+
+                if (offerParam != null)
+                {
+                    offerParam!.Value = paramInput.Value;
+                    continue;
+                }
+
+                offerParam ??= new OfferParameter()
+                {
+                    IdOffer = offer.Id,
+                    IdParameter = paramInput.IdParameter,
+                    Value = paramInput.Value
+                };
+                this._context.OfferParameters!.Add(offerParam);
+            }
+
+
+            this._context.SaveChanges();
+            return RedirectToAction("Detail", "EstateOffers", new { id = offer.Id });
 
         }
+        [Authorize(false)]
+        public IActionResult DeleteOffer(int idOffer)
+        {
+            User user = this.ViewBag.User;
+            Offer offer = this._context.Offers!.Find(idOffer)!;
 
+            if (offer.IdBroker != user.Id && user.Type != 'a')
+            {
+                return RedirectToAction("Offers");
+            }
+
+            this._context.Offers!.Remove(offer);
+            this._context.SaveChanges();
+
+            return RedirectToAction("Offers");
+        }
     }
 }

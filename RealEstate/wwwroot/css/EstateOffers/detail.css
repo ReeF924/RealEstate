@@ -246,6 +246,7 @@ section.description {
     height:250px;
     display: flex;
     justify-content: center;
+    gap: 20px;
     align-items: center;
 }
 

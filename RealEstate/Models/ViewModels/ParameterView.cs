@@ -2,16 +2,20 @@
 
 namespace RealEstate.Models.ViewModels
 {
-	public class ParameterView : Parameter
+	public class ParameterView
 	{
-        public OfferParameter? Parameter { get; set; }
-
-        public ParameterView(Parameter parameter, OfferParameter? offerParam)
+        public int IdParameter { get; set; }
+        public string ParameterValue { get; set; }
+        public string? Value { get; set; }
+        public ParameterView(int idParam, string paramValue, string? value)
         {
-            this.Id = parameter.Id;
-            this.Value = parameter.Value;
-            this.Parameter = offerParam;
+            this.IdParameter = idParam;
+            this.ParameterValue = paramValue;
+            this.Value = value;
         }
-
+        public ParameterView()
+        {
+                
+        }
     }
 }

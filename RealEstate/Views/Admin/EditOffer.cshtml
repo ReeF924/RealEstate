@@ -13,37 +13,27 @@
     <form asp-action="EditOffer" asp-route-idOffer="@offer.Id">
         <div>
             <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" type="text" required" value="@offer.Name" />
+            <input asp-for="Name" name="Name" class="form-control" type="text" required" value="@offer.Name" />
         </div>
 
         <div>
             <label asp-for="Price" class="form-label"></label>
-            <input asp-for="Price" class="form-control" type="number" required value="@offer.Price" />
+            <input asp-for="Price" name="Price" class="form-control" type="number" required value="@offer.Price" />
         </div>
 
         <div>
             <label asp-for="Location" class="form-label"></label>
-            <input asp-for="Location" class="form-control" type="text" required value="@offer.Location" />
+            <input asp-for="Location" name="Location" class="form-control" type="text" required value="@offer.Location" />
         </div>
 
         <div>
             <label asp-for="Region" class="form-label"></label>
-            <input asp-for="Region" class="form-control" type="text" required value="@offer.Region" />
+            <input asp-for="Region" name="Region" class="form-control" type="text" required value="@offer.Region" />
         </div>
 
         <div>
             <label asp-for="Area" class="form-label"></label>
-            <input asp-for="Area" class="form-control" type="number" required value="@offer.Area" />
-        </div>
-
-        <div>
-            <label asp-for="Description" class="form-label"></label>
-            <textarea asp-for="Description" class="form-control">@offer.Description</textarea>
-        </div>
-
-        <div>
-            <label asp-for="ShortDescription" class="form-label"></label>
-            <textarea asp-for="ShortDescription" class="form-control">@offer.ShortDescription</textarea>
+            <input asp-for="Area" name="Area" class="form-control" type="number" required value="@offer.Area" />
         </div>
 
         <div>
@@ -54,6 +44,7 @@
                 categoryArr.Add(new KeyValuePair<char, string>('h', "House"));
                 categoryArr.Add(new KeyValuePair<char, string>('c', "Cottage"));
             }
+            <label asp-for="Category" class="form-label"></label>
             <select asp-for="Category" name="Category" class="form-select" required>
                 @foreach (KeyValuePair<char, string> item in categoryArr)
                 {
@@ -63,10 +54,20 @@
         </div>
 
         <div>
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" name="Description" class="form-control" value="@offer.Description" />
+        </div>
+
+        <div>
+            <label asp-for="ShortDescription" class="form-label"></label>
+            <input asp-for="ShortDescription" name="ShortDescription" class="form-control" value="@offer.ShortDescription" />
+        </div>
+        <div>
 
             @{
                 char[] energyArr = { 'A', 'B', 'C', 'D', 'E', 'F' };
             }
+            <label asp-for="EnergyClass" class="form-label"></label>
             <select asp-for="EnergyClass" name="EnergyClass" class="form-select" required>
                 <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
                 <option>Choose the energy class</option>
@@ -78,6 +79,7 @@
         </div>
 
         <div>
+            <label asp-for="IdBroker" class="form-label">Assigned Broker</label>
             <select asp-for="IdBroker" name="IdBroker" class="form-select">
                 <!--Pokud required, nenecha nas zadat moznost s prazdnou value-->
                 <option selected>Choose broker</option>
@@ -96,10 +98,10 @@
                     @for (int i = 0; i < offer.Parameters.Count; i++)
                     {
                         <tr>
-                            <td>@offer.Parameters[i].Value</td>
+                            <td>@offer.Parameters[i].ParameterValue</td>
                             <td>
-                                <input type="hidden" name="Parameters[@i].Parameter!.Id" asp-for="Parameters[i].Parameter!.Id" value="@(offer.Parameters[i].Parameter != null ? offer.Parameters[i].Parameter!.Id : 0)" />
-                                <input type="text" name="Parameters[@i].Parameter!.Value" asp-for="Parameters[i].Parameter!.Value" value="@(offer.Parameters[i].Parameter != null ? offer.Parameters[i].Parameter!.Value : "")" />
+                                <input type="hidden" name="Parameters[@i].IdParameter" asp-for="Parameters[i].IdParameter" value="@(offer.Parameters[i].IdParameter)" />
+                                <input type="text" name="Parameters[@i].Value" asp-for="Parameters[i].Value" value="@(offer.Parameters[i].Value)" />
                             </td>
                         </tr>
                     }
@@ -107,7 +109,7 @@
             </table>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex buttons">
             <button type="submit" class="btn btn-success">Save</button>
             <button type="reset" class="btn btn-danger">Reset</button>
         </div>

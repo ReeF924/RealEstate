@@ -1,2 +1,5 @@
-﻿body {
+﻿table {
+    overflow-y: scroll;
+    overflow: auto;
+    height: 100%;
 }

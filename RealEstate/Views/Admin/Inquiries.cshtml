@@ -1,4 +1,4 @@
-﻿@using RealEstate.Models.ViewModels;
+@using RealEstate.Models.ViewModels;
 @{
     List<InquiryList> inquiries = this.ViewBag.Inquiries;
 }
@@ -33,14 +33,19 @@
                             @inquiry.Email
                         </td>
                         <td>
-                            @{string? additionalInfo = inquiry.AdditionalInformation ?? "";}
+                            @{
+                                string? additionalInfo = inquiry.AdditionalInformation ?? "";
+                            }
                             @additionalInfo.Substring(0, Math.Min(30, additionalInfo.Length))
                         </td>
                         <td>
                             @inquiry.DateTimeSent
                         </td>
                         <td>
-                            <a asp-action="NewChatFromInquiry" asp-route-mail="@inquiry.Email" class="link-underline-hover">Send Message</a>
+                            @if (inquiry.IdUser != null)
+                            {
+                                <a asp-action="NewChatFromInquiry" asp-route-idOffer="@inquiry.IdOffer" class="link-underline-hover">Send Message</a>
+                            }
                         </td>
                     </tr>
                 }

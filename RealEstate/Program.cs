@@ -8,7 +8,11 @@ namespace RealEstate
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddSession();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
+            });
             //builder.Services.AddEntityFrameworkProxies();
 
             var app = builder.Build();

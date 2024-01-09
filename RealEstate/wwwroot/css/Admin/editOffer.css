@@ -1,8 +1,35 @@
-form{
+form {
     padding: 3% 5%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    column-gap: 5px;
 }
-input,textarea,select{
+
+input, textarea, select {
     margin-bottom: 5px;
+}
+
+.offer-parameters, .buttons {
+    grid-column: 1/3;
+}
+
+    .offer-parameters tr {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+    }
+
+        .offer-parameters tr td, .offer-parameters tr th {
+            width: 100%;
+            text-align: center;
+        }
+
+.buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.buttons > * {
+    width: 10%;
+    font-size: 1.2em;
 }

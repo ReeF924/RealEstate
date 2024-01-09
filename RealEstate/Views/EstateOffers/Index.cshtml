@@ -53,9 +53,14 @@
                 </a>
             </div>
         </div>
+        @{
+            
+
+            
+        }
 
         <div class="filter-menu-container d-none">
-            <vc:filter-component param="@(new KeyValuePair<ulong,List<string>>(this.ViewBag.MaxPrice, this.ViewBag.Regions))"></vc:filter-component>
+            <vc:filter-component param="@this.ViewBag.FilterComponentParameter"></vc:filter-component>
         </div>
         <div>
                 <div class="offers-list">
