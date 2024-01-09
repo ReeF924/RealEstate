@@ -68,7 +68,7 @@ namespace RealEstate.Controllers
             this.ViewBag.IsAdminView = false;
         }
 
-        [Authorize(usersAllowed: false)]
+        [Authorize(false, false)]
         public IActionResult Users()
         {
             var users = this._context.Users!.Where(users => users.Type != 'a').ToList();

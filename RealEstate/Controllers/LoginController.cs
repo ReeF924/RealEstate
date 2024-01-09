@@ -55,10 +55,10 @@ namespace RealEstate.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignUp(int? idUser = null)
+        public IActionResult SignUp(int? idUser = null, bool adminEdit = false)
         {
             User user;
-            if(idUser != null)
+            if (idUser != null)
             {
                 user = this._context.Users!.Where(user => user.Id == idUser).First();
                 user.Password = "";
@@ -66,8 +66,9 @@ namespace RealEstate.Controllers
             else
                 user = new User();
 
-            this.ViewBag.IdUser = idUser;   
+            this.ViewBag.IdUser = idUser;
             this.ViewBag.Type = idUser == null ? "Create" : "Edit";
+            this.ViewBag.AdminEdit = adminEdit;
             return View(user);
         }
 
@@ -80,13 +81,13 @@ namespace RealEstate.Controllers
             this._context.Users!.Add(input);
             this._context.SaveChanges();
             User user = input;
-            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
 
+            this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
             return RedirectToAction("Index", "EstateOffers");
         }
 
         [HttpPost]
-        public IActionResult EditUser(User input, int idUser)
+        public IActionResult EditUser(User input, int idUser, bool adminEdit = false)
         {
             //validace
             User user = this._context.Users!.Where(user => user.Id == idUser).First();
@@ -97,8 +98,10 @@ namespace RealEstate.Controllers
             user.Surname = input.Surname;
             user.PhoneNumber = input.PhoneNumber;
 
-
             this._context.SaveChanges();
+
+            if (adminEdit) return RedirectToAction("Users", "Admin");
+
             this.HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
 
             return RedirectToAction("Index", "EstateOffers");

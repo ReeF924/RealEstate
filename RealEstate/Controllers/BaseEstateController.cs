@@ -7,7 +7,7 @@ namespace RealEstate.Controllers
 {
     public abstract class BaseEstateController : Controller
     {
-        protected Context _context = new();
+        protected readonly Context _context = new();
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

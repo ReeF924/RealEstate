@@ -85,6 +85,14 @@ namespace RealEstate.Controllers
 
         }
 
+        public IActionResult GetOffersPartial()
+        {
+
+
+
+            return PartialView("_Offers");
+        }
+
         private List<Offer> FilterOffers(List<Offer> offers, FilterModel filter, StringInputModel search)
         {
             if (search != null && search!.Value != null)

@@ -1,0 +1,30 @@
+﻿@{
+    List<Offer> offers = this.ViewBag.Offers;
+}
+
+@for (int i = 0; i < offers.Count; i++)
+{
+    Offer offer = offers[i];
+
+    <div class="flex-column">
+        <div class="offer-img-container">
+            <a asp-asp-controller="EstateOffers" asp-action="Detail" asp-route-id="@offer.Id">
+                @{
+                    var image = offer.Images?.FirstOrDefault();
+                    string relPath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
+                }
+                <img src="@relPath" alt="offered-house">
+            </a>
+        </div>
+        <div class="offer-information">
+            <h3 class="item-name">@offer.Name</h3>
+            <span class="item-price-tag">@offer.Price Kč</span>
+            <p class="item-description">
+                @{
+                    string addition = offer.Description.Length > 100 ? "..." : "";
+                }
+                @(offer.ShortDescription == null ? offer.Description.Substring(0, Math.Min(97, offer.Description.Length)) + addition : offer.ShortDescription)
+            </p>
+        </div>
+    </div>
+}

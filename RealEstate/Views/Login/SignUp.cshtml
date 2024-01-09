@@ -12,7 +12,8 @@
                             <div class="card-header"><h3 class="text-center font-weight-light my-4 partial-border">Create Account</h3></div>
                             <div class="card-body">
 
-                                <form asp-controller="Login" asp-action="@(this.ViewBag.Type + "User")" asp-route-idUser ="@this.ViewBag.IdUser" >
+                                <form asp-controller="Login" asp-action="@(this.ViewBag.Type + "User")"
+                                      asp-route-idUser="@this.ViewBag.IdUser" asp-route-adminEdit="@this.ViewBag.AdminEdit">
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -23,7 +24,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input asp-for="Password" class="form-control" id="inputPassword" type="password" placeholder="Create a password" required />
+                                                <input asp-for="Password" class="form-control" id="inputPassword" type="password" placeholder="Create a password" />
                                                 <label for="inputPassword">Password</label>
                                             </div>
                                         </div>

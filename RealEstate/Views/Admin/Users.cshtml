@@ -1,5 +1,4 @@
 ﻿@{
-    User user = this.ViewBag.User;
     List<User> users = (List<User>)this.ViewBag.Users;
 }
 <div>
@@ -13,46 +12,47 @@
                     <th>Last name</th>
                     <th>Email</th>
                     <th>Phone number</th>
-                    <th>Make broker</th>
+                    <th>Change Type</th>
+                    <th>Edit User</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (User userList in users)
+                @foreach (User user in users)
                 {
                     <tr>
                         <td>
-                            @userList.Username
+                            @user.Username
                         </td>
                         <td>
-                            @userList.Type
+                            @user.Type
                         </td>
                         <td>
-                            @userList.Name
+                            @user.Name
                         </td>
                         <td>
-                            @userList.Surname
+                            @user.Surname
                         </td>
                         <td>
-                            @userList.Email
+                            @user.Email
                         </td>
                         <td>
-                            @userList.PhoneNumber
+                            @user.PhoneNumber
                         </td>
-                        @if(user.Type == 'a')
-                        {
                         <td>
                             @{
-                                if (userList.Type == 'u')
+                                if (user.Type == 'u')
                                 {
-                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@userList.Id" class="link-underline-hover">Make broker</a>
+                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@user.Id" class="link-underline-hover">Make broker</a>
                                 }
-                                else if (userList.Type == 'b')
+                                else if (user.Type == 'b')
                                 {
-                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@userList.Id" class="link-underline-hover">Remove broker</a>
+                                    <a asp-controller="Admin" asp-action="ChangeUserType" asp-route-idUser="@user.Id" class="link-underline-hover">Remove broker</a>
                                 }
                             }
                         </td>
-                        }
+                        <td>
+                            <a asp-controller="Login" asp-action="SignUp" asp-route-idUser="@user.Id" asp-route-adminEdit="true" class="link-underline-hover">Edit Profile</a>
+                        </td>
                     </tr>
                 }
             </tbody>
