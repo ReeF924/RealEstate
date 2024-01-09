@@ -334,7 +334,7 @@ namespace RealEstate.Controllers
             Offer? offer = this._context.Offers!.Find(idOffer)!;
             offer ??= new Offer();
 
-            if(offer.IdBroker != user.Id || user.Type != 'a')
+            if(offer.IdBroker != user.Id && user.Type != 'a')
             {
                 return RedirectToAction("Offers");
             }
