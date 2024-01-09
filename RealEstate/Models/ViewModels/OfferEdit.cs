@@ -23,7 +23,7 @@ namespace RealEstate.Models.ViewModels
             this.Location = offer.Location;
             this.Region = offer.Region;
             this.Parameters = parameters;
-
+            this.Images = offer.Images;
         }
 
         public OfferEdit()

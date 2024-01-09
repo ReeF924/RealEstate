@@ -10,7 +10,7 @@
         @{
             Offer offer = (Offer)ViewBag.Offer;
             Image? image = offer.Images!.FirstOrDefault();
-            string firstImagePath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.Id}.png") : PathHelper.NotFoundImg;
+            string firstImagePath = image != null ? Url.Content($"~/images//offers//{image.IdOffer}//{image.PathName}.png") : PathHelper.NotFoundImg;
 
             <div class="detail-photo">
                 <img src="@firstImagePath" alt="detail-image">
@@ -30,7 +30,7 @@
                         image = offer.Images[i];
                         string alt = "detailSub_" + i.ToString();
 
-                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.PathName}.png")" alt="@alt">
                     }
                 }
                 else
@@ -41,13 +41,13 @@
                         image = offer.Images[i];
                         string alt = "detailSub_" + i.ToString();
 
-                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                        <img class="@className" src="@Url.Content($"~/images//offers//{offer.Id}//{image.PathName}.png")" alt="@alt">
                     }
 
                     image = offer.Images[5];
                     string label = "dalších " + (offer.Images.Count - 6).ToString() + " fotek";
                     <a onclick="viewAllSubPhotos(this)" class="dark-layer-over view-more-sub-photo">
-                        <img src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="detailSub_6">
+                        <img src="@Url.Content($"~/images//offers//{offer.Id}//{image.PathName}.png")" alt="detailSub_6">
                         <label class="next">@label</label>
                     </a>
 
@@ -56,7 +56,7 @@
                         image = offer.Images[i];
                         string alt = "detailSub_" + i.ToString();
 
-                        <img class="d-none additional-sub-photo" src="@Url.Content($"~/images//offers//{offer.Id}//{image.Id}.png")" alt="@alt">
+                        <img class="d-none additional-sub-photo" src="@Url.Content($"~/images//offers//{offer.Id}//{image.PathName}.png")" alt="@alt">
                     }
                 }
             </div>

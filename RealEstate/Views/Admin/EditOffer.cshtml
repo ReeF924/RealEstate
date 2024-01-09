@@ -1,12 +1,17 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/admin/editOffer.css" />
 }
+
+@section Scripts {
+    <script src="~/js/admin/editOffer.js"></script>
+}
 @using RealEstate.Models.ViewModels;
 @{
     User user = this.ViewBag.User;
     OfferEdit offer = this.ViewBag.Offer;
     List<User> brokers = this.ViewBag.Brokers;
     List<ParameterView> parameters = this.ViewBag.Parameters;
+    List<Image> images = offer.Images;
 }
 <section>
     @model OfferEdit
@@ -107,6 +112,33 @@
                     }
                 </tbody>
             </table>
+        </div>
+
+        <div class="images">
+            <table class="table table-striped">
+                <th></th>
+                <th>Image</th>
+                <tbody>
+                    @for (int i = 0; i < images.Count; i++)
+                    {
+                        <tr>
+                            <td class="icon-row">
+                                icon
+                            </td>
+                            <td class="image">
+                                <input type="hidden" name="Images[@i].IdImage" asp-for="Images[i].Id" value="@(offer.Images[i].Id)" />
+                                <img src="@Url.Content($"~/images//offers//{offer.Id}//{images[i].Id}.png")" />
+                            </td>
+                            <td class="delete-img">
+                                <i class="bi bi-trash"></i>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
         </div>
 
         <div class="d-flex buttons">

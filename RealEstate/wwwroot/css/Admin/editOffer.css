@@ -22,7 +22,13 @@ input, textarea, select {
         .offer-parameters tr td, .offer-parameters tr th {
             width: 100%;
             text-align: center;
+            display:flex;
+            align-items:center;
         }
+
+.offer-parameters .images{
+    height: 100px;
+}
 
 .buttons {
     display: flex;
