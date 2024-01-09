@@ -88,7 +88,7 @@ namespace RealEstate.Controllers
             this.ViewBag.FilterComponentParameter = new FilterComponentParameter(filter, regions, maxPrice);
         }
 
-        public IActionResult GetOffersPartial()
+        public IActionResult GetOffersPartial(string? filter)
         {
 
 
