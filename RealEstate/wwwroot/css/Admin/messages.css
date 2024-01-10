@@ -19,9 +19,9 @@ aside.messages {
     overflow-y: scroll;
 }
 
-#selected-chat {
-    background-color: rgb(220,220,220);
-    border: solid 1px #aaa;
+.selected-chat {
+    background-color: rgb(220,220,220) !important;
+    border: solid 1px #aaa !important;
 }
 
 

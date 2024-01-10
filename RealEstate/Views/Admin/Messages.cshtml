@@ -10,14 +10,16 @@
     User user = this.ViewBag.User;
     List<ChatView> chats = this.ViewBag.Chats ?? new List<ChatView>();
     int counter = 0;
+    int selectedCounter = this.ViewBag.Selected;
 }
 <main class="messages">
     <aside class="messages">
         <div class="chats-selection">
             @foreach (ChatView chat in chats)
             {
-                <a asp-action="Messages" asp-all-route-data="this.ViewBag.RouteData" asp-route-idChat="@chat.Id"
-                   class="aside-container link-standard" id="@(counter++ == this.ViewBag.Selected ? "selected-chat" : "")">
+                string className = counter++ == selectedCounter ? "selected-chat" : "";
+                <a asp-action="Messages" asp-route-idChat="@(chat.Id)"
+                   class="aside-container link-standard @className">
                     <div class="left-side">
                         @{
                             string message = user.Type != 'a' ? $"{chat.OtherUser.Name} {chat.OtherUser.Surname}" : $"{chat.OtherUser.Name} {chat.OtherUser.Surname} - {chat.Sender!.Name} {chat.Sender!.Surname}";

@@ -6,56 +6,54 @@ using RealEstate.Attributes;
 using System.Text.Json;
 using System.Text;
 using RealEstate.Models.ComponentModels;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace RealEstate.Controllers
 {
     public class EstateOffersController : BaseEstateController
     {
         [HttpGet]
-        public IActionResult Index(string? filter = null, char? category = null)
+        public IActionResult Index(char? category = null, string? search = null)
         {
             List<Offer> offers = this._context.Offers!.ToList();
 
             if (category != null)
                 offers = offers.Where(offer => offer.Category == category).ToList();
 
-            FilterModel filterEncoded = new();
+            FilterModel filter = new();
 
-            if (filter != null)
+
+            var filterToken = this.HttpContext.Session.GetString("filterToken");
+            if (filterToken != null)
             {
-                var filterBytes = Convert.FromBase64String(filter);
+                var filterBytes = Convert.FromBase64String(filterToken!);
                 var filterJson = Encoding.UTF8.GetString(filterBytes);
 
-                filterEncoded = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
+                filter = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
             }
 
-            this.IndexInit(offers, filterEncoded, new());
 
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Index(FilterModel filter, StringInputModel search)
-        {
-            var offers = this._context.Offers!.ToList();
+            //var filterBytes = Convert.FromBase64String(filter);
+            //var filterJson = Encoding.UTF8.GetString(filterBytes);
 
-            if (filter.PriceMax == null)
-            {
-                var filterToken = this.HttpContext.Session.GetString("filterToken");
-                if (filterToken != null)
-                {
-                    var filterBytes = Convert.FromBase64String(filterToken!);
-                    var filterJson = Encoding.UTF8.GetString(filterBytes);
+            //filterEncoded = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
 
-                    filter = JsonSerializer.Deserialize<FilterModel>(filterJson)!;
-                }
-            }
 
             this.IndexInit(offers, filter, search);
 
             return View();
         }
+        [HttpPost]
+        public IActionResult CreateFilter(FilterModel filter, string? search)
+        {
+            string json = JsonSerializer.Serialize(filter);
+            string filterBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+            this.HttpContext.Session.SetString("filterToken", filterBase64);
 
-        private void IndexInit(List<Offer> offers, FilterModel filter, StringInputModel search)
+            return RedirectToAction("Index", new {search});
+        }
+
+        private void IndexInit(List<Offer> offers, FilterModel filter, string? search)
         {
             this.ViewBag.NavUnderline = "Home";
 
@@ -78,9 +76,7 @@ namespace RealEstate.Controllers
 
             ulong maxPrice = this._context.Offers!.Max(offer => offer.Price);
 
-            string json = JsonSerializer.Serialize(filter);
-            string filterBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
-            this.HttpContext.Session.SetString("filterToken", filterBase64);
+            
 
 
             this.ViewBag.CategoryCounts = this._context.Offers!.GetCategoryCount();
@@ -88,12 +84,12 @@ namespace RealEstate.Controllers
             this.ViewBag.FilterComponentParameter = new FilterComponentParameter(filter, regions, maxPrice);
         }
 
-        private List<Offer> FilterOffers(List<Offer> offers, FilterModel filter, StringInputModel search)
+        private List<Offer> FilterOffers(List<Offer> offers, FilterModel filter, string? search)
         {
-            if (search != null && search!.Value != null)
+            if (search != null)
             {
-                search!.Value = search.Value.ToLower().Trim();
-                offers = this.FindSearchOffers(offers!, search.Value);
+                search = search.ToLower().Trim();
+                offers = this.FindSearchOffers(offers!, search);
             }
 
             if (filter != null)

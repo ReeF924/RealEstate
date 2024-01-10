@@ -12,7 +12,7 @@
 
 
 @model FilterModel
-<form asp-controller="EstateOffers" asp-action="Index" id="filter-form">
+<form asp-controller="EstateOffers" asp-action="CreateFilter" id="filter-form">
     @{
         char[] energyArr = { 'A', 'B', 'C', 'D', 'E', 'F' };
         List<string> regions = this.ViewBag.Regions;
@@ -33,45 +33,45 @@
             });
         });
 
-        // let rangeMin = 100;
-        // const range = document.querySelector(".range-selected");
-        // const rangeInput = document.querySelectorAll(".range-input input");
-        // const rangePrice = document.querySelectorAll(".range-price input");
+                        // let rangeMin = 100;
+                        // const range = document.querySelector(".range-selected");
+                        // const rangeInput = document.querySelectorAll(".range-input input");
+                        // const rangePrice = document.querySelectorAll(".range-price input");
 
-        // rangeInput.forEach((input) => {
-        //     input.addEventListener("input", (e) => {
-        //         let minRange = parseInt(rangeInput[0].value);
-        //         let maxRange = parseInt(rangeInput[1].value);
-        //         if (maxRange - minRange < rangeMin) {
-        //             if (e.target.className === "min") {
-        //                 rangeInput[0].value = maxRange - rangeMin;
-        //             } else {
-        //                 rangeInput[1].value = minRange + rangeMin;
-        //             }
-        //         } else {
-        //             rangePrice[0].value = minRange;
-        //             rangePrice[1].value = maxRange;
-        //             range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
-        //             range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
-        //         }
-        //     });
-        // });
+                        // rangeInput.forEach((input) => {
+                        //     input.addEventListener("input", (e) => {
+                        //         let minRange = parseInt(rangeInput[0].value);
+                        //         let maxRange = parseInt(rangeInput[1].value);
+                        //         if (maxRange - minRange < rangeMin) {
+                        //             if (e.target.className === "min") {
+                        //                 rangeInput[0].value = maxRange - rangeMin;
+                        //             } else {
+                        //                 rangeInput[1].value = minRange + rangeMin;
+                        //             }
+                        //         } else {
+                        //             rangePrice[0].value = minRange;
+                        //             rangePrice[1].value = maxRange;
+                        //             range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
+                        //             range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
+                        //         }
+                        //     });
+                        // });
 
-        // rangePrice.forEach((input) => {
-        //     input.addEventListener("input", (e) => {
-        //         let minPrice = rangePrice[0].value;
-        //         let maxPrice = rangePrice[1].value;
-        //         if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
-        //             if (e.target.className === "min") {
-        //                 rangeInput[0].value = minPrice;
-        //                 range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
-        //             } else {
-        //                 rangeInput[1].value = maxPrice;
-        //                 range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-        //             }
-        //         }
-        //     });
-        // });
+                        // rangePrice.forEach((input) => {
+                        //     input.addEventListener("input", (e) => {
+                        //         let minPrice = rangePrice[0].value;
+                        //         let maxPrice = rangePrice[1].value;
+                        //         if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
+                        //             if (e.target.className === "min") {
+                        //                 rangeInput[0].value = minPrice;
+                        //                 range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+                        //             } else {
+                        //                 rangeInput[1].value = maxPrice;
+                        //                 range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                        //             }
+                        //         }
+                        //     });
+                        // });
     </script>
 
     <div class="test" id="test">
@@ -109,6 +109,12 @@
             <option value="" selected>Choose a region</option>
             @foreach (var region in regions)
             {
+                bool selected = region == @filter.Region;
+                if (selected)
+                {
+                    <option value="@region" selected>@region</option>
+                    continue;
+                }
                 <option value="@region">@region</option>
             }
         </select>
@@ -119,6 +125,11 @@
             <option value="" selected>Choose the energy class</option>
             @foreach (char c in energyArr)
             {
+                bool selectedEn = c == filter.EnergyClass;
+                if (selectedEn)
+                {
+                    <option value="@c" selected>@c</option>
+                }
                 <option value="@c">@c</option>
             }
         </select>
